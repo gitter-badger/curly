@@ -1,0 +1,9 @@
+# Auto Configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+librarian.commons.config.reactor.ReactorAutoConfiguration,\
+librarian.commons.config.context.AsyncExecutorAutoConfiguration,\
+librarian.commons.config.cache.RedisCacheConfig,\
+org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration,\
+librarian.commons.config.web.CustomWebAutoConfiguration,\
+librarian.commons.config.web.RibbonRestBalanced,\
+librarian.commons.config.feign.OAuth2FeignAutoConfiguration

@@ -1,0 +1,8 @@
+rootProject.name = 'carroll'
+include 'artifact'
+include 'edge'
+include 'commons'
+include 'infrastructure:configserver'
+include 'infrastructure:eureka'
+include 'infrastructure:prana'
+include 'infrastructure:proxy'
