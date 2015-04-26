@@ -17,8 +17,6 @@
 -->
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
