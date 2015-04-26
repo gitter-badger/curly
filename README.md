@@ -1,5 +1,11 @@
 #{urly
+[![Build Status](https://travis-ci.org/joaoevangelista/curly.svg)](https://travis-ci.org/joaoevangelista/curly)
 
+[![forthebadge](http://forthebadge.com/images/badges/compatibility-betamax.svg)](http://forthebadge.com)
+
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+
+[![forthebadge](http://forthebadge.com/images/badges/gluten-free.svg)](http://forthebadge.com)
 ---------------------------------------------------------------------------
 
 
@@ -11,7 +17,7 @@ Curly is a *concept* of an application where you can upload, detail, favorite, a
 Collect it into your account and also show yours stuff to the rest of world
 
 
-####It's based on Spring Cloud and Netflix OSS, also Spring Family, powered by Scala, Groovy and the old but gold Java
+####It's based on Spring Cloud and Netflix OSS, also Spring Family, powered by Scala, Groovy and Java
  
 
 
@@ -19,31 +25,21 @@ Collect it into your account and also show yours stuff to the rest of world
 
 
 
-Backpack is composed by the following microservices
+{urly is composed by the following microservices
 
+- ###Edge
+    * Running on port: 8079
 
-- ###How to
+- ###ReadMe
     * Running on port: 8085
 
 
-- ###Library
+- ###Artifact
       * Running on port: 8084
 
 
-- ###Rating
-    * Running on port: 8088
-
-
-- ###Star
-    * Running on port: 8083
-
-
-- ###UI
-   * Running on port: 8080
-
-
 - ###Authentication Server
-     * Running on port: 9999
+     * Powered by GitHub
             
 
 - ###Infrastructure
@@ -56,3 +52,5 @@ Backpack is composed by the following microservices
     * ####Zuul Proxy
       * Running on port: 10002
         
+    * ####Turbine
+      * Running on port: 11090
