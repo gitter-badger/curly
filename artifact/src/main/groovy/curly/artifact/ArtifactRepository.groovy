@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package carroll.artifact
+package curly.artifact
 
 import curly.commons.logging.Loggable
 import org.springframework.cache.annotation.CacheEvict
@@ -50,9 +50,11 @@ interface ArtifactRepository extends MongoRepository<Artifact, String> {
     @CacheEvict(["artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"])
     void delete(Artifact artifact)
 
+    @Loggable
     @Cacheable("artifacts")
     Page<Artifact> findAll(Pageable pageable)
 
+    @Loggable
     @Cacheable("singleArtifact")
     Artifact findOne(String id)
 }

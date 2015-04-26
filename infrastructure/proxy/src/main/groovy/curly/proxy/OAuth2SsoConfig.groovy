@@ -1,4 +1,4 @@
-package carroll.proxy
+package curly.proxy
 
 import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso
 import org.springframework.cloud.security.oauth2.sso.OAuth2SsoConfigurer

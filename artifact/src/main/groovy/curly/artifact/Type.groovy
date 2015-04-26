@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package carroll.artifact
+package curly.artifact
 
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -22,13 +22,10 @@ import org.springframework.data.mongodb.core.mapping.Document
  * @since 19/04/2015
  */
 @Document
-class Category {
+class Type implements Serializable {
     String name
 
-    Category(String name) {
-        this.name = name
-    }
+    Type(String name) { this.name = name }
 
-    Category() {
-    }
+    Type() {}
 }

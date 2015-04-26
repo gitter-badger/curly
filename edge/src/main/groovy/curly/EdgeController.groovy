@@ -1,16 +1,19 @@
-package carroll
+package curly
+
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import rx.Observable
 
+import static curly.commons.rx.RxResult.defer
+
 @RestController
 class EdgeController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    Observable<String> hello(Pageable pageable) {
+    def hello(Pageable pageable) {
         println pageable.getPageNumber()
-        Observable.just("Olá")
+       defer Observable.just("Hello")
     }
 }

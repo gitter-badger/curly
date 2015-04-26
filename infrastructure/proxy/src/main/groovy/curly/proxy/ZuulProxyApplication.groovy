@@ -1,18 +1,16 @@
-package carroll.prana
-
+package curly.proxy
 import org.springframework.boot.SpringApplication
 import org.springframework.cloud.client.SpringCloudApplication
-import org.springframework.cloud.netflix.sidecar.EnableSidecar
-
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 /**
  * @author João Pedro Evangelista
  */
-@EnableSidecar
+@EnableZuulProxy
 @SpringCloudApplication
-public class PranaApplication {
+class ZuulProxyApplication {
 
     static void main(String[] args) {
-        SpringApplication.run PranaApplication.class, args
+        SpringApplication.run ZuulProxyApplication.class, args
     }
 
 }

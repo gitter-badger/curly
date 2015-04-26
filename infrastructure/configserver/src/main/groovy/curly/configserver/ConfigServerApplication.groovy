@@ -1,16 +1,16 @@
-package carroll.proxy
+package curly.configserver
+
 import org.springframework.boot.SpringApplication
 import org.springframework.cloud.client.SpringCloudApplication
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy
+import org.springframework.cloud.config.server.EnableConfigServer
+
 /**
  * @author João Pedro Evangelista
  */
-@EnableZuulProxy
+@EnableConfigServer
 @SpringCloudApplication
-class ZuulProxyApplication {
-
+public class ConfigServerApplication {
     static void main(String[] args) {
-        SpringApplication.run ZuulProxyApplication.class, args
+        SpringApplication.run ConfigServerApplication.class, args
     }
-
 }

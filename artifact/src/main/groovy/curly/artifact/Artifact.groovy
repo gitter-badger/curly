@@ -13,20 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package carroll.artifact
+package curly.artifact
 
+import org.bson.types.ObjectId
+import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.hateoas.Identifiable
+
+import java.time.LocalDate
 
 /**
  * @author Joao Pedro Evangelista
  * @since 19/04/2015
  */
 @Document
-class Language {
+class Artifact implements Identifiable<String>, Serializable {
+
+
+    @Id
+    String id
+
+    String author
 
     String name
 
-    Language(String name) { this.name = name }
+    String homePage
 
-    Language() {}
+    Set<Language> languages
+
+    Set<Type> types
+
+    Category category
+
+    LocalDate incubation
+
+    String owner
+
+    Artifact() {
+        this.id = id == null ? ObjectId.get().toHexString() : id;
+    }
 }
