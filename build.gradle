@@ -143,6 +143,7 @@ project('commons', {
         compile "org.springframework.security.oauth:spring-security-oauth2"
         compile "org.mongodb:mongo-java-driver:3.0.0"
         compile "org.reflections:reflections:0.9.9"
+        compile "com.jcabi:jcabi-aspects:0.21.1"
         testCompile "org.springframework.boot:spring-boot-starter-test"
     }
 })
