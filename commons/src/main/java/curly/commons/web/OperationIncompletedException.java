@@ -13,43 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact
+package curly.commons.web;
 
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.hateoas.Identifiable
-
-import java.time.LocalDate
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @author João Pedro Evangelista
  */
-@Document
-class Artifact implements Identifiable<String>, Serializable {
-
-
-    @Id
-    String id
-
-    String author
-
-    String name
-
-    String homePage
-
-    Set<Language> languages
-
-    Set<Type> types
-
-    Category category
-
-    LocalDate incubation
-
-    String owner
-
-    Artifact() {
-        this.id = id == null ? ObjectId.get().toHexString() : id;
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+public class OperationIncompletedException extends RuntimeException {
+    public OperationIncompletedException() {
+        super("Operation can not be fulfilled on request");
     }
 }

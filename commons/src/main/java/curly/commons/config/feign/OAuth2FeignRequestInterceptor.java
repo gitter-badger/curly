@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ *        Copyright 2015 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -61,10 +61,6 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
         this.header = header;
     }
 
-    private static boolean tokenExists(OAuth2ClientContext oAuth2ClientContext) {
-        return oAuth2ClientContext.getAccessTokenRequest().getExistingToken() != null;
-    }
-
     /**
      * @see RequestInterceptor#apply(RequestTemplate)
      */
@@ -74,6 +70,10 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
             logger.debug("Applying RequestInterceptor customization");
             template.header(header, value(tokenType));
         }
+    }
+
+    private static boolean tokenExists(OAuth2ClientContext oAuth2ClientContext) {
+        return oAuth2ClientContext.getAccessTokenRequest().getExistingToken() != null;
     }
 
     private String value(String tokenType) {
