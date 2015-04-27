@@ -79,7 +79,7 @@ allprojects {
     }
     license {
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
-        header rootProject.file('HEADER')
+        header rootProject.file('NOTICE')
         includes(["**/*.java", "**/*.groovy", "**/*.scala", "**/*.yml"])
         strictCheck true
         mapping {

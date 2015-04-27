@@ -46,7 +46,7 @@ public class ReactorAutoConfiguration {
     EventBus eventBus(Environment reactorEnv) {
         return EventBus.config()
                 .env(reactorEnv)
-                .dispatcher(new MpscDispatcher(properties.getDispatcher()))
+                .dispatcher(new MpscDispatcher("MpscDispatcher"))
                 .get();
     }
 
