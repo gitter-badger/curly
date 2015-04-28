@@ -14,7 +14,6 @@
  *    limitations under the License.
  */
 package curly.artifact
-
 import curly.commons.web.OperationIncompletedException
 import curly.commons.web.hateoas.MediaTypes
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,9 +22,14 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.data.web.PageableDefault
 import org.springframework.data.web.PagedResourcesAssembler
 import org.springframework.hateoas.ExposesResourceFor
+import org.springframework.hateoas.PagedResources
+import org.springframework.hateoas.Resource
+import org.springframework.http.HttpEntity
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.context.request.async.DeferredResult
+import rx.Observable
 import rx.schedulers.Schedulers
 
 import javax.validation.constraints.NotNull
@@ -50,8 +54,8 @@ class ArtifactResourceController {
     @RequestMapping(
             method = RequestMethod.GET,
             produces = MediaTypes.HAL_JSON)
-    def artifacts(@PageableDefault(20) Pageable pageable,
-                  PagedResourcesAssembler<Artifact> assembler) {
+    DeferredResult<ResponseEntity<PagedResources<Resource>>> artifacts(@PageableDefault(20) Pageable pageable,
+                                                                       PagedResourcesAssembler<Artifact> assembler) {
         defer this.command.artifacts(pageable)
                 .map { it.or { new ResourceNotFoundException() } }
                 .map { assembler.toResource(it, resourceAssembler) }
@@ -63,7 +67,7 @@ class ArtifactResourceController {
             value = "/{id}",
             method = RequestMethod.GET,
             produces = MediaTypes.HAL_JSON)
-    def artifact(@PathVariable("id") String id) {
+    DeferredResult<ResponseEntity<Resource<Artifact>>> artifact(@PathVariable("id") String id) {
         defer this.command.artifact(id)
                 .map { it.or { new ResourceNotFoundException() } }
                 .map { resourceAssembler.toResource(it) }
@@ -76,7 +80,7 @@ class ArtifactResourceController {
             method = [RequestMethod.POST, RequestMethod.PUT],
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaTypes.HAL_JSON)
-    def insertArtifact(@RequestBody Artifact artifact) {
+    DeferredResult<ResponseEntity<Resource<Artifact>>> insertArtifact(@RequestBody Artifact artifact) {
         defer this.command.save(artifact)
                 .map { it.or({ new OperationIncompletedException() }) }
                 .map { resourceAssembler.toResource(it) }
@@ -84,7 +88,14 @@ class ArtifactResourceController {
                 Schedulers.computation()
     }
 
-    //todo delete
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.DELETE,
+            produces = MediaTypes.HAL_JSON)
+    DeferredResult<HttpEntity<?>> deleteArtifact(@PathVariable("id") String id) {
+        this.command.delete(new Artifact(id: id))
+        defer Observable.just(ResponseEntity.noContent())
+    }
 
-    //todo by methods
+    //todo by methods query dsl
 }
