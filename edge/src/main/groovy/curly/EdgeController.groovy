@@ -15,20 +15,29 @@
  */
 package curly
 
+import curly.commons.rx.RxResult
+import curly.edge.artifact.Artifact
+import curly.edge.artifact.repository.ArtifactClient
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
-import rx.Observable
-
-import static curly.commons.rx.RxResult.defer
+import org.springframework.web.context.request.async.DeferredResult
 
 @RestController
 class EdgeController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    def hello(Pageable pageable) {
-        println pageable.getPageNumber()
-       defer Observable.just("Hello")
+    @Autowired ArtifactClient client;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    DeferredResult<ResponseEntity<List<Artifact>>> hello(@PageableDefault(20) Pageable pageable) {
+        return RxResult.defer(rx.Observable.just(client.findAll(pageable.pageNumber, pageable.pageSize))
+        )
+
     }
 }

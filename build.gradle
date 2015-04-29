@@ -45,6 +45,7 @@ allprojects {
         groovyVersion = '2.4.1'
         kotlinVersion = '0.11.91.1'
         javaVersion = '1.8'
+        metricsVersion = '3.1.2'
         rxjavaVersion = '1.0.8'
         rxscalaVersion = '0.24.1'
         reactorVersion = '2.0.0.RELEASE'
@@ -76,6 +77,10 @@ allprojects {
     dependencies {
         compile "javax.ws.rs:jsr311-api:1.1.1"
         compile "org.springframework.boot:spring-boot-starter-actuator"
+        compile "io.dropwizard.metrics:metrics-core:$metricsVersion"
+        compile "io.dropwizard.metrics:metrics-healthchecks:$metricsVersion"
+        compile "io.dropwizard.metrics:metrics-servlets:$metricsVersion"
+        compile "io.dropwizard.metrics:metrics-annotation:$metricsVersion"
         compile "org.springframework.boot:spring-boot-starter-web"
         compile "org.springframework.boot:spring-boot-starter-undertow"
         compile "org.springframework.cloud:spring-cloud-starter-eureka"

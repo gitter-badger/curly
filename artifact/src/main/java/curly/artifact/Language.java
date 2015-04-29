@@ -13,22 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.artifact;
 
-import curly.EdgeController
-import org.springframework.hateoas.PagedResources
-import org.springframework.hateoas.ResourceAssembler
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
 
 /**
- * @author João Pedro Evangelista
+ * @author Joao Pedro Evangelista
+ * @since 19/04/2015
  */
-class PagedArtifact extends PagedResources<Artifact> implements ResourceAssembler<Artifact, ArtifactResource> {
+@Document
+public class Language implements Serializable {
 
-    @Override
-    ArtifactResource toResource(Artifact entity) {
-        return new ArtifactResource(entity,
-                ControllerLinkBuilder.linkTo(EdgeController)
-                        .slash(entity.id).withSelfRel())
+    String name;
+
+    Language(String name) {
+        this.name = name;
+    }
+
+    Language() {
     }
 }

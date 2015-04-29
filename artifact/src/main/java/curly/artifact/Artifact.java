@@ -13,39 +13,55 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
+package curly.artifact;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.hateoas.Identifiable;
+
+import java.io.Serializable;
+import java.util.Set;
+
 /**
  * @author Joao Pedro Evangelista
  * @since 19/04/2015
  */
-class Artifact implements  Serializable {
+@Data
+@AllArgsConstructor
+@Document
+public class Artifact implements Identifiable<String>, Serializable {
 
     @Id
-    String id
+    private String id;
 
-    String author
+    private String author;
 
-    String name
+    private String name;
 
-    String homePage
+    private String homePage;
 
-    Set<Language> languages
+    private Set<Language> languages;
 
-    Set<Type> types
+    private Set<Type> types;
 
-    Category category
+    private Category category;
 
-    String incubation
+    private String incubation;
 
-    String owner
+    private String owner;
 
     Artifact() {
         this.id = id == null ? ObjectId.get().toHexString() : id;
     }
 
-    boolean isNew(){
-        id == null
+    public Artifact(String id) {
+        this.id = id;
+    }
+
+    @Override public String getId() {
+        return this.id;
     }
 }

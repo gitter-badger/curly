@@ -14,7 +14,6 @@
  *    limitations under the License.
  */
 package curly.edge.artifact.repository
-
 import curly.commons.web.hateoas.MediaTypes
 import curly.edge.artifact.Artifact
 import curly.edge.artifact.PagedArtifact
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-
 /**
  * @author João Pedro Evangelista
  */
@@ -40,9 +38,8 @@ interface ArtifactClient {
 
     @RequestMapping(
             value = "/arts?page={page}&size={size}",
-            method = RequestMethod.GET,
-            produces = MediaTypes.HAL_JSON)
-    ResponseEntity<PagedArtifact> findAll(@PathVariable("page") int page, @PathVariable("size") int size)
+            method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<Artifact>> findAll(@PathVariable("page") int page, @PathVariable("size") int size)
 
     @RequestMapping(
             value = "/arts",

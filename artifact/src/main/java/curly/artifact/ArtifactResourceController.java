@@ -2,16 +2,16 @@ package curly.artifact;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
-import rx.Observable;
+
+import java.util.List;
 
 import static curly.commons.rx.RxResult.defer;
 
@@ -24,20 +24,18 @@ public class ArtifactResourceController {
 
     private final ArtifactService artifactService;
 
-    private final ArtifactResourceAssembler assembler;
 
     @Autowired
-    public ArtifactResourceController(ArtifactService artifactService, ArtifactResourceAssembler assembler) {
+    public ArtifactResourceController(ArtifactService artifactService) {
         this.artifactService = artifactService;
-        this.assembler = assembler;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public DeferredResult<PagedResources<ArtifactResource>> artifactResources(@PageableDefault(20) Pageable pageable,
-                                                                              PagedResourcesAssembler<Artifact> pagedResourcesAssembler) {
+    public DeferredResult<List<Artifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
         System.out.println(pageable.getPageNumber());
-        return defer(Observable.from(this.artifactService.findAll(pageable))
-                .map(o -> o.<RuntimeException>orElseThrow(ResourceNotFoundException::new))
-                .map(a -> pagedResourcesAssembler.toResource(a, assembler)));
+        return defer(this.artifactService.findAll(pageable)
+                .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
+                .map(Slice::getContent));
+
     }
 }
