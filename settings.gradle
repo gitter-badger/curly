@@ -1,4 +1,4 @@
-rootProject.name = 'carroll'
+rootProject.name = 'curly'
 include 'artifact'
 include 'edge'
 include 'commons'
