@@ -78,3 +78,11 @@ logging:
         web: DEBUG
     curly: INFO
   file: application.log
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000

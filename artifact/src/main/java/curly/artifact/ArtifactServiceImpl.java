@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.concurrent.Future;
 
 /**
@@ -23,10 +24,10 @@ public class ArtifactServiceImpl implements ArtifactService {
     }
 
     @HystrixCommand
-    @Override public Future<Page<Artifact>> findAll(Pageable pageable) {
-        return new AsyncResult<Page<Artifact>>() {
-            @Override public Page<Artifact> invoke() {
-                return artifactRepository.findAll(pageable);
+    @Override public Future<Optional<Page<Artifact>>> findAll(Pageable pageable) {
+        return new AsyncResult<Optional<Page<Artifact>>>() {
+            @Override public Optional<Page<Artifact>> invoke() {
+                return Optional.ofNullable(artifactRepository.findAll(pageable));
             }
         };
     }
