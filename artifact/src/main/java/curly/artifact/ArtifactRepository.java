@@ -27,7 +27,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @author Joao Pedro Evangelista
  * @since 19/04/2015
  */
-@RepositoryRestResource(exported = false)
+@RepositoryRestResource(exported = true)
 interface ArtifactRepository extends MongoRepository<Artifact, String> {
 
     @Loggable

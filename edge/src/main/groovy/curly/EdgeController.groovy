@@ -46,7 +46,7 @@ class EdgeController {
             @PageableDefault(20) Pageable pageable, PagedResourcesAssembler<Artifact> pagedResourcesAssembler) {
         RxResult.defer(rx.Observable.just(client.findAll(pageable.pageNumber, pageable.pageSize))
                 .filter({ res -> res.statusCode.is2xxSuccessful() })
-                .map({ r -> pagedResourcesAssembler.toResource(PageProcessor.toPage(r.body, pageable), assembler) })
+                .map({ r -> pagedResourcesAssembler.toResource(PageProcessor.toPage(r.body), assembler) })
                 .map({ ResponseEntity.ok(it) })
         )
 

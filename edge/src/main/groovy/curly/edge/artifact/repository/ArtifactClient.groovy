@@ -39,7 +39,7 @@ interface ArtifactClient {
     @RequestMapping(
             value = "/arts?page={page}&size={size}",
             method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<Artifact>> findAll(@PathVariable("page") int page, @PathVariable("size") int size)
+    ResponseEntity<PagedArtifact> findAll(@PathVariable("page") int page, @PathVariable("size") int size)
 
     @RequestMapping(
             value = "/arts",

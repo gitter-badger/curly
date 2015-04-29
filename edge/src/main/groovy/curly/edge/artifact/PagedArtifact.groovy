@@ -16,6 +16,7 @@
 package curly.edge.artifact
 
 import curly.EdgeController
+import org.springframework.hateoas.Link
 import org.springframework.hateoas.PagedResources
 import org.springframework.hateoas.ResourceAssembler
 import org.springframework.hateoas.mvc.ControllerLinkBuilder
@@ -24,6 +25,20 @@ import org.springframework.hateoas.mvc.ControllerLinkBuilder
  * @author João Pedro Evangelista
  */
 class PagedArtifact extends PagedResources<Artifact> implements ResourceAssembler<Artifact, ArtifactResource> {
+
+    protected PagedArtifact() {
+        super()
+    }
+
+    @SuppressWarnings("UnnecessaryQualifiedReference")
+    PagedArtifact(Collection<Artifact> content, PagedResources.PageMetadata metadata, Link... links) {
+        super(content, metadata, links)
+    }
+
+    @SuppressWarnings("UnnecessaryQualifiedReference")
+    PagedArtifact(Collection<Artifact> content, PagedResources.PageMetadata metadata, Iterable<Link> links) {
+        super(content, metadata, links)
+    }
 
     @Override
     ArtifactResource toResource(Artifact entity) {

@@ -1,12 +1,12 @@
 package curly;
 
 import curly.commons.rx.RxResult;
+import curly.commons.web.hateoas.PageProcessor;
 import curly.edge.artifact.Artifact;
 import curly.edge.artifact.ArtifactResource;
 import curly.edge.artifact.ArtifactResourceAssembler;
 import curly.edge.artifact.repository.ArtifactClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -24,8 +24,8 @@ public class EdgeControllers {
     DeferredResult<ResponseEntity<PagedResources<ArtifactResource>>> hello(@PageableDefault(20) Pageable pageable, PagedResourcesAssembler<Artifact> assembler) {
         return RxResult.defer(rx.Observable.just(client.findAll(pageable.getPageNumber(), pageable.getPageSize()))
                 .filter(res -> res.getStatusCode().is2xxSuccessful())
-                .map(r -> assembler.toResource(new PageImpl<>(r.getBody(), pageable, r.getBody().size()),
-                        new ArtifactResourceAssembler()))
+                .map(e -> assembler.toResource(PageProcessor.toPage(e.getBody()), new ArtifactResourceAssembler()))
                 .map(ResponseEntity::ok));
+
     }
 }
