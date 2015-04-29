@@ -16,12 +16,17 @@
 package curly
 
 import curly.commons.rx.RxResult
+import curly.commons.web.hateoas.MediaTypes
+import curly.commons.web.hateoas.PageProcessor
 import curly.edge.artifact.Artifact
+import curly.edge.artifact.ArtifactResource
+import curly.edge.artifact.ArtifactResourceAssembler
 import curly.edge.artifact.repository.ArtifactClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.MediaType
+import org.springframework.data.web.PagedResourcesAssembler
+import org.springframework.hateoas.PagedResources
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -33,10 +38,16 @@ class EdgeController {
 
     @Autowired ArtifactClient client;
 
+    @Autowired ArtifactResourceAssembler assembler
+
     @RequestMapping(value = "/", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    DeferredResult<ResponseEntity<List<Artifact>>> hello(@PageableDefault(20) Pageable pageable) {
-        return RxResult.defer(rx.Observable.just(client.findAll(pageable.pageNumber, pageable.pageSize))
+            produces = MediaTypes.HAL_JSON)
+    DeferredResult<ResponseEntity<PagedResources<ArtifactResource>>> hello(
+            @PageableDefault(20) Pageable pageable, PagedResourcesAssembler<Artifact> pagedResourcesAssembler) {
+        RxResult.defer(rx.Observable.just(client.findAll(pageable.pageNumber, pageable.pageSize))
+                .filter({ res -> res.statusCode.is2xxSuccessful() })
+                .map({ r -> pagedResourcesAssembler.toResource(PageProcessor.toPage(r.body, pageable), assembler) })
+                .map({ ResponseEntity.ok(it) })
         )
 
     }
