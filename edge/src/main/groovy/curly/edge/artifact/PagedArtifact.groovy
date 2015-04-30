@@ -15,7 +15,6 @@
  */
 package curly.edge.artifact
 
-import curly.EdgeController
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.PagedResources
 import org.springframework.hateoas.ResourceAssembler
@@ -43,7 +42,7 @@ class PagedArtifact extends PagedResources<Artifact> implements ResourceAssemble
     @Override
     ArtifactResource toResource(Artifact entity) {
         return new ArtifactResource(entity,
-                ControllerLinkBuilder.linkTo(EdgeController)
+                ControllerLinkBuilder.linkTo(ArtifactController)
                         .slash(entity.id).withSelfRel())
     }
 }

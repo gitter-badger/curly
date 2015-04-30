@@ -15,7 +15,7 @@
  */
 package curly.artifact;
 
-import curly.commons.logging.Loggable;
+import com.jcabi.aspects.Loggable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

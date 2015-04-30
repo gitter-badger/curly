@@ -19,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,11 +46,17 @@ public class ArtifactResourceController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public DeferredResult<PagedArtifact> artifactResources(@PageableDefault(20) Pageable pageable) {
-        System.out.println(pageable.getPageNumber());
+    public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
         return defer(this.artifactService.findAll(pageable)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
-                .map(PagedArtifact::new));
+                .map(PagedArtifact::new)
+                .map(ResponseEntity::ok));
+    }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
+        return defer(this.artifactService.findOne(id)
+                .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
+                .map(ResponseEntity::ok));
     }
 }

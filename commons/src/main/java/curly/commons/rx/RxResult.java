@@ -15,7 +15,7 @@
  */
 package curly.commons.rx;
 
-import curly.commons.logging.Loggable;
+import com.jcabi.aspects.Loggable;
 import org.springframework.web.context.request.async.DeferredResult;
 import rx.Observable;
 import rx.Scheduler;
@@ -32,7 +32,8 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class RxResult {
 
-    private RxResult(){}
+    private RxResult() {
+    }
 
     @Loggable
     public static <T> DeferredResult<T> defer(Observable<T> observable, Scheduler subScheduler) {

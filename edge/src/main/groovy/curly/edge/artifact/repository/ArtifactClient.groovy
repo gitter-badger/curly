@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 package curly.edge.artifact.repository
-import curly.commons.web.hateoas.MediaTypes
+
 import curly.edge.artifact.Artifact
+import curly.edge.artifact.ArtifactResource
 import curly.edge.artifact.PagedArtifact
 import org.springframework.cloud.netflix.feign.FeignClient
 import org.springframework.http.MediaType
@@ -33,12 +34,15 @@ interface ArtifactClient {
     @RequestMapping(
             value = "/arts/{id}",
             method = RequestMethod.GET,
-            produces = MediaTypes.HAL_JSON)
-    ResponseEntity<PagedArtifact> findOne(@PathVariable("id") String id)
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ArtifactResource> findOne(@PathVariable("id") String id)
 
     @RequestMapping(
             value = "/arts?page={page}&size={size}",
-            method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PagedArtifact> findAll(@PathVariable("page") int page, @PathVariable("size") int size)
 
     @RequestMapping(

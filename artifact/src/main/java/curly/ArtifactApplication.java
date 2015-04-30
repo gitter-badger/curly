@@ -48,5 +48,4 @@ class ArtifactApplication {
                     .anyRequest().authenticated();
         }
     }
-
 }

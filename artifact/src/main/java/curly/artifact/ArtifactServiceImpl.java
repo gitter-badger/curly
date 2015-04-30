@@ -48,4 +48,13 @@ public class ArtifactServiceImpl implements ArtifactService {
         };
     }
 
+    @Override
+    @HystrixCommand
+    public Observable<Optional<Artifact>> findOne(String id) {
+        return new ObservableResult<Optional<Artifact>>() {
+            @Override public Optional<Artifact> invoke() {
+                return Optional.ofNullable(artifactRepository.findOne(id));
+            }
+        };
+    }
 }

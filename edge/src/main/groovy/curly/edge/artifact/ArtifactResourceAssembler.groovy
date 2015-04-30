@@ -15,10 +15,10 @@
  */
 package curly.edge.artifact
 
-import curly.EdgeController
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport
 import org.springframework.stereotype.Component
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
 
 /**
  * @author João Pedro Evangelista
@@ -30,13 +30,13 @@ class ArtifactResourceAssembler extends ResourceAssemblerSupport<Artifact, Artif
      *
      */
     ArtifactResourceAssembler() {
-        super(EdgeController, ArtifactResource)
+        super(ArtifactController, ArtifactResource)
     }
 
     @Override
     ArtifactResource toResource(Artifact entity) {
         return new ArtifactResource(
-                entity, ControllerLinkBuilder.linkTo(EdgeController).slash(entity.id).withSelfRel()
+                entity, linkTo(ArtifactController).slash(entity.id).withSelfRel()
         )
     }
 }
