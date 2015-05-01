@@ -27,10 +27,10 @@ import java.io.Serializable;
 public class Type implements Serializable {
     String name;
 
-    Type(String name) {
+    public Type(String name) {
         this.name = name;
     }
 
-    Type() {
+    public Type() {
     }
 }

@@ -53,7 +53,7 @@ public class Artifact implements Identifiable<String>, Serializable {
 
     private String owner;
 
-    Artifact() {
+    public Artifact() {
         this.id = id == null ? ObjectId.get().toHexString() : id;
     }
 

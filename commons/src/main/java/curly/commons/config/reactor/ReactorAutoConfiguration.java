@@ -15,8 +15,6 @@
  */
 package curly.commons.config.reactor;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.Environment;
@@ -29,11 +27,7 @@ import reactor.spring.context.config.EnableReactor;
  */
 @EnableReactor
 @Configuration
-@EnableConfigurationProperties(ReactorProperties.class)
 public class ReactorAutoConfiguration {
-
-    @Autowired
-    private ReactorProperties properties;
 
     @Bean
     @Reactor

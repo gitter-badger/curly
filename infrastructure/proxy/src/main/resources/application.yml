@@ -16,11 +16,7 @@ zuul:
     ui:
       path: /#!/**
       url: http://localhost:3000
-    readme: /readme/**
-    heartit: /heartit/**
-    artifact: /artifact/**
-    rating: /rating/**
-    devops: /devops/**
+    edge: /api/**
 
 
 spring:

@@ -16,6 +16,7 @@
 package curly;
 
 import curly.commons.config.cache.annotation.EnableRedisCache;
+import curly.commons.config.context.EnableRingBufferExecutor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
@@ -29,10 +30,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
  * @author João Pedro Evangelista
  * @since 25/04/15
  */
+@EnableRingBufferExecutor
 @EnableRedisCache
 @EnableMongoRepositories
 @SpringCloudApplication
-class ArtifactApplication {
+public class ArtifactApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ArtifactApplication.class, args);

@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +40,9 @@ public class PageProcessor {
     public static <T> Page<T> toPage(PagedResources<T> res) {
         Assert.notNull(res, "Resources content must be not null");
         PageMetadata metadata = res.getMetadata();
-        return new PageImpl<T>(new ArrayList<>(res.getContent()), new PageRequest((int) metadata.getNumber(), (int) metadata.getSize()), metadata.getTotalElements());
+        if (res.getContent().isEmpty()) return new PageImpl<T>(Collections.emptyList());
+        return new PageImpl<>(new ArrayList<>(res.getContent()), new PageRequest((int) metadata.getNumber(),
+                (int) metadata.getSize()), metadata.getTotalElements());
     }
 
 

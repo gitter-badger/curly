@@ -19,7 +19,6 @@ import com.jcabi.aspects.Loggable;
 import org.springframework.web.context.request.async.DeferredResult;
 import rx.Observable;
 import rx.Scheduler;
-import rx.functions.Action1;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -47,15 +46,7 @@ public final class RxResult {
     @Loggable
     public static <T> DeferredResult<T> defer(Observable<T> observable) {
         DeferredResult<T> deferredResult = new DeferredResult<>();
-        observable.subscribe(new Action1<T>() {
-            @Override public void call(T t) {
-                deferredResult.setResult(t);
-            }
-        }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
-                deferredResult.setErrorResult(throwable);
-            }
-        });
+        observable.subscribe(deferredResult::setResult, deferredResult::setErrorResult);
         return deferredResult;
     }
 }

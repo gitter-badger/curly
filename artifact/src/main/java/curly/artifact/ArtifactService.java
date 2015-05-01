@@ -27,5 +27,7 @@ import java.util.Optional;
 public interface ArtifactService {
     Observable<Optional<Page<Artifact>>> findAll(Pageable pageable);
 
+    Observable<Optional<Artifact>> save(Artifact artifact);
+
     Observable<Optional<Artifact>> findOne(String id);
 }

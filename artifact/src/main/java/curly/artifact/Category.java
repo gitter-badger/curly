@@ -27,10 +27,10 @@ import java.io.Serializable;
 public class Category implements Serializable {
     String name;
 
-    Category(String name) {
+    public Category(String name) {
         this.name = name;
     }
 
-    Category() {
+    public Category() {
     }
 }

@@ -19,10 +19,15 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import rx.Observable;
 
+import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -33,13 +38,22 @@ public class ArtifactServiceImpl implements ArtifactService {
 
     private final ArtifactRepository artifactRepository;
 
+    private final MongoTemplate mongoTemplate;
+
     @Autowired
-    public ArtifactServiceImpl(ArtifactRepository artifactRepository) {
+    public ArtifactServiceImpl(ArtifactRepository artifactRepository, MongoTemplate mongoTemplate) {
         this.artifactRepository = artifactRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
-    @HystrixCommand
-    @Override public Observable<Optional<Page<Artifact>>> findAll(Pageable pageable) {
+    @PostConstruct
+    public void init() {
+
+    }
+
+    @HystrixCommand(fallbackMethod = "defaultFindAll")
+    @Override
+    public Observable<Optional<Page<Artifact>>> findAll(Pageable pageable) {
         return new ObservableResult<Optional<Page<Artifact>>>() {
             @Override
             public Optional<Page<Artifact>> invoke() {
@@ -49,12 +63,34 @@ public class ArtifactServiceImpl implements ArtifactService {
     }
 
     @Override
-    @HystrixCommand
+    @Retryable
+    public Observable<Optional<Artifact>> save(Artifact artifact) {
+        return new ObservableResult<Optional<Artifact>>() {
+            @Override
+            public Optional<Artifact> invoke() {
+                return Optional.ofNullable(artifactRepository.save(artifact));
+            }
+        };
+    }
+
+    @Override
+    @HystrixCommand(fallbackMethod = "defaultFindOne")
     public Observable<Optional<Artifact>> findOne(String id) {
         return new ObservableResult<Optional<Artifact>>() {
-            @Override public Optional<Artifact> invoke() {
+            @Override
+            public Optional<Artifact> invoke() {
                 return Optional.ofNullable(artifactRepository.findOne(id));
             }
         };
+    }
+
+    @SuppressWarnings("unused")
+    private Optional<Page<Artifact>> defaultFindAll(Pageable pageable) {
+        return Optional.of(new PageImpl<>(Collections.emptyList()));
+    }
+
+    @SuppressWarnings("unused")
+    private Optional<Artifact> defaultFindOne(String id) {
+        return Optional.of(new Artifact(id));
     }
 }

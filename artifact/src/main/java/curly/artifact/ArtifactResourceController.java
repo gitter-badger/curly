@@ -15,6 +15,7 @@
  */
 package curly.artifact;
 
+import curly.commons.config.reactor.Reactor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+import reactor.bus.EventBus;
 
 import static curly.commons.rx.RxResult.defer;
 
@@ -35,14 +37,15 @@ import static curly.commons.rx.RxResult.defer;
  */
 @RestController
 @RequestMapping("/arts")
-public class ArtifactResourceController {
+class ArtifactResourceController {
 
     private final ArtifactService artifactService;
-
+    private final EventBus eventBus;
 
     @Autowired
-    public ArtifactResourceController(ArtifactService artifactService) {
+    ArtifactResourceController(ArtifactService artifactService, @Reactor EventBus eventBus) {
         this.artifactService = artifactService;
+        this.eventBus = eventBus;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,10 +56,22 @@ public class ArtifactResourceController {
                 .map(ResponseEntity::ok));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
         return defer(this.artifactService.findOne(id)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
                 .map(ResponseEntity::ok));
     }
+
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.DELETE)
+    public HttpEntity<?> deleteResource(@PathVariable("id") String id) {
+        //todo eventBus.notify("artifact.del", Event.wrap(id));
+        return ResponseEntity.noContent().build();
+    }
+
 }

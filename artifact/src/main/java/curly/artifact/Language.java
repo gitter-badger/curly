@@ -28,10 +28,10 @@ public class Language implements Serializable {
 
     String name;
 
-    Language(String name) {
+    public Language(String name) {
         this.name = name;
     }
 
-    Language() {
+    public Language() {
     }
 }
