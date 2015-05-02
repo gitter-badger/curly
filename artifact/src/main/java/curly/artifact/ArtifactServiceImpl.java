@@ -15,82 +15,111 @@
  */
 package curly.artifact;
 
+import com.jcabi.aspects.Loggable;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
+import curly.commons.github.OctoUser;
+import curly.commons.security.negotiation.ResourceOperationsResolverAdapter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import rx.Observable;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Optional;
 
 /**
  * @author João Pedro Evangelista
  */
+@Slf4j
 @Service
-public class ArtifactServiceImpl implements ArtifactService {
+public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artifact, OctoUser>
+        implements ArtifactService {
 
-    private final ArtifactRepository artifactRepository;
-
-    private final MongoTemplate mongoTemplate;
+    private final ArtifactRepository repository;
 
     @Autowired
-    public ArtifactServiceImpl(ArtifactRepository artifactRepository, MongoTemplate mongoTemplate) {
-        this.artifactRepository = artifactRepository;
-        this.mongoTemplate = mongoTemplate;
+    public ArtifactServiceImpl(ArtifactRepository artifactRepository) {
+        this.repository = artifactRepository;
     }
 
-    @PostConstruct
-    public void init() {
-
-    }
-
-    @HystrixCommand(fallbackMethod = "defaultFindAll")
+    @Loggable
     @Override
+    @HystrixCommand(fallbackMethod = "defaultFindAll")
     public Observable<Optional<Page<Artifact>>> findAll(Pageable pageable) {
+        log.trace("Finding for page {}", pageable.getPageNumber());
         return new ObservableResult<Optional<Page<Artifact>>>() {
             @Override
             public Optional<Page<Artifact>> invoke() {
-                return Optional.ofNullable(artifactRepository.findAll(pageable));
+                return Optional.ofNullable(repository.findAll(pageable));
             }
         };
     }
 
+    @Loggable
     @Override
     @Retryable
-    public Observable<Optional<Artifact>> save(Artifact artifact) {
+    public Observable<Optional<Artifact>> save(Artifact artifact, OctoUser octoUser) {
+        log.trace("Saving entity {} ...", artifact);
         return new ObservableResult<Optional<Artifact>>() {
             @Override
             public Optional<Artifact> invoke() {
-                return Optional.ofNullable(artifactRepository.save(artifact));
+                onSave(artifact, octoUser);
+                return Optional.ofNullable(repository.save(artifact));
             }
         };
     }
 
+    @Loggable
     @Override
     @HystrixCommand(fallbackMethod = "defaultFindOne")
     public Observable<Optional<Artifact>> findOne(String id) {
+        log.trace("Finding for {}", id);
         return new ObservableResult<Optional<Artifact>>() {
             @Override
             public Optional<Artifact> invoke() {
-                return Optional.ofNullable(artifactRepository.findOne(id));
+                return Optional.ofNullable(repository.findOne(id));
             }
         };
     }
 
+
+    @Async
+    @Override
+    @Loggable
+    @Retryable
+    @HystrixCommand
+    public void delete(String id, OctoUser user) {
+        Assert.notNull(user, "OctoUser must be not null");
+        Assert.hasText(id, "Id must be not empty");
+        log.trace("Looking for entity with id {}", id);
+        findOne(id).filter(artifact -> isOwnedBy(artifact.orElseThrow(ResourceNotFoundException::new), user))
+                .doOnNext(artifact -> repository.delete(artifact.get()))
+                .doOnError(throwable ->
+                        log.error("Cannot process #delete({},{}) nested exception is, {}", id, user.getId()));
+    }
+
+
+    @Loggable
     @SuppressWarnings("unused")
+    @HystrixCommand
     private Optional<Page<Artifact>> defaultFindAll(Pageable pageable) {
+        log.trace("Falling back with empty collection");
         return Optional.of(new PageImpl<>(Collections.emptyList()));
     }
 
+    @Loggable
     @SuppressWarnings("unused")
+    @HystrixCommand
     private Optional<Artifact> defaultFindOne(String id) {
+        log.trace("Falling back with {}", id);
         return Optional.of(new Artifact(id));
     }
 }

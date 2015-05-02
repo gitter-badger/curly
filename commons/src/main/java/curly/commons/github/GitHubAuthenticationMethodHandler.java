@@ -38,7 +38,7 @@ public class GitHubAuthenticationMethodHandler implements HandlerMethodArgumentR
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return this.findMethodAnnotation(GitHubAuthentication.class, parameter) != null;
+        return findMethodAnnotation(GitHubAuthentication.class, parameter) != null;
     }
 
     @Override
@@ -48,11 +48,11 @@ public class GitHubAuthenticationMethodHandler implements HandlerMethodArgumentR
                                   WebDataBinderFactory binderFactory) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication instanceof OAuth2Authentication)) {
+        if ((authentication == null) || !(authentication instanceof OAuth2Authentication)) {
             return null;
         }
 
-        return this.from((OAuth2Authentication) authentication);
+        return from((OAuth2Authentication) authentication);
     }
 
     @SuppressWarnings("unchecked")
@@ -61,22 +61,23 @@ public class GitHubAuthenticationMethodHandler implements HandlerMethodArgumentR
         if (userAuthentication != null) {
             try {
                 LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) userAuthentication.getDetails();
-                return OctoUser.builder()
-                        .avatarUrl(String.valueOf(map.get("avatar_url")))
-                        .blog(String.valueOf(map.get("blog")))
-                        .company(String.valueOf(map.get("company")))
-                        .email(String.valueOf(map.get("email")))
-                        .followers(Integer.valueOf(String.valueOf(map.get("followers"))))
-                        .following(Integer.valueOf(String.valueOf(map.get("following"))))
-                        .hireable(Boolean.valueOf(String.valueOf(map.get("hireable"))))
-                        .htmlUrl(String.valueOf(map.get("html_url")))
-                        .id(Integer.valueOf(String.valueOf(map.get("id"))))
-                        .login(String.valueOf(map.get("login")))
-                        .name(String.valueOf(map.get("name")))
-                        .publicRepos(Integer.valueOf(String.valueOf(map.get("public_repos"))))
-                        .type(String.valueOf(map.get("type")))
-                        .url(String.valueOf(map.get("url")))
-                        .build();
+                return new OctoUser(String.valueOf(map.get("email")),
+                        Boolean.valueOf(String.valueOf(map.get("hireable"))),
+                        Long.valueOf(String.valueOf(map.get("id"))),
+                        Integer.valueOf(String.valueOf(map.get("followers"))),
+                        Integer.valueOf(String.valueOf(map.get("following"))),
+                        Integer.valueOf(String.valueOf(map.get("public_repos"))),
+                        String.valueOf(map.get("avatar_url")),
+                        String.valueOf(map.get("blog")),
+                        String.valueOf(map.get("company")),
+                        null,
+                        String.valueOf(map.get("html_url")),
+                        null,
+                        String.valueOf(map.get("login")),
+                        String.valueOf(map.get("name")),
+                        String.valueOf(map.get("type")),
+                        String.valueOf(map.get("url")));
+
             } catch (ClassCastException e) {
                 log.error("Cannot build OctoUser due to a ClassCastException {}", e);
             }

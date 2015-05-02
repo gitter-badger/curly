@@ -15,6 +15,9 @@
  */
 package curly.artifact;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -23,14 +26,13 @@ import java.io.Serializable;
  * @author Joao Pedro Evangelista
  * @since 19/04/2015
  */
+@Data
 @Document
+@NoArgsConstructor
+@AllArgsConstructor
 public class Type implements Serializable {
-    String name;
 
-    public Type(String name) {
-        this.name = name;
-    }
+    private static final long serialVersionUID = -7040041440712207806L;
 
-    public Type() {
-    }
+    private String name;
 }

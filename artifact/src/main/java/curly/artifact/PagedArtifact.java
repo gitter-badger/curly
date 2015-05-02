@@ -35,7 +35,7 @@ public class PagedArtifact extends PagedResources<Artifact> {
 
     public PagedArtifact(Page<Artifact> artifacts) {
         super(artifacts.getContent(),
-                new PagedResources.PageMetadata(artifacts.getSize(),
+                new PageMetadata(artifacts.getSize(),
                         artifacts.getNumber(), artifacts.getTotalElements(),
                         artifacts.getTotalPages()));
     }

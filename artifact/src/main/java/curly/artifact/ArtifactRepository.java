@@ -39,6 +39,7 @@ interface ArtifactRepository extends MongoRepository<Artifact, String> {
     @Loggable
     @Cacheable("byCategory") Page<Artifact> findByCategory(String name, Pageable pageable);
 
+
     @Loggable
     @CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"}) Artifact save(Artifact artifact);
 

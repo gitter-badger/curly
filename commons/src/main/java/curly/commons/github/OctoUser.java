@@ -15,12 +15,9 @@
  */
 package curly.commons.github;
 
-import lombok.AllArgsConstructor;
+import curly.commons.security.SimpleUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.Builder;
 
 import java.io.Serializable;
 
@@ -30,13 +27,10 @@ import java.io.Serializable;
  * @author Joao Pedro Evangelista
  * @since 06/04/2015
  */
+
 @Getter
-@Builder
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode
-public class OctoUser implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class OctoUser extends SimpleUser<Long> implements Serializable {
 
     public static final String TYPE_USER = "User";
 
@@ -44,13 +38,13 @@ public class OctoUser implements Serializable {
 
     private static final long serialVersionUID = -1211802439119529774L;
 
+    private String email;
+
     private boolean hireable;
 
     private int followers;
 
     private int following;
-
-    private int id;
 
     private int publicRepos;
 
@@ -59,8 +53,6 @@ public class OctoUser implements Serializable {
     private String blog;
 
     private String company;
-
-    private String email;
 
     private String gravatarId;
 
@@ -76,4 +68,28 @@ public class OctoUser implements Serializable {
 
     private String url;
 
+    public OctoUser(String email, boolean hireable, long id, int followers, int following, int publicRepos, String avatarUrl,
+                    String blog, String company, String gravatarId, String htmlUrl, String location, String login,
+                    String name, String type, String url) {
+        super(id);
+        this.email = email;
+        this.hireable = hireable;
+        this.followers = followers;
+        this.following = following;
+        this.publicRepos = publicRepos;
+        this.avatarUrl = avatarUrl;
+        this.blog = blog;
+        this.company = company;
+        this.gravatarId = gravatarId;
+        this.htmlUrl = htmlUrl;
+        this.location = location;
+        this.login = login;
+        this.name = name;
+        this.type = type;
+        this.url = url;
+    }
+
+    public OctoUser(Long id) {
+        super(id);
+    }
 }

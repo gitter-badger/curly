@@ -42,7 +42,7 @@ public class ArtifactApplication {
 
     @Configuration
     @EnableOAuth2Resource
-    static class OAuth2ResourceConfig extends ResourceServerConfigurerAdapter {
+    private static class OAuth2ResourceConfig extends ResourceServerConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()

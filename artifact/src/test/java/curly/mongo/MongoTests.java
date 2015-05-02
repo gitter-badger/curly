@@ -20,6 +20,7 @@ import java.util.Set;
 /**
  * @author João Pedro Evangelista
  */
+@SuppressWarnings("ObjectAllocationInLoop")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {ArtifactApplication.class})
 public class MongoTests {
@@ -31,8 +32,8 @@ public class MongoTests {
     public void testInsert() throws Exception {
         for (int i = 0; i < 10; i++) {
             Artifact artifact = new Artifact();
-            Set<Language> languages = new HashSet<>();
-            Set<Type> types = new HashSet<>();
+            Set<Language> languages = new HashSet<>(4);
+            Set<Type> types = new HashSet<>(4);
             types.add(new Type("document"));
             types.add(new Type("nosql"));
             languages.add(new Language("java"));

@@ -13,27 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
-
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
+package curly.commons.security.negotiation;
 
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
-@Document
-public class Category implements Serializable {
+public class OperationViolationException extends RuntimeException {
 
-    private static final long serialVersionUID = 2741852981600031808L;
+    private static final long serialVersionUID = -1729290014353488481L;
 
-    String name;
-
-    public Category(String name) {
-        this.name = name;
+    public OperationViolationException() {
+        super("Error occurred during assertions on process of entity");
     }
 
-    public Category() {
+    public OperationViolationException(String message) {
+        super("Error occurred during assertions on process of entity. " + message);
+    }
+
+    public OperationViolationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -15,14 +15,17 @@
  */
 package curly.artifact;
 
+import curly.commons.security.OwnedResource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.hateoas.Identifiable;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -30,9 +33,12 @@ import java.util.Set;
  * @since 19/04/2015
  */
 @Data
-@AllArgsConstructor
 @Document
-public class Artifact implements Identifiable<String>, Serializable {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class Artifact extends OwnedResource implements Identifiable<String>, Serializable {
+
+    private static final long serialVersionUID = 8357768165966900756L;
 
     @Id
     private String id;
@@ -51,17 +57,23 @@ public class Artifact implements Identifiable<String>, Serializable {
 
     private String incubation;
 
-    private String owner;
-
     public Artifact() {
-        this.id = id == null ? ObjectId.get().toHexString() : id;
+        this.id = (id == null) ? ObjectId.get().toHexString() : id;
     }
 
     public Artifact(String id) {
         this.id = id;
+        this.author = "";
+        this.name = "";
+        this.homePage = "";
+        this.languages = new HashSet<>(0);
+        this.types = new HashSet<>(0);
+        this.category = new Category();
+        this.incubation = "";
+        this.owner = "";
     }
 
     @Override public String getId() {
-        return this.id;
+        return id;
     }
 }

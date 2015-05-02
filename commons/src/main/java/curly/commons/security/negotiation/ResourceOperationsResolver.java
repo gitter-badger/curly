@@ -13,27 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.commons.security.negotiation;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
+import curly.commons.security.OwnedResource;
+import curly.commons.security.SimpleUser;
 
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
-@Document
-public class Category implements Serializable {
-
-    private static final long serialVersionUID = 2741852981600031808L;
-
-    String name;
-
-    public Category(String name) {
-        this.name = name;
-    }
-
-    public Category() {
-    }
+public interface ResourceOperationsResolver<T extends OwnedResource, U extends SimpleUser<Long>> {
+    void onSave(T entity, U user);
 }

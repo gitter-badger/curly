@@ -13,27 +13,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.commons.security;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
-@Document
-public class Category implements Serializable {
+@Getter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+public class SimpleUser<PK> implements Serializable {
 
-    private static final long serialVersionUID = 2741852981600031808L;
+    private static final long serialVersionUID = 6175805815717640186L;
 
-    String name;
+    private PK id;
 
-    public Category(String name) {
-        this.name = name;
+    public PK getId() {
+        return id;
     }
 
-    public Category() {
-    }
 }

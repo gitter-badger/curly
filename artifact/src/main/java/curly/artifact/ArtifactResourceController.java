@@ -15,7 +15,8 @@
  */
 package curly.artifact;
 
-import curly.commons.config.reactor.Reactor;
+import curly.commons.github.GitHubAuthentication;
+import curly.commons.github.OctoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -24,13 +25,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
-import reactor.bus.EventBus;
 
 import static curly.commons.rx.RxResult.defer;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
  * @author João Pedro Evangelista
@@ -40,17 +44,15 @@ import static curly.commons.rx.RxResult.defer;
 class ArtifactResourceController {
 
     private final ArtifactService artifactService;
-    private final EventBus eventBus;
 
-    @Autowired
-    ArtifactResourceController(ArtifactService artifactService, @Reactor EventBus eventBus) {
+    @Autowired ArtifactResourceController(ArtifactService artifactService) {
         this.artifactService = artifactService;
-        this.eventBus = eventBus;
+
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
-        return defer(this.artifactService.findAll(pageable)
+        return defer(artifactService.findAll(pageable)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
                 .map(PagedArtifact::new)
                 .map(ResponseEntity::ok));
@@ -58,19 +60,28 @@ class ArtifactResourceController {
 
     @RequestMapping(
             value = "/{id}",
-            method = RequestMethod.GET,
+            method = GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
-        return defer(this.artifactService.findOne(id)
+        return defer(artifactService.findOne(id)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
                 .map(ResponseEntity::ok));
     }
 
+
+    @RequestMapping(method = {POST, PUT})
+    public HttpEntity<?> saveResource(@RequestBody Artifact artifact,
+                                      @GitHubAuthentication OctoUser octoUser) {
+        artifactService.save(artifact, octoUser);
+        return ResponseEntity.noContent().build();
+    }
+
     @RequestMapping(
             value = "/{id}",
-            method = RequestMethod.DELETE)
-    public HttpEntity<?> deleteResource(@PathVariable("id") String id) {
-        //todo eventBus.notify("artifact.del", Event.wrap(id));
+            method = DELETE)
+    public HttpEntity<?> deleteResource(@PathVariable("id") String id,
+                                        @GitHubAuthentication OctoUser octoUser) {
+        artifactService.delete(id, octoUser);
         return ResponseEntity.noContent().build();
     }
 
