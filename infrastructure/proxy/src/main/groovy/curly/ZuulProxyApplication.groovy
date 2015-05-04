@@ -13,18 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly
+
+import org.springframework.boot.SpringApplication
+import org.springframework.cloud.client.SpringCloudApplication
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy
+
 /**
- * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @author João Pedro Evangelista
  */
-class Category implements Serializable {
-    String name
+@EnableZuulProxy
+@SpringCloudApplication
+class ZuulProxyApplication {
 
-    Category(String name) {
-        this.name = name
+    static void main(String[] args) {
+        SpringApplication.run ZuulProxyApplication.class, args
     }
 
-    Category() {
-    }
 }

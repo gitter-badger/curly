@@ -1,0 +1,7 @@
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(":commons")
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb"
+    compile "org.springframework.boot:spring-boot-starter-data-rest"
+}

@@ -84,6 +84,10 @@ gradle-app.setting
 # IntelliJ
 /out/
 
+## logs
+*.log
+*.log.*
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 

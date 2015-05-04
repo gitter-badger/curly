@@ -13,18 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly
+
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
+
 /**
- * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @author João Pedro Evangelista
  */
-class Category implements Serializable {
-    String name
+@EnableEurekaServer
+@SpringBootApplication
+class EurekaServerApplication {
 
-    Category(String name) {
-        this.name = name
-    }
-
-    Category() {
+    static void main(String[] args) {
+        SpringApplication.run EurekaServerApplication.class, args
     }
 }

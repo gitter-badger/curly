@@ -13,18 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly
+
+import org.springframework.boot.SpringApplication
+import org.springframework.cloud.client.SpringCloudApplication
+import org.springframework.cloud.config.server.EnableConfigServer
+
 /**
- * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @author João Pedro Evangelista
  */
-class Category implements Serializable {
-    String name
-
-    Category(String name) {
-        this.name = name
-    }
-
-    Category() {
+@EnableConfigServer
+@SpringCloudApplication
+public class ConfigServerApplication {
+    static void main(String[] args) {
+        SpringApplication.run ConfigServerApplication.class, args
     }
 }

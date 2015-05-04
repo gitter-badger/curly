@@ -14,13 +14,15 @@
  *    limitations under the License.
  */
 package curly.edge.artifact
+
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @since 19/04/2015£
  */
-class Artifact implements  Serializable {
+class Artifact implements Serializable {
 
     @Id
     String id
@@ -45,7 +47,7 @@ class Artifact implements  Serializable {
         this.id = id == null ? ObjectId.get().toHexString() : id;
     }
 
-    boolean isNew(){
+    boolean isNew() {
         id == null
     }
 }

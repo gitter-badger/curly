@@ -13,18 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.commons.logging;
+
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
-class Category implements Serializable {
-    String name
+public enum LogLevel {
 
-    Category(String name) {
-        this.name = name
-    }
-
-    Category() {
-    }
+    TRACE, INFO, DEBUG, WARN, ERROR
 }

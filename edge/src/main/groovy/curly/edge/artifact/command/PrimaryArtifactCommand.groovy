@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service
 import org.springframework.util.Assert
 
 import javax.validation.constraints.NotNull
+
 /**
  * @author João Pedro Evangelista
  */

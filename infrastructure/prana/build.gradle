@@ -1,0 +1,13 @@
+apply plugin: 'groovy'
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    compile "org.springframework.cloud:spring-cloud-netflix-sidecar:1.0.0.RELEASE"
+}
+jar {
+    baseName = 'sidecar'
+}
+springBoot {
+    mainClass = 'curly.SideCarApplication'
+}

@@ -13,18 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.commons.logging.annotation.config;
+
+import org.springframework.context.annotation.Import;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
-class Category implements Serializable {
-    String name
-
-    Category(String name) {
-        this.name = name
-    }
-
-    Category() {
-    }
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Import({LoggingConfiguration.class})
+public @interface EnableLoggable {
 }

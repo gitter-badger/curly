@@ -15,7 +15,7 @@
  */
 package curly.commons.rx;
 
-import com.jcabi.aspects.Loggable;
+import curly.commons.logging.annotation.Loggable;
 import org.springframework.web.context.request.async.DeferredResult;
 import rx.Observable;
 import rx.Scheduler;

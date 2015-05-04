@@ -46,7 +46,7 @@ class ArtifactController {
             produces = MediaTypes.HAL_JSON)
     DeferredResult<ResponseEntity<PagedResources<ArtifactResource>>> getAll(
             @PageableDefault(20) Pageable pageable, PagedResourcesAssembler<Artifact> pagedResourcesAssembler) {
-        defer(rx.Observable.just(client.findAll(pageable.pageNumber, pageable.pageSize))
+        defer(client.findAll(pageable.pageNumber, pageable.pageSize)
                 .filter({ res -> res.statusCode.is2xxSuccessful() })
                 .map({ r -> pagedResourcesAssembler.toResource(PageProcessor.toPage(r.body), assembler) })
                 .map({ ResponseEntity.ok(it) }))

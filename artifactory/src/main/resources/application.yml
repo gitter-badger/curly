@@ -1,0 +1,95 @@
+server:
+  port: 8084
+
+eureka:
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:10003/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+
+spring:
+  oauth2:
+      client:
+        clientId: cae4925a4ce2feb76ec8
+        clientSecret: 41df89b5d95976f0028045889e2c2596fbd6b417
+        accessTokenUri: https://github.com/login/oauth/access_token
+        userAuthorizationUri: https://github.com/login/oauth/authorize
+        clientAuthenticationScheme: form
+      resource:
+        userInfoUri: https://api.github.com/user
+        preferTokenInfo: false
+
+debug:
+security:
+  user:
+    password: mylove
+
+
+io:
+  redis:
+    cache:
+       cacheNames:
+        - artifacts
+        - singleArtifact
+        - byLanguage
+        - byType
+        - byCategory
+       cacheExpirations:
+        - 10000
+        - 10000
+
+
+management:
+  context-path: /management/
+  security:
+    enabled: true
+    role: ADMIN
+
+endpoints:
+  autoconfig:
+    sensitive: true
+  beans:
+      sensitive: true
+  configprops:
+      sensitive: true
+  dump:
+      sensitive: true
+  env:
+      sensitive: true
+  health:
+      sensitive: true
+  info:
+      sensitive: true
+  mappings:
+      sensitive: true
+  metrics:
+      sensitive: true
+  shutdown:
+      sensitive: true
+      enabled: true
+  trace:
+      sensitive: true
+
+ribbon:
+  ServerListRefreshInterval: 5000
+  ReadTimeout: 7777
+  client:
+    name: artifact
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+    curly: INFO
+  file: application.log
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000

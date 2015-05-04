@@ -46,6 +46,7 @@ allprojects {
         kotlinVersion = '0.11.91.1'
         javaVersion = '1.8'
         metricsVersion = '3.1.2'
+        mongoDriverVersion = '3.0.0'
         rxjavaVersion = '1.0.8'
         rxscalaVersion = '0.24.1'
         reactorVersion = '2.0.0.RELEASE'
@@ -77,10 +78,6 @@ allprojects {
     dependencies {
         compile "javax.ws.rs:jsr311-api:1.1.1"
         compile "org.springframework.boot:spring-boot-starter-actuator"
-        compile "io.dropwizard.metrics:metrics-core:$metricsVersion"
-        compile "io.dropwizard.metrics:metrics-healthchecks:$metricsVersion"
-        compile "io.dropwizard.metrics:metrics-servlets:$metricsVersion"
-        compile "io.dropwizard.metrics:metrics-annotation:$metricsVersion"
         compile "org.springframework.boot:spring-boot-starter-web"
         compile "org.springframework.boot:spring-boot-starter-undertow"
         compile "org.springframework.cloud:spring-cloud-starter-eureka"
@@ -101,136 +98,6 @@ allprojects {
         }
     }
 }
-/**
- * -----------------------------------------------------
- * ----------------------- Apps ------------------------
- * -----------------------------------------------------
- */
-
-project('artifact', {
-
-    apply plugin: 'spring-boot'
-
-    dependencies {
-        compile project(":commons")
-        compile "org.springframework.boot:spring-boot-starter-data-mongodb"
-        compile "org.springframework.boot:spring-boot-starter-data-rest"
-    }
-})
-
-project("edge", {
-    apply plugin: 'groovy'
-    apply plugin: 'spring-boot'
-
-    dependencies {
-        compile project(":commons")
-        compile "org.springframework.boot:spring-boot-starter-data-rest"
-        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-    }
-})
-
-/**
- * -------------------------------------------------
- * -------------------- Commons -------------------
- * -------------------------------------------------
- */
-project('commons', {
-    apply plugin: 'java'
-
-    dependencies {
-        compile "org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5"
-        compile "io.projectreactor:reactor-core:$reactorVersion"
-        compile "io.projectreactor.spring:reactor-spring-context:$reactorVersion"
-        compile "io.projectreactor.spring:reactor-spring-core:$reactorVersion"
-        compile "io.projectreactor.spring:reactor-spring-webmvc:$reactorVersion"
-        compile "io.reactivex:rxjava:$rxjavaVersion"
-        compile "org.projectlombok:lombok"
-        compile "org.springframework:spring-aspects"
-        compile "org.springframework.boot:spring-boot-starter-data-rest"
-        compile "org.springframework.boot:spring-boot-starter-redis"
-        compile "org.springframework.cloud:spring-cloud-starter-security"
-        compile "org.springframework.cloud:spring-cloud-starter-feign"
-        compile "org.springframework.retry:spring-retry"
-        compile "org.springframework.security.oauth:spring-security-oauth2"
-        compile "org.mongodb:mongo-java-driver:3.0.0"
-        compile "org.reflections:reflections:0.9.9"
-        compile "com.jcabi:jcabi-aspects:0.21.1"
-        testCompile "org.springframework.boot:spring-boot-starter-test"
-    }
-})
-/**
- * --------------------------------------------------------------
- * --------------------- Infrastructure -----------------------
- * --------------------------------------------------------------
- */
-project('infrastructure:configserver', {
-    apply plugin: 'groovy'
-    apply plugin: 'spring-boot'
-
-    dependencies {
-        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-        compile "org.springframework.cloud:spring-cloud-config-server"
-    }
-    jar {
-        baseName = 'config-server'
-    }
-    springBoot {
-        mainClass = 'curly.configserver.ConfigServerApplication'
-    }
-})
-
-project('infrastructure:eureka', {
-    apply plugin: 'groovy'
-    apply plugin: 'spring-boot'
-
-    dependencies {
-        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-        compile "org.springframework.cloud:spring-cloud-starter-eureka-server"
-    }
-    jar {
-        baseName = 'eureka'
-    }
-    springBoot {
-        mainClass = 'curly.eureka.EurekaServerApplication'
-    }
-    springBoot {
-        requiresUnpack = ['com.netflix.eureka:eureka-core', 'com.netflix.eureka:eureka-client']
-    }
-})
-
-project('infrastructure:proxy', {
-    apply plugin: 'groovy'
-    apply plugin: 'spring-boot'
-
-    dependencies {
-        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-        compile "org.springframework.cloud:spring-cloud-starter-security"
-        compile "org.springframework.cloud:spring-cloud-starter-zuul"
-        compile "org.springframework.security.oauth:spring-security-oauth2"
-        compile project(':commons')
-    }
-    jar {
-        baseName = 'proxy'
-    }
-    springBoot {
-        mainClass = 'curly.proxy.ZuulProxyApplication'
-    }
-})
-project('infrastructure:prana', {
-    apply plugin: 'groovy'
-    apply plugin: 'spring-boot'
-
-    dependencies {
-        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-        compile "org.springframework.cloud:spring-cloud-netflix-sidecar:1.0.0.RELEASE"
-    }
-    jar {
-        baseName = 'proxy'
-    }
-    springBoot {
-        mainClass = 'curly.prana.PranaApplication'
-    }
-})
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'

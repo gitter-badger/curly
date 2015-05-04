@@ -13,18 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.commons.logging.annotation;
+
+import curly.commons.logging.LogLevel;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
-class Category implements Serializable {
-    String name
+@Documented
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Loggable {
 
-    Category(String name) {
-        this.name = name
-    }
-
-    Category() {
-    }
+    LogLevel value() default LogLevel.TRACE;
 }
