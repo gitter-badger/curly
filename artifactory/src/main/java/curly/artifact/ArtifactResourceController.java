@@ -17,6 +17,7 @@ package curly.artifact;
 
 import curly.commons.github.GitHubAuthentication;
 import curly.commons.github.OctoUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -24,11 +25,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.concurrent.Callable;
 
 import static curly.commons.rx.RxResult.defer;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -39,7 +43,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 /**
  * @author João Pedro Evangelista
  */
-@RestController
+@Slf4j
+@Controller
 @RequestMapping("/arts")
 class ArtifactResourceController {
 
@@ -51,19 +56,25 @@ class ArtifactResourceController {
 
     }
 
+    @ResponseBody
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
+        log.trace("Querying resources with page {}, size {}", pageable.getPageNumber(), pageable.getPageSize());
+        artifactService.findAll(pageable).forEach(System.out::println);
         return defer(artifactService.findAll(pageable)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
                 .map(PagedArtifact::new)
-                .map(ResponseEntity::ok));
+                        .map(ResponseEntity::ok)
+        );
     }
 
+    @ResponseBody
     @RequestMapping(
             value = "/{id}",
             method = GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
+        log.trace("Querying single resource based on id {}", id);
         return defer(artifactService.findOne(id)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
                 .map(ResponseEntity::ok));
@@ -71,19 +82,21 @@ class ArtifactResourceController {
 
 
     @RequestMapping(method = {POST, PUT})
-    public HttpEntity<?> saveResource(@RequestBody Artifact artifact,
-                                      @GitHubAuthentication OctoUser octoUser) {
+    public Callable<HttpEntity<?>> saveResource(@RequestBody Artifact artifact,
+                                                @GitHubAuthentication OctoUser octoUser) {
+        log.debug("Performing save operations based on user {}", octoUser.getId());
         artifactService.save(artifact, octoUser);
-        return ResponseEntity.noContent().build();
+        return () -> ResponseEntity.ok().build();
     }
 
     @RequestMapping(
             value = "/{id}",
             method = DELETE)
-    public HttpEntity<?> deleteResource(@PathVariable("id") String id,
-                                        @GitHubAuthentication OctoUser octoUser) {
+    public Callable<HttpEntity<?>> deleteResource(@PathVariable("id") String id,
+                                                  @GitHubAuthentication OctoUser octoUser) {
+        log.trace("Performing deletion operations based on user {}", octoUser.getId());
         artifactService.delete(id, octoUser);
-        return ResponseEntity.noContent().build();
+        return () -> ResponseEntity.noContent().build();
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package curly.artifact;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ import java.io.Serializable;
  * @author Joao Pedro Evangelista
  * @since 19/04/2015
  */
+@Data
 @Document
 public class Category implements Serializable {
 

@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.security.Principal;
 
 /**
  * Github user representation
@@ -30,7 +31,7 @@ import java.io.Serializable;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class OctoUser extends SimpleUser<Long> implements Serializable {
+public class OctoUser extends SimpleUser<Long> implements Serializable, Principal {
 
     public static final String TYPE_USER = "User";
 
@@ -91,5 +92,8 @@ public class OctoUser extends SimpleUser<Long> implements Serializable {
 
     public OctoUser(Long id) {
         super(id);
+    }
+
+    public OctoUser() {
     }
 }

@@ -36,10 +36,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableRedisCache
 @EnableMongoRepositories
 @SpringCloudApplication
-public class ArtifactApplication {
+public class ArtifactoryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ArtifactApplication.class, args);
+        SpringApplication.run(ArtifactoryApplication.class, args);
     }
 
     @Configuration
