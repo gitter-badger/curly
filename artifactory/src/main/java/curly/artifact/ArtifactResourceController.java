@@ -23,13 +23,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.concurrent.Callable;
@@ -44,7 +44,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
  * @author João Pedro Evangelista
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/arts")
 class ArtifactResourceController {
 
@@ -53,29 +53,28 @@ class ArtifactResourceController {
     @Autowired
     ArtifactResourceController(ArtifactService artifactService) {
         this.artifactService = artifactService;
-
     }
 
-    @ResponseBody
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
         log.trace("Querying resources with page {}, size {}", pageable.getPageNumber(), pageable.getPageSize());
         artifactService.findAll(pageable).forEach(System.out::println);
-        return defer(artifactService.findAll(pageable)
-                .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
-                .map(PagedArtifact::new)
+        return defer(
+                artifactService.findAll(pageable)
+                        .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
+                        .map(PagedArtifact::new)
                         .map(ResponseEntity::ok)
         );
     }
 
-    @ResponseBody
     @RequestMapping(
             value = "/{id}",
             method = GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
         log.trace("Querying single resource based on id {}", id);
-        return defer(artifactService.findOne(id)
+        return defer(
+                artifactService.findOne(id)
                 .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
                 .map(ResponseEntity::ok));
     }
@@ -86,7 +85,7 @@ class ArtifactResourceController {
                                                 @GitHubAuthentication OctoUser octoUser) {
         log.debug("Performing save operations based on user {}", octoUser.getId());
         artifactService.save(artifact, octoUser);
-        return () -> ResponseEntity.ok().build();
+        return () -> new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(
