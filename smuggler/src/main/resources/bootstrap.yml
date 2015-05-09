@@ -1,6 +1,6 @@
 spring:
   application:
-    name: artifactory
+    name: edge
   cloud:
     config:
       uri: http://localhost:10004/

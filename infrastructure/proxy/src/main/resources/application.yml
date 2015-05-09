@@ -17,6 +17,7 @@ zuul:
       path: /#!/**
       url: http://localhost:3000
     edge: /api/**
+    artifactory: /artifactory/**
 
 
 spring:

@@ -53,6 +53,8 @@ class EdgeApplication extends WebMvcConfigurerAdapter {
         @Override
         void configure(HttpSecurity http) throws Exception {
             http
+                    .anonymous()
+                    .and()
                     .authorizeRequests()
                     .antMatchers("/heart/**").authenticated()
                     .antMatchers(GET, "/**").permitAll()

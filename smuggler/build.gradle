@@ -1,0 +1,14 @@
+apply plugin: 'spring-boot'
+apply plugin: 'groovy'
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    compile project(":commons")
+}
+jar {
+    baseName = 'smuggler'
+}
+springBoot {
+    mainClass = 'curly.SmugglerApplication'
+}
+
