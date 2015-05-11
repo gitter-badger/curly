@@ -30,7 +30,7 @@ class Diff implements SyncOperation<ExportedOctoRepository>, Serializable {
     public MultiValueMap<Operation, ExportedOctoRepository> invoke(List<ExportedOctoRepository> repositories, List<ExportedOctoRepository> gitHubRepositories) {
         MultiValueMap<Operation, ExportedOctoRepository> multiValueMap = new LinkedMultiValueMap<>(0)
         repositories.each { repo ->
-            if (gitHubRepositories.contains(repo.octoRepository)) {
+            if (gitHubRepositories.contains(repo)) {
                 multiValueMap.add Operation.KEEP, repo
             } else {
                 multiValueMap.add Operation.REMOVE, repo

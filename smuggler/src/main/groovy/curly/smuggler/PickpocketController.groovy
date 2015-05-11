@@ -14,25 +14,28 @@
  *    limitations under the License.
  */
 package curly.smuggler
-
 import curly.commons.github.GitHubAuthentication
 import curly.commons.github.OctoUser
+import curly.smuggler.sync.command.SyncCommand
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.async.DeferredResult
-
 /**
  * @author Joao Pedro Evangelista
  */
-@RestController
+@Controller
 @RequestMapping("/pickpocket")
 class PickpocketController {
 
-    @RequestMapping(method = RequestMethod.PATCH)
-    DeferredResult<ResponseEntity<?>> diffRespo(@GitHubAuthentication OctoUser octoUser) {
+    @Autowired private SyncCommand command
 
+    @RequestMapping(method = RequestMethod.PATCH)
+    DeferredResult<ResponseEntity<List<ExportedOctoRepository>>> repositoriesSync(
+            @GitHubAuthentication OctoUser octoUser) {
+        return command.executeSync(octoUser)
     }
 
 }
