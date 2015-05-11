@@ -13,12 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.smuggler
+package curly.smuggler.client
+
+import curly.commons.github.OctoUser
+import curly.smuggler.OctoRepository
+import org.springframework.http.ResponseEntity
+import org.springframework.util.concurrent.ListenableFuture
 
 /**
  * @author Joao Pedro Evangelista
  */
-interface Updatable<PK, T> {
+interface GitHubClient {
 
-
+    ListenableFuture<ResponseEntity<OctoRepository[]>> getRepositories(OctoUser octoUser)
 }

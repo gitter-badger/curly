@@ -58,7 +58,7 @@ class ArtifactResourceController {
     @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
         log.trace("Querying resources with page {}, size {}", pageable.getPageNumber(), pageable.getPageSize());
-        artifactService.findAll(pageable).forEach(System.out::println);
+        artifactService.findAll(pageable);
         return defer(
                 artifactService.findAll(pageable)
                         .map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))

@@ -16,11 +16,17 @@
 package curly.smuggler
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import curly.commons.github.OctoUser
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
 /**
+ * A GitHub repository representation for internal usages when acquiring data from API.
+ *
+ * This class can be converted into a {@link ExportedOctoRepository} for data manipulation
+ * and representation on app.
+ *
  * @author Joao Pedro Evangelista
  */
 @ToString
@@ -36,6 +42,7 @@ class OctoRepository implements Serializable {
 
     boolean hasWiki;
 
+    @JsonProperty("private")
     boolean isPrivate;
 
     Date createdAt;

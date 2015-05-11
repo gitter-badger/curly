@@ -13,26 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.smuggler
+package curly.smuggler.repository
 
-import curly.commons.github.GitHubAuthentication
-import curly.commons.github.OctoUser
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.context.request.async.DeferredResult
+import curly.smuggler.ExportedOctoRepository
+import org.springframework.data.gemfire.repository.GemfireRepository
+
+import java.util.concurrent.Future
 
 /**
  * @author Joao Pedro Evangelista
  */
-@RestController
-@RequestMapping("/pickpocket")
-class PickpocketController {
+interface ExportedOctoRepositoryRepository extends GemfireRepository<ExportedOctoRepository, String> {
 
-    @RequestMapping(method = RequestMethod.PATCH)
-    DeferredResult<ResponseEntity<?>> diffRespo(@GitHubAuthentication OctoUser octoUser) {
-
-    }
-
+    Future<List<ExportedOctoRepository>> findByOctoRepositoryOwnerId(Long id)
 }

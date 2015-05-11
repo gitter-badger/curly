@@ -13,25 +13,29 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.smuggler
+package curly.smuggler.client
 
-import curly.commons.github.GitHubAuthentication
 import curly.commons.github.OctoUser
+import curly.commons.logging.annotation.Loggable
+import curly.smuggler.OctoRepository
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.context.request.async.DeferredResult
+import org.springframework.stereotype.Component
+import org.springframework.util.concurrent.ListenableFuture
+import org.springframework.web.client.AsyncRestTemplate
 
 /**
  * @author Joao Pedro Evangelista
  */
-@RestController
-@RequestMapping("/pickpocket")
-class PickpocketController {
+@Component
+class GitHubClientImpl implements GitHubClient {
 
-    @RequestMapping(method = RequestMethod.PATCH)
-    DeferredResult<ResponseEntity<?>> diffRespo(@GitHubAuthentication OctoUser octoUser) {
+    final AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate()
+
+    @Loggable
+    @Override
+    ListenableFuture<ResponseEntity<OctoRepository[]>> getRepositories(OctoUser octoUser) {
+        println "Querying Gitihub..."
+        asyncRestTemplate.getForEntity("https://api.github.com/users/{user}/repos", OctoRepository[], octoUser.login)
 
     }
 

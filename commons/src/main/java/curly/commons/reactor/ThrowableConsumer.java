@@ -13,26 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.smuggler
+package curly.commons.reactor;
 
-import curly.commons.github.GitHubAuthentication
-import curly.commons.github.OctoUser
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.context.request.async.DeferredResult
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.fn.Consumer;
+
 
 /**
  * @author Joao Pedro Evangelista
  */
-@RestController
-@RequestMapping("/pickpocket")
-class PickpocketController {
+public class ThrowableConsumer implements Consumer<Throwable> {
 
-    @RequestMapping(method = RequestMethod.PATCH)
-    DeferredResult<ResponseEntity<?>> diffRespo(@GitHubAuthentication OctoUser octoUser) {
+    private final Logger logger;
 
+    public ThrowableConsumer(Class<?> aClass) {
+        this.logger = LoggerFactory.getLogger(aClass);
     }
 
+    @Override
+    public void accept(Throwable throwable) {
+        logger.error("Cannot Process Task", throwable);
+    }
 }

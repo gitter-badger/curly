@@ -15,13 +15,34 @@
  */
 package curly.smuggler
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.gemfire.mapping.Region
+
 /**
+ * The entity used to store synchronization between GitHub's repositories and stored ones.
+ *
+ * This class offers a compatibility with {@link OctoRepository} by allowing this class
+ * to be constructed with a OctoRepository.
+ *
  * @author Joao Pedro Evangelista
  */
+@Region("exportedOctoRepository")
 class ExportedOctoRepository implements Serializable {
+
+    @Id
+    String id
 
     boolean exported
 
     OctoRepository octoRepository
 
+    ExportedOctoRepository() {
+        id = (id != null) ?: UUID.randomUUID().toString()
+    }
+
+    ExportedOctoRepository(OctoRepository octoRepository) {
+        id = (id != null) ?: UUID.randomUUID().toString()
+        exported = false
+        this.octoRepository = octoRepository
+    }
 }

@@ -15,11 +15,42 @@
  */
 package curly
 
+import com.gemstone.gemfire.cache.GemFireCache
+import curly.smuggler.ExportedOctoRepository
+import org.springframework.boot.SpringApplication
 import org.springframework.cloud.client.SpringCloudApplication
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.data.gemfire.CacheFactoryBean
+import org.springframework.data.gemfire.LocalRegionFactoryBean
+import org.springframework.data.gemfire.repository.config.EnableGemfireRepositories
 
 /**
  * @author Joao Pedro Evangelista
  */
 @SpringCloudApplication
 class SmugglerApplication {
+
+    static void main(String[] args) {
+        SpringApplication.run SmugglerApplication, args
+    }
+
+    @Configuration
+    @EnableGemfireRepositories
+    static class GemfireConfiguration {
+
+        @Bean CacheFactoryBean cacheFactoryBean() {
+            new CacheFactoryBean()
+        }
+
+        @Bean
+        LocalRegionFactoryBean<String, ExportedOctoRepository> exportedOctoRepositoryLocalRegion(GemFireCache gemfireCache) {
+            def factoryBean = new LocalRegionFactoryBean<String, ExportedOctoRepository>()
+            factoryBean.setCache(gemfireCache)
+            factoryBean.setName("exportedOctoRepository")
+            factoryBean.setClose(false)
+            factoryBean
+        }
+
+    }
 }

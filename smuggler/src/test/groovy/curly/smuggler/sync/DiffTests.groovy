@@ -15,8 +15,8 @@
  */
 package curly.smuggler.sync
 
+import curly.smuggler.ExportedOctoRepository
 import curly.smuggler.OctoRepository
-import org.eclipse.egit.github.core.Repository
 import org.junit.Before
 import org.junit.Test
 import org.springframework.util.MultiValueMap
@@ -24,29 +24,28 @@ import org.springframework.util.MultiValueMap
 import static org.hamcrest.Matchers.hasSize
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
-
 /**
  * @author Joao Pedro Evangelista
  */
 class DiffTests {
-    List<OctoRepository> repos
-    List<OctoRepository> request
-    MultiValueMap<Operation, OctoRepository> multiMap
+    List<ExportedOctoRepository> repos
+    List<ExportedOctoRepository> request
+    MultiValueMap<Operation, ExportedOctoRepository> multiMap
 
-    Repository repo1
-    Repository repo2
-    Repository repo3
-    Repository repo4
-    Repository repo5
+    ExportedOctoRepository repo1
+    ExportedOctoRepository repo2
+    ExportedOctoRepository repo3
+    ExportedOctoRepository repo4
+    ExportedOctoRepository repo5
 
     @Before
     public void setUp() throws Exception {
 
-        repo1 = new Repository(id: 123, name: "Spring", description: "spr")
-        repo2 = new Repository(id: 123, name: "Spring-io", description: "spr")
-        repo3 = new Repository(id: 1234, name: "Guava", description: "gua")
-        repo4 = new Repository(id: 12345, name: "Groovy", description: "gro")
-        repo5 = new Repository(id: 123456, name: "Scala", description: "scala")
+        repo1 = new ExportedOctoRepository(new OctoRepository(id: 123, name: "Spring", description: "spr"))
+        repo2 = new ExportedOctoRepository(new OctoRepository(id: 123, name: "Spring-io", description: "spr"))
+        repo3 = new ExportedOctoRepository(new OctoRepository(id: 1234, name: "Guava", description: "gua"))
+        repo4 = new ExportedOctoRepository(new OctoRepository(id: 12345, name: "Groovy", description: "gro"))
+        repo5 = new ExportedOctoRepository(new OctoRepository(id: 123456, name: "Scala", description: "scala"))
 
         this.repos = new LinkedList(Arrays.asList(repo1, repo4, repo5)).asImmutable()
         this.request = new LinkedList(Arrays.asList(repo2, repo3, repo4)).asImmutable()
@@ -62,4 +61,5 @@ class DiffTests {
         assertThat(multiMap.get(Operation.REMOVE), hasSize(2))
         assertThat(multiMap.get(Operation.KEEP), hasSize(1))
     }
+
 }

@@ -1,4 +1,7 @@
 #{urly
+
+![Logo](https://raw.githubusercontent.com/joaoevangelista/curly/master/src/logo60.png)
+
 [![Build Status](https://travis-ci.org/joaoevangelista/curly.svg)](https://travis-ci.org/joaoevangelista/curly)
 
 [![forthebadge](http://forthebadge.com/images/badges/compatibility-betamax.svg)](http://forthebadge.com)

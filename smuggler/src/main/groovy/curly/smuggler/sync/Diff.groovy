@@ -14,25 +14,23 @@
  *    limitations under the License.
  */
 package curly.smuggler.sync
-
 import curly.commons.logging.annotation.Loggable
-import curly.smuggler.OctoRepository
+import curly.smuggler.ExportedOctoRepository
 import groovy.transform.Immutable
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-
 /**
  * @author Joao Pedro Evangelista
  */
 @Immutable
-class Diff implements SyncOperation<OctoRepository>, Serializable {
+class Diff implements SyncOperation<ExportedOctoRepository>, Serializable {
 
     @Loggable
     @Override
-    public MultiValueMap<Operation, OctoRepository> invoke(List<OctoRepository> repositories, List<OctoRepository> gitHubRepositories) {
-        MultiValueMap<Operation, OctoRepository> multiValueMap = new LinkedMultiValueMap<>(0)
+    public MultiValueMap<Operation, ExportedOctoRepository> invoke(List<ExportedOctoRepository> repositories, List<ExportedOctoRepository> gitHubRepositories) {
+        MultiValueMap<Operation, ExportedOctoRepository> multiValueMap = new LinkedMultiValueMap<>(0)
         repositories.each { repo ->
-            if (gitHubRepositories.contains(repo)) {
+            if (gitHubRepositories.contains(repo.octoRepository)) {
                 multiValueMap.add Operation.KEEP, repo
             } else {
                 multiValueMap.add Operation.REMOVE, repo
