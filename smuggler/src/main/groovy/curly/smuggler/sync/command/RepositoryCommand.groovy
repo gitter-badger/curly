@@ -24,6 +24,8 @@ import curly.smuggler.repository.ExportedOctoRepositoryRepository
 import curly.smuggler.sync.Diff
 import curly.smuggler.sync.Operation
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.context.request.async.DeferredResult
 import rx.Observable
@@ -47,9 +49,9 @@ class RepositoryCommand implements SyncCommand {
     @Loggable
     @Override
     @HystrixCommand(fallbackMethod = "executeSyncFallback")
-    DeferredResult<List<ExportedOctoRepository>> executeSync(OctoUser octoUser) {
+    DeferredResult<ResponseEntity<List<ExportedOctoRepository>>> executeSync(OctoUser octoUser) {
 
-        def defer = new DeferredResult<List<ExportedOctoRepository>>()
+        def defer = new DeferredResult<ResponseEntity<List<ExportedOctoRepository>>>()
 
         def invoke = new Diff().invoke(
                 getLocalRepositories(octoUser)
@@ -57,24 +59,6 @@ class RepositoryCommand implements SyncCommand {
                 getRemoteRepositories(octoUser)
                         .toBlocking().first())
 
-/*
-
-        def with = Observable.just(invoke.get(Operation.ADD))
-                .<List<ExportedOctoRepository>, List<ExportedOctoRepository>> zipWith(
-                Observable.just(invoke.get(Operation.KEEP)), { listAdd, listKeep ->
-            Stream.concat(listAdd.stream(), listKeep.stream()).collect(Collectors.toList())
-        })
-*/
-
-        /*removeOperation()?.toBlocking()?.first()?.each { rem ->
-            with.toBlocking().first().each { zip ->
-                if (rem.octoRepository.id == (zip.octoRepository.id)) {
-                    if (rem.exported) {
-                        zip.exported = true
-                    }
-                }
-            }
-        }*/
         Observable.just(invoke.get(Operation.REMOVE)).doOnNext({ repository.delete(it) })
                 .subscribe { list ->
             list.each { l ->
@@ -83,15 +67,18 @@ class RepositoryCommand implements SyncCommand {
                         Observable.just(invoke.get(Operation.KEEP)), { listAdd, listKeep ->
                     Stream.concat(listAdd.stream(), listKeep.stream()).collect(Collectors.toList())
                 }).subscribe({ zipper ->
-                    defer.setResult(zipper)
+                    defer.setResult(ResponseEntity.ok(zipper))
                     zipper.each { z ->
                         exportFallback(z, l)
                     }
-                }, { throwable -> defer.setErrorResult(throwable) })
+                }, { throwable ->
+                    defer.setErrorResult(
+                            new ResponseEntity<>(throwable, HttpStatus.INTERNAL_SERVER_ERROR))
+                })
             }
         }
-
         return defer
+
     }
 
     private static void exportFallback(ExportedOctoRepository zipped, ExportedOctoRepository removable) {
@@ -101,15 +88,6 @@ class RepositoryCommand implements SyncCommand {
             }
         }
     }
-
-/*
-    @Loggable
-    @HystrixCommand
-    private Observable<List<ExportedOctoRepository>> removeOperation(MultiValueMap<Operation, ExportedOctoRepository> invoke) {
-        return Observable.just(invoke.get(Operation.REMOVE)).doOnNext({ repository.delete(it) })
-
-    }
-*/
 
     @Loggable
     @HystrixCommand

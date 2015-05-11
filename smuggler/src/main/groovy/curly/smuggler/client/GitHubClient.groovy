@@ -25,5 +25,5 @@ import org.springframework.util.concurrent.ListenableFuture
  */
 interface GitHubClient {
 
-    ListenableFuture<ResponseEntity<OctoRepository[]>> getRepositories(OctoUser octoUser)
+    ListenableFuture<ResponseEntity<List<OctoRepository>>> getRepositories(OctoUser octoUser)
 }

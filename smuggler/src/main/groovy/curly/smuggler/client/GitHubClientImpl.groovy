@@ -18,6 +18,8 @@ package curly.smuggler.client
 import curly.commons.github.OctoUser
 import curly.commons.logging.annotation.Loggable
 import curly.smuggler.OctoRepository
+import org.springframework.core.ParameterizedTypeReference
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.util.concurrent.ListenableFuture
@@ -30,12 +32,15 @@ import org.springframework.web.client.AsyncRestTemplate
 class GitHubClientImpl implements GitHubClient {
 
     final AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate()
+    static
+    final ParameterizedTypeReference<List<OctoRepository>> reference = new ParameterizedTypeReference<List<OctoRepository>>() {
+    }
 
     @Loggable
     @Override
-    ListenableFuture<ResponseEntity<OctoRepository[]>> getRepositories(OctoUser octoUser) {
+    ListenableFuture<ResponseEntity<List<OctoRepository>>> getRepositories(OctoUser octoUser) {
         println "Querying Gitihub..."
-        asyncRestTemplate.getForEntity("https://api.github.com/users/{user}/repos", OctoRepository[], octoUser.login)
+        asyncRestTemplate.exchange("https://api.github.com/users/{user}/repos", HttpMethod.GET, null, reference, octoUser.login)
 
     }
 

@@ -17,11 +17,12 @@ package curly.smuggler.sync.command
 
 import curly.commons.github.OctoUser
 import curly.smuggler.ExportedOctoRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.web.context.request.async.DeferredResult
 
 /**
  * @author Joao Pedro Evangelista
  */
 interface SyncCommand {
-    DeferredResult<List<ExportedOctoRepository>> executeSync(OctoUser octoUser)
+    DeferredResult<ResponseEntity<List<ExportedOctoRepository>>> executeSync(OctoUser octoUser)
 }
