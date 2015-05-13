@@ -16,13 +16,11 @@
 package curly.smuggler.sync
 import curly.commons.logging.annotation.Loggable
 import curly.smuggler.ExportedOctoRepository
-import groovy.transform.Immutable
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 /**
  * @author Joao Pedro Evangelista
  */
-@Immutable
 class Diff implements SyncOperation<ExportedOctoRepository>, Serializable {
 
     @Loggable

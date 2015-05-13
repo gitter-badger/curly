@@ -3,4 +3,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 curly.commons.config.reactor.ReactorAutoConfiguration,\
 curly.commons.github.GitHubResolverAutoConfiguration,\
 org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration,\
-curly.commons.config.feign.OAuth2FeignAutoConfiguration
+curly.commons.config.feign.FeignCustomizationAutoConfiguration

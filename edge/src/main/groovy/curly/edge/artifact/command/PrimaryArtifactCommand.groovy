@@ -70,7 +70,7 @@ class PrimaryArtifactCommand implements ArtifactCommand {
 
     @Override
     def save(Artifact artifact) {
-        Assert.notNull(id, "Artifact must not be null")
+        Assert.notNull(artifact, "Artifact must not be null")
         artifactClient.save(artifact)
     }
 

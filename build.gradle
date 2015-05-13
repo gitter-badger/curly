@@ -61,7 +61,7 @@ allprojects {
     }
     ext['spring-hateoas.version'] = '0.17.0.RELEASE'
     ext['spring-data-releasetrain.version'] = 'Fowler-RELEASE'
-    ext['undertow.version'] = '1.2.1.Final'
+    ext['undertow.version'] = '1.2.5.Final'
     ext['jackson.version'] = '2.5.2'
 
     dependencyManagement {

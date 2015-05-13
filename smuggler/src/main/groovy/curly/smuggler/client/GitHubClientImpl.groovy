@@ -32,6 +32,7 @@ import org.springframework.web.client.AsyncRestTemplate
 class GitHubClientImpl implements GitHubClient {
 
     final AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate()
+
     static
     final ParameterizedTypeReference<List<OctoRepository>> reference = new ParameterizedTypeReference<List<OctoRepository>>() {
     }
@@ -39,7 +40,6 @@ class GitHubClientImpl implements GitHubClient {
     @Loggable
     @Override
     ListenableFuture<ResponseEntity<List<OctoRepository>>> getRepositories(OctoUser octoUser) {
-        println "Querying Gitihub..."
         asyncRestTemplate.exchange("https://api.github.com/users/{user}/repos", HttpMethod.GET, null, reference, octoUser.login)
 
     }

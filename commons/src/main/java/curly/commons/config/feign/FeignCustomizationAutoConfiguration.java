@@ -17,6 +17,7 @@ package curly.commons.config.feign;
 
 import feign.Feign;
 import feign.RequestInterceptor;
+import feign.codec.ErrorDecoder;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -34,7 +35,15 @@ import org.springframework.util.Assert;
 @Configuration
 @ConditionalOnClass({Feign.class, OAuth2ClientContext.class})
 @AutoConfigureAfter({OAuth2LoadBalancerClientAutoConfiguration.class})
-public class OAuth2FeignAutoConfiguration {
+public class FeignCustomizationAutoConfiguration {
+
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnClass(ErrorDecoder.class)
+    ErrorDecoder errorDecoder() {
+        return new SpringErrorDecoder();
+    }
 
     @Bean
     @ConditionalOnBean(OAuth2ClientContext.class)
