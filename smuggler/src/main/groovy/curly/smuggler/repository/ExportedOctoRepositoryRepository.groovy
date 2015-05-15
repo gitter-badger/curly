@@ -14,16 +14,12 @@
  *    limitations under the License.
  */
 package curly.smuggler.repository
-
 import curly.smuggler.ExportedOctoRepository
 import org.springframework.data.gemfire.repository.GemfireRepository
-
-import java.util.concurrent.Future
-
 /**
  * @author Joao Pedro Evangelista
  */
 interface ExportedOctoRepositoryRepository extends GemfireRepository<ExportedOctoRepository, String> {
 
-    Future<List<ExportedOctoRepository>> findByOctoRepositoryOwnerId(Long id)
+    List<ExportedOctoRepository> findByOctoRepositoryOwnerId(Long id)
 }

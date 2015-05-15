@@ -18,6 +18,7 @@ package curly.commons.github;
 import curly.commons.security.SimpleUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -30,6 +31,7 @@ import java.security.Principal;
  */
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class OctoUser extends SimpleUser<Long> implements Serializable, Principal {
 

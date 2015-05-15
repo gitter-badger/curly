@@ -40,7 +40,7 @@ class GitHubClientImpl implements GitHubClient {
     @Loggable
     @Override
     ListenableFuture<ResponseEntity<List<OctoRepository>>> getRepositories(OctoUser octoUser) {
-        asyncRestTemplate.exchange("https://api.github.com/users/{user}/repos", HttpMethod.GET, null, reference, octoUser.login)
+        asyncRestTemplate.exchange("https://api.github.com/users/joaoevangelista/repos", HttpMethod.GET, null, reference)
 
     }
 
