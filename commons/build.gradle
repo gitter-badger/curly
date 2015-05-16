@@ -17,5 +17,6 @@ dependencies {
     compile "org.springframework.retry:spring-retry"
     compile "org.springframework.security.oauth:spring-security-oauth2"
     compile "org.mongodb:mongo-java-driver:$mongoDriverVersion"
+    compile "org.reflections:reflections:0.9.9"
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }

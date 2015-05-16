@@ -36,8 +36,6 @@ allprojects {
         maven { url "http://repo.spring.io/libs-milestone/" }
 
     }
-    apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
     apply plugin: 'license'
 
 
@@ -64,6 +62,24 @@ allprojects {
     ext['undertow.version'] = '1.2.5.Final'
     ext['jackson.version'] = '2.5.2'
 
+
+    license {
+        ext.year = Calendar.getInstance().get(Calendar.YEAR)
+        header rootProject.file('NOTICE')
+        includes(["**/*.java", "**/*.groovy", "**/*.scala", "**/*.yml"])
+        strictCheck true
+        mapping {
+            java = 'SLASHSTAR_STYLE'
+            groovy = 'SLASHSTAR_STYLE'
+            scala = 'SLASHSTAR_STYLE'
+        }
+    }
+}
+
+configure(allprojects - project(":merchant")) {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
     dependencyManagement {
         imports {
             mavenBom "io.spring.platform:platform-bom:$springIOPlatformVersion"
@@ -89,18 +105,8 @@ allprojects {
         testCompile "com.jayway.jsonpath:json-path"
         testCompile "org.skyscreamer:jsonassert:1.2.3"
     }
-    license {
-        ext.year = Calendar.getInstance().get(Calendar.YEAR)
-        header rootProject.file('NOTICE')
-        includes(["**/*.java", "**/*.groovy", "**/*.scala", "**/*.yml"])
-        strictCheck true
-        mapping {
-            java = 'SLASHSTAR_STYLE'
-            groovy = 'SLASHSTAR_STYLE'
-            scala = 'SLASHSTAR_STYLE'
-        }
-    }
 }
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
