@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 package curly.smuggler
-import curly.commons.github.GitHubAuthentication
+
 import curly.commons.github.OctoUser
 import curly.smuggler.sync.command.SyncCommand
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,10 +32,11 @@ class PickpocketController {
 
     @Autowired private SyncCommand command
 
-    @RequestMapping(method = RequestMethod.PATCH)
-    DeferredResult<ResponseEntity<List<ExportedOctoRepository>>> repositoriesSync(
-            @GitHubAuthentication OctoUser octoUser) {
-        return command.executeSync(octoUser)
+    @RequestMapping(method = RequestMethod.GET)
+    DeferredResult<ResponseEntity<List<ExportedOctoRepository>>> repositoriesSync() {
+        def u = new OctoUser(5256711l)
+        u.login = "joaoevangelista"
+        return command.executeSync(u)
     }
 
 }
