@@ -15,23 +15,21 @@
  */
 package curly
 
+import curly.HealthJsonProtocol._
 import spray.http.MediaTypes
+import spray.httpx.SprayJsonSupport._
 import spray.routing.HttpService
-
 
 /**
  * @author Joao Evangelista
  */
+trait HealthRoutes extends HttpService {
 
-trait MerchantRoutes extends HttpService {
-
-
-  val simpleMerchantRoute = {
-    path("exchange" / Segment) { userLogin =>
+  val healthRoutes = {
+    path("health") {
       get {
-        respondWithMediaType(MediaTypes.`application/json`) {
-          complete(userLogin)
-        }
+        respondWithMediaType(MediaTypes.`application/json`)
+        complete(Health("UP"))
       }
     }
   }

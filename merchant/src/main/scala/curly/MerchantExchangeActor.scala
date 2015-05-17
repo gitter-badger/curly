@@ -20,9 +20,9 @@ import akka.actor.Actor
 /**
  * @author Joao Evangelista
  */
-class MerchantExchangeActor extends Actor with MerchantRoutes with akka.actor.ActorLogging {
+class MerchantExchangeActor extends Actor with MerchantRoutes with HealthRoutes with akka.actor.ActorLogging {
 
-  override def receive: Receive = runRoute(simpleMerchantRoute)
+  override def receive: Receive = runRoute(simpleMerchantRoute ~ healthRoutes)
 
   def actorRefFactory = context
 }
