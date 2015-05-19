@@ -13,24 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant.repository
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
-
+import curly.merchant.ExportedOctoRepository
+import org.springframework.data.gemfire.repository.GemfireRepository
 /**
- * @author Joao Evangelista
+ * @author Joao Pedro Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
+interface ExportedOctoRepositoryRepository extends GemfireRepository<ExportedOctoRepository, String> {
 
-    implicit val system = ActorSystem()
-
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
-  }
-
+    List<ExportedOctoRepository> findByOctoRepositoryOwnerId(Long id)
 }

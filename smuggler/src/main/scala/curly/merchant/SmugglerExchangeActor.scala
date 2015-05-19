@@ -13,24 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
+import akka.actor.Actor
+import curly.merchant.health.HealthRoutes
 
 /**
  * @author Joao Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
+class SmugglerExchangeActor extends Actor with SmugglerRoutes with HealthRoutes with akka.actor.ActorLogging {
 
-    implicit val system = ActorSystem()
+  override def receive: Receive = runRoute(simpleMerchantRoute ~ healthRoutes)
 
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
-  }
-
+  def actorRefFactory = context
 }

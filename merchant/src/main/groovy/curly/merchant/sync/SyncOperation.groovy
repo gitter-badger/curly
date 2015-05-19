@@ -13,24 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant.sync
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
+import org.springframework.util.MultiValueMap
 
 /**
- * @author Joao Evangelista
+ * @author Joao Pedro Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
+interface SyncOperation<T> {
 
-    implicit val system = ActorSystem()
-
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
-  }
-
+    MultiValueMap<Operation, T> invoke(List<T> localRepositories, List<T> remoteRepositories)
 }

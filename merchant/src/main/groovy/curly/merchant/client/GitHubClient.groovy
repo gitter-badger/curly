@@ -13,24 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant.client
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
+import curly.commons.github.OctoUser
+import curly.merchant.OctoRepository
+import org.springframework.http.ResponseEntity
+import org.springframework.util.concurrent.ListenableFuture
 
 /**
- * @author Joao Evangelista
+ * @author Joao Pedro Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
+interface GitHubClient {
 
-    implicit val system = ActorSystem()
-
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
-  }
-
+    ListenableFuture<ResponseEntity<List<OctoRepository>>> getRepositories(OctoUser octoUser)
 }

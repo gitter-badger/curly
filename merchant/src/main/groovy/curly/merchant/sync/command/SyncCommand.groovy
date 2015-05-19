@@ -13,24 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant.sync.command
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
+import curly.commons.github.OctoUser
+import curly.merchant.ExportedOctoRepository
+import org.springframework.http.ResponseEntity
+import org.springframework.web.context.request.async.DeferredResult
 
 /**
- * @author Joao Evangelista
+ * @author Joao Pedro Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
-
-    implicit val system = ActorSystem()
-
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
-  }
-
+interface SyncCommand {
+    DeferredResult<ResponseEntity<List<ExportedOctoRepository>>> executeSync(OctoUser octoUser)
 }

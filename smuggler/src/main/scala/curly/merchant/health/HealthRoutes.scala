@@ -13,24 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant.health
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
+import curly.merchant.health.HealthJsonProtocol._
+import spray.http.MediaTypes
+import spray.httpx.SprayJsonSupport._
+import spray.routing.HttpService
 
 /**
  * @author Joao Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
+trait HealthRoutes extends HttpService {
 
-    implicit val system = ActorSystem()
-
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
+  val healthRoutes = {
+    path("health") {
+      get {
+        respondWithMediaType(MediaTypes.`application/json`)
+        complete(Health("UP"))
+      }
+    }
   }
+
 
 }

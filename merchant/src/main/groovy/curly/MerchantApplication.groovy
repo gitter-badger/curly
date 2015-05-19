@@ -16,7 +16,7 @@
 package curly
 
 import com.gemstone.gemfire.cache.GemFireCache
-import curly.smuggler.ExportedOctoRepository
+import curly.merchant.ExportedOctoRepository
 import org.springframework.boot.SpringApplication
 import org.springframework.cloud.client.SpringCloudApplication
 import org.springframework.context.annotation.Bean

@@ -13,24 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant.health
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import curly.merchant.SmugglerExchangeActor
-import spray.can.Http
+import spray.json.DefaultJsonProtocol
 
 /**
  * @author Joao Evangelista
  */
-object SmugglerServer {
-  def main(args: Array[String]) {
-
-    implicit val system = ActorSystem()
-
-    val service = system.actorOf(Props[SmugglerExchangeActor], "smugglerExchange")
-
-    IO(Http) ! Http.Bind(service, interface = "localhost", port = 8888)
-  }
-
+object HealthJsonProtocol extends DefaultJsonProtocol {
+  implicit val HealthFormat = jsonFormat1(Health)
 }
