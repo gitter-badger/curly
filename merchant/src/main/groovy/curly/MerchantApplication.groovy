@@ -29,10 +29,10 @@ import org.springframework.data.gemfire.repository.config.EnableGemfireRepositor
  * @author Joao Pedro Evangelista
  */
 @SpringCloudApplication
-class SmugglerApplication {
+class MerchantApplication {
 
     static void main(String[] args) {
-        SpringApplication.run SmugglerApplication, args
+        SpringApplication.run MerchantApplication, args
     }
 
     @Configuration

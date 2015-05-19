@@ -13,14 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.smuggler
 
 import akka.actor.Actor
+import curly.smuggler.health.HealthRoutes
 
 /**
  * @author Joao Evangelista
  */
-class MerchantExchangeActor extends Actor with MerchantRoutes with HealthRoutes with akka.actor.ActorLogging {
+class SmugglerExchangeActor extends Actor with SmugglerRoutes with HealthRoutes with akka.actor.ActorLogging {
 
   override def receive: Receive = runRoute(simpleMerchantRoute ~ healthRoutes)
 

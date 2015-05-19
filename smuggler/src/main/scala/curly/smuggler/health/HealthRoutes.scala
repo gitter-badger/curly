@@ -13,25 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.smuggler.health
 
+import curly.smuggler.health.HealthJsonProtocol._
 import spray.http.MediaTypes
+import spray.httpx.SprayJsonSupport._
 import spray.routing.HttpService
-
 
 /**
  * @author Joao Evangelista
  */
+trait HealthRoutes extends HttpService {
 
-trait MerchantRoutes extends HttpService {
-
-
-  val simpleMerchantRoute = {
-    path("exchange" / Segment) { userLogin =>
+  val healthRoutes = {
+    path("health") {
       get {
-        respondWithMediaType(MediaTypes.`application/json`) {
-          complete(userLogin)
-        }
+        respondWithMediaType(MediaTypes.`application/json`)
+        complete(Health("UP"))
       }
     }
   }
