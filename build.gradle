@@ -76,7 +76,7 @@ allprojects {
     }
 }
 
-configure(allprojects - project(":merchant")) {
+configure(allprojects - project(":smuggler")) {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
 

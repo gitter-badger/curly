@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :papers, :only => [:create, :update, :delete], :defaults => {:format => 'json'}
+
+  get '/papers/artifact/:art/owner/:owner', to: 'papers#get_by_owner_and_artifact', :defaults => {:format => 'json'}
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
