@@ -18,12 +18,7 @@ package curly.commons.config.cache.annotation;
 import curly.commons.config.cache.RedisCacheConfig;
 import org.springframework.context.annotation.Import;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * @author Joao Pedro Evangelista

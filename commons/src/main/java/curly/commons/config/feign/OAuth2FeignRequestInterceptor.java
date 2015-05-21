@@ -61,6 +61,10 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
         this.header = header;
     }
 
+    private static boolean tokenExists(OAuth2ClientContext oAuth2ClientContext) {
+        return oAuth2ClientContext.getAccessTokenRequest().getExistingToken() != null;
+    }
+
     /**
      * @see RequestInterceptor#apply(RequestTemplate)
      */
@@ -70,10 +74,6 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
             logger.debug("Applying RequestInterceptor customization");
             template.header(header, value(tokenType));
         }
-    }
-
-    private static boolean tokenExists(OAuth2ClientContext oAuth2ClientContext) {
-        return oAuth2ClientContext.getAccessTokenRequest().getExistingToken() != null;
     }
 
     private String value(String tokenType) {

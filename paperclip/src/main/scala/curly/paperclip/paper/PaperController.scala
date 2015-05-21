@@ -28,7 +28,7 @@ import rx.lang.scala.JavaConversions._
  * @author Joao Pedro Evangelista
  */
 @RestController
-@RequestMapping("/paperclip")
+@RequestMapping(value = Array("/paperclip"))
 class PaperController @Autowired()(val command: PaperCommand) {
 
   @RequestMapping(value = Array("/artifact/{artifact}"), method = Array(RequestMethod.GET))

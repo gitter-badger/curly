@@ -28,7 +28,7 @@ import rx.Observable
 class PaperHystrixCommand @Autowired()(val repository: PaperRepository) extends PaperCommand {
 
   @Retryable
-  @HystrixCommand("fallbackGetPaperByArtifact")
+  @HystrixCommand(fallbackMethod = "fallbackGetPaperByArtifact")
   override def getPaperByArtifact(artifact: String): Observable[Option[Paper]] = {
     new ObservableResult[Option[Paper]] {
       override def invoke(): Option[Paper] = {
