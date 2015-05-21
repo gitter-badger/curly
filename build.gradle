@@ -38,7 +38,6 @@ allprojects {
     }
     apply plugin: 'license'
 
-
     ext {
         groovyVersion = '2.4.1'
         kotlinVersion = '0.11.91.1'
@@ -74,9 +73,7 @@ allprojects {
             scala = 'SLASHSTAR_STYLE'
         }
     }
-}
 
-configure(allprojects - project(":smuggler")) {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
 
@@ -105,6 +102,10 @@ configure(allprojects - project(":smuggler")) {
         testCompile "com.jayway.jsonpath:json-path"
         testCompile "org.skyscreamer:jsonassert:1.2.3"
     }
+}
+
+configure(allprojects - project(":paperclip")) {
+
 }
 
 

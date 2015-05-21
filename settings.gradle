@@ -6,6 +6,6 @@ include 'infrastructure:configserver'
 include 'infrastructure:discovery'
 include 'infrastructure:prana'
 include 'infrastructure:proxy'
-include 'smuggler'
 include 'merchant'
+include "paperclip"
 

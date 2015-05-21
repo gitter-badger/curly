@@ -19,7 +19,6 @@ import curly.commons.security.OwnedResource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.hateoas.Identifiable;
@@ -58,7 +57,7 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
     private String incubation;
 
     public Artifact() {
-        this.id = (id == null) ? ObjectId.get().toHexString() : id;
+        //this.id = (id == null) ? ObjectId.get().toHexString() : id;
     }
 
     public Artifact(String id) {

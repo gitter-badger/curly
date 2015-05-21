@@ -1,0 +1,37 @@
+server:
+  port: 8091
+
+eureka:
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:10003/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+
+spring:
+  oauth2:
+      client:
+        clientId: cae4925a4ce2feb76ec8
+        clientSecret: 41df89b5d95976f0028045889e2c2596fbd6b417
+        accessTokenUri: https://github.com/login/oauth/access_token
+        userAuthorizationUri: https://github.com/login/oauth/authorize
+        clientAuthenticationScheme: form
+      resource:
+        userInfoUri: https://api.github.com/user
+        preferTokenInfo: false
+  jackson:
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+
+security:
+  user:
+    password: vanessa
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+    curly: INFO
+  file: application.log
+
