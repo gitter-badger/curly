@@ -20,7 +20,7 @@ Curly is a *concept* of an application where you can upload, detail, favorite, a
 Collect it into your account and also show yours stuff to the rest of world
 
 
-####It's based on Spring Cloud and Netflix OSS, also Spring Family, powered by Scala, Groovy and Java
+####It's built with Spring, Netflix OSS, Spray, Rails, written in Java, Scala, Groovy, Ruby, Kotlin*
  
 
 
