@@ -20,7 +20,9 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource
 import org.springframework.context.annotation.{Bean, Configuration}
+import org.springframework.http.HttpMethod
 import org.springframework.retry.annotation.EnableRetry
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
 
 /**
@@ -32,12 +34,21 @@ class PaperclipApplication {
   @Bean def defaultScalaModule = DefaultScalaModule
 }
 
+@Configuration
+@EnableOAuth2Resource
+class OAuth2Resource extends ResourceServerConfigurerAdapter {
+  override def configure(http: HttpSecurity): Unit = {
+    http
+      .anonymous()
+      .and()
+      .authorizeRequests()
+      .antMatchers(HttpMethod.GET, "/paperclip/**").permitAll()
+      .anyRequest().authenticated()
+  }
+}
+
 object Runner {
   def main(args: Array[String]) {
     SpringApplication.run(classOf[PaperclipApplication], args: _*)
   }
 }
-
-@Configuration
-@EnableOAuth2Resource
-class OAuth2Resource extends ResourceServerConfigurerAdapter with OAuth2ResourceServer
