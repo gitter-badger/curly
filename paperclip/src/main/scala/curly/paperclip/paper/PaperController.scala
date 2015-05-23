@@ -20,7 +20,7 @@ import curly.commons.rx.RxResult._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.security.access.annotation.Secured
-import org.springframework.web.bind.annotation.{PathVariable, RequestMapping, RequestMethod, RestController}
+import org.springframework.web.bind.annotation._
 import org.springframework.web.context.request.async.DeferredResult
 import rx.lang.scala.JavaConversions._
 
@@ -31,12 +31,18 @@ import rx.lang.scala.JavaConversions._
 @RequestMapping(value = Array("/paperclip"))
 class PaperController @Autowired()(val command: PaperCommand) {
 
+
+  /**
+   * Get the raw content of a file matching the artifact id
+   * @param artifact the artifact request it's paper
+   * @return raw content or Status 404 if not found
+   */
   @RequestMapping(value = Array("/artifact/{artifact}"), method = Array(RequestMethod.GET))
-  def getPaper(artifact: String@PathVariable("artifact")): DeferredResult[ResponseEntity[Paper]] = {
-    defer(toScalaObservable(command.getPaperByArtifact(artifact)).map {
+  def getPaper(artifact: String@PathVariable("artifact")): DeferredResult[_ <: ResponseEntity[RawPaper]] = {
+    defer(toJavaObservable(toScalaObservable(command.getPaperByArtifact(artifact)).map {
       case Some(o) => ResponseEntity.ok(o)
-      case None => new ResponseEntity[Paper](HttpStatus.NOT_FOUND)
-    })
+      case None => new ResponseEntity[RawPaper](HttpStatus.NOT_FOUND)
+    }))
   }
 
   /**
@@ -45,15 +51,20 @@ class PaperController @Autowired()(val command: PaperCommand) {
    * @param octoUser the current logged user
    * @return the found entity
    */
-  @Secured
+  @Secured(value = Array("ROLE_USER"))
   @RequestMapping(value = Array("/owner/artifact/{artifact}"), method = Array(RequestMethod.GET))
-  def getPaperForOwner(artifact: String@PathVariable("artifact"), octoUser: OctoUser@GitHubAuthentication): DeferredResult[ResponseEntity[Paper]] = {
-    defer(toScalaObservable(command.getPaperForOwner(artifact, Option(octoUser))).map {
+  def getPaperForOwner(artifact: String@PathVariable("artifact"), octoUser: OctoUser@GitHubAuthentication): DeferredResult[_ <: ResponseEntity[RawPaper]] = {
+    defer(toJavaObservable(toScalaObservable(command.getPaperForOwner(artifact, Option(octoUser))).map {
       case Some(o) => ResponseEntity.ok(o)
-      case None => new ResponseEntity[Paper](HttpStatus.NOT_FOUND)
-    })
+      case None => new ResponseEntity[RawPaper](HttpStatus.NOT_FOUND)
+    }))
   }
 
-  //todo get raw content
+  @Secured(value = Array("ROLE_USER"))
+  @RequestMapping(method = Array(RequestMethod.PATCH, RequestMethod.PUT))
+  def savePaper(rawPaper: RawPaper@RequestBody, octoUser: OctoUser@GitHubAuthentication): DeferredResult[_ <: ResponseEntity[_]] = {
+    ???
+  }
+
   //todo post content process save (reactive) akka?
 }

@@ -71,7 +71,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
         return new ObservableResult<Optional<Artifact>>() {
             @Override
             public Optional<Artifact> invoke() {
-                onSave(artifact, octoUser);
+                checkMatch(artifact, octoUser);
                 return Optional.ofNullable(repository.save(artifact));
             }
         };

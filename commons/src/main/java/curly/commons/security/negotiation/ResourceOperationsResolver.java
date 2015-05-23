@@ -22,5 +22,5 @@ import curly.commons.security.SimpleUser;
  * @author Joao Pedro Evangelista
  */
 public interface ResourceOperationsResolver<T extends OwnedResource, U extends SimpleUser<Long>> {
-    void onSave(T entity, U user);
+    void checkMatch(T entity, U user);
 }

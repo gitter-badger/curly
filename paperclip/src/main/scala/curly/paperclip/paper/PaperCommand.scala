@@ -22,7 +22,7 @@ import rx.Observable
  * @author Joao Pedro Evangelista
  */
 trait PaperCommand {
-  def getPaperByArtifact(artifact: String): Observable[Option[Paper]]
+  def getPaperByArtifact(artifact: String): Observable[Option[RawPaper]]
 
-  def getPaperForOwner(artifact: String, owner: Option[OctoUser]): Observable[Option[Paper]]
+  def getPaperForOwner(artifact: String, owner: Option[OctoUser]): Observable[Option[RawPaper]]
 }

@@ -19,14 +19,14 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 /**
+ * Entity representation of a MongoDB document
+ *
  * @author Joao Pedro Evangelista
  */
 @Document
 class Paper(val owner: String, val artifact: String, val contentLocation: String) {
 
   var id: String@Id = _
-
-  //noinspection ComparingUnrelatedTypes
 
   override def equals(other: Any): Boolean = other match {
     case that: Paper =>
@@ -38,6 +38,7 @@ class Paper(val owner: String, val artifact: String, val contentLocation: String
     case _ => false
   }
 
+  //noinspection ComparingUnrelatedTypes
   def canEqual(other: Any): Boolean = other.isInstanceOf[Paper]
 
   override def hashCode(): Int = {

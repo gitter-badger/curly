@@ -18,6 +18,8 @@ package curly.paperclip.paper
 import java.nio.file.{Files, Paths}
 
 /**
+ * Reader and writer for local storage only
+ *
  * @author Joao Evangelista
  */
 class LocalStorageAccessor extends StorageAccessor {
@@ -25,14 +27,15 @@ class LocalStorageAccessor extends StorageAccessor {
   val systemHome = System.getenv("HOMEPATH")
 
   override def rawContent(path: String): String = {
-    val path = java.nio.file.Paths.get(systemHome, path)
-    new String(Files.readAllBytes(path))
+    val fullPath = java.nio.file.Paths.get(systemHome, path)
+    new String(Files.readAllBytes(fullPath))
   }
 
-  override def write(content: String, artifact: String): Unit = {
+  override def write(content: String, artifact: String): String = {
     val dir = Files.createDirectory(Paths.get(systemHome, artifact)).toAbsolutePath.toString
-    val file = Paths.get(dir, "README.md")
-    Files.write(file, content.getBytes)
+    val file = Paths.get(dir, "PAPER.md")
+    val savedPath = Files.write(file, content.getBytes)
+    savedPath.toAbsolutePath.toString
   }
 }
 

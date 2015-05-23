@@ -29,7 +29,7 @@ public abstract class ResourceOperationsResolverAdapter<T extends OwnedResource,
 
 
     @Override
-    public void onSave(T entity, U user) {
+    public void checkMatch(T entity, U user) {
         Assert.notNull(entity, "Entity must be not null!");
         Assert.notNull(user, "User must be not null");
 

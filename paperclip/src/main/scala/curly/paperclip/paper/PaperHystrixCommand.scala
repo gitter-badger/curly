@@ -18,6 +18,7 @@ package curly.paperclip.paper
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult
 import curly.commons.github.OctoUser
+import curly.commons.security.negotiation.ResourceOperationsResolverAdapter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.retry.annotation.Retryable
 import rx.Observable
@@ -25,31 +26,60 @@ import rx.Observable
 /**
  * @author Joao Pedro Evangelista
  */
-class PaperHystrixCommand @Autowired()(val repository: PaperRepository) extends PaperCommand {
+class PaperHystrixCommand @Autowired()(val repository: PaperRepository,
+                                       val storageAccessor: StorageAccessor)
+  extends ResourceOperationsResolverAdapter[Paper, OctoUser] with PaperCommand {
 
   @Retryable
   @HystrixCommand(fallbackMethod = "fallbackGetPaperByArtifact")
-  override def getPaperByArtifact(artifact: String): Observable[Option[Paper]] = {
-    new ObservableResult[Option[Paper]] {
-      override def invoke(): Option[Paper] = {
-        Option(repository.findByArtifact(artifact))
+  override def getPaperByArtifact(artifact: String): Observable[Option[RawPaper]] = {
+    new ObservableResult[Option[RawPaper]] {
+      override def invoke(): Option[RawPaper] = {
+        val paper = Option(repository.findByArtifact(artifact))
+        readFromLocation(paper)
       }
+    }
+  }
+
+  private def readFromLocation(paper: Option[Paper]): Option[RawPaper] = {
+    paper match {
+      case Some(mPaper) => Option(storageAccessor.rawContent(mPaper.contentLocation)) match {
+        case
+          Some(mContent) => Some(new RawPaper(mPaper.owner, mPaper.artifact, mContent))
+        case _ => None
+      }
+      case _ => None
     }
   }
 
   @HystrixCommand
   override def getPaperForOwner(artifact: String, owner: Option[OctoUser]) = {
-    new ObservableResult[Option[Paper]] {
-      override def invoke(): Option[Paper] = {
+    new ObservableResult[Option[RawPaper]] {
+      override def invoke(): Option[RawPaper] = {
         owner match {
-          case Some(o) => Option(repository.findByArtifactAndOwner(artifact, o.getId.toString))
-          case None => throw new IllegalArgumentException
+          case Some(o) =>
+            val paper = Option(repository.findByArtifactAndOwner(artifact, o.getId.toString))
+            checkOwner(owner, paper)
+            readFromLocation(paper)
+          case _ => None
         }
       }
     }
   }
 
-  def fallbackGetPaperByArtifact(artifact: String): Option[Paper] = {
-    Option(new Paper("", "", ""))
+  private def checkOwner(octoUser: Option[OctoUser], optPaper: Option[Paper]): Unit = {
+    octoUser match {
+      case
+        Some(octo) => optPaper match {
+        case Some(raw) =>
+          checkMatch(raw, octo)
+        case _ =>
+      }
+      case _ =>
+    }
+  }
+
+  def fallbackGetPaperByArtifact(artifact: String): Option[RawPaper] = {
+    Option(new RawPaper("", artifact, ""))
   }
 }

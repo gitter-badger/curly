@@ -38,7 +38,7 @@ public class OperationsTests {
         SampleResource sampleResource = new SampleResource();
         sampleResource.setOwner("1234");
         OctoUser user = new OctoUser(4321L);
-        sample.onSave(sampleResource, user);
+        sample.checkMatch(sampleResource, user);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class OperationsTests {
         SampleResource sampleResource = new SampleResource();
         OctoUser user = new OctoUser(1234L);
         assertTrue(sampleResource.getOwner() == null);
-        sample.onSave(sampleResource, user);
+        sample.checkMatch(sampleResource, user);
         assertEquals("Owner must be equal than user id", sampleResource.getOwner(), user.getId().toString());
     }
 }
