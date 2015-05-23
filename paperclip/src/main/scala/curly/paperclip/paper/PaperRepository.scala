@@ -22,6 +22,8 @@ import org.springframework.data.mongodb.repository.MongoRepository
  */
 trait PaperRepository extends MongoRepository[Paper, String] {
 
+  def deleteByIdAndOwner(paperId: String, toString: String): Unit
+
   def findByArtifact(artifact: String): Paper
 
   def findByArtifactAndOwner(artifact: String, owner: String): Paper

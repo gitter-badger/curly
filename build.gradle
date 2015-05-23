@@ -104,11 +104,6 @@ allprojects {
     }
 }
 
-configure(allprojects - project(":paperclip")) {
-
-}
-
-
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }

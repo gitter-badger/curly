@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package test.groovy.curly.smuggler.sync
+package curly.merchant.sync
 
-import curly.smuggler.ExportedOctoRepository
-import curly.smuggler.OctoRepository
+import curly.merchant.ExportedOctoRepository
+import curly.merchant.OctoRepository
 import org.junit.Before
 import org.junit.Test
 import org.springframework.util.MultiValueMap

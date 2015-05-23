@@ -13,25 +13,32 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.paperclip.paper
+package curly.paperclip
 
-import java.nio.file.Path
-
-import curly.commons.github.OctoUser
-import rx.Observable
+import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders._
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
 
 /**
  * @author Joao Pedro Evangelista
  */
-trait PaperCommand {
+class LocalStorageAccessorTests extends SpringBootTests {
 
-  def getPaperByArtifact(artifact: String): Observable[Option[RawPaper]]
+  @Autowired() val wac: WebApplicationContext = _
 
-  def getPaperForOwner(artifact: String, owner: Option[OctoUser]): Observable[Option[RawPaper]]
+  val mockMvc = MockMvcBuilders.webAppContextSetup(wac).build()
 
-  def writeContent(content: String, artifact: String): Observable[Option[Path]]
+  @Test
+  def testRead(): Unit = {
+    mockMvc.perform(
+      asyncDispatch(
+        mockMvc.perform(put("/pickpocket")
+          .principal(octoUser))
+          .andReturn()
+      )
+    )
+  }
 
-  def savePaper(path: Path, artifact: String, octoUser: OctoUser): Observable[Option[Paper]]
-
-  def deletePaper(paperId: String, octoUser: OctoUser): Unit
 }

@@ -61,7 +61,7 @@ class PaperController @Autowired()(val command: PaperCommand) {
   }
 
   @Secured(value = Array("ROLE_USER"))
-  @RequestMapping(method = Array(RequestMethod.PATCH, RequestMethod.PUT))
+  @RequestMapping(method = Array(RequestMethod.POST, RequestMethod.PUT))
   def savePaper(rawPaper: RawPaper@RequestBody, octoUser: OctoUser@GitHubAuthentication): DeferredResult[_ <: ResponseEntity[_]] = {
     ???
   }
