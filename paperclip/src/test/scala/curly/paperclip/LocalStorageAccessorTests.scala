@@ -26,9 +26,8 @@ import org.springframework.web.context.WebApplicationContext
  */
 class LocalStorageAccessorTests extends SpringBootTests {
 
-  @Autowired() val wac: WebApplicationContext = _
-
   val mockMvc = MockMvcBuilders.webAppContextSetup(wac).build()
+  @Autowired() var wac: WebApplicationContext = null
 
   @Test
   def testRead(): Unit = {

@@ -60,10 +60,16 @@ class PaperController @Autowired()(val command: PaperCommand) {
     }))
   }
 
-  @Secured(value = Array("ROLE_USER"))
   @RequestMapping(method = Array(RequestMethod.POST, RequestMethod.PUT))
-  def savePaper(rawPaper: RawPaper@RequestBody, octoUser: OctoUser@GitHubAuthentication): DeferredResult[_ <: ResponseEntity[_]] = {
-    ???
+  def savePaper(rawPaper: RawPaper@RequestBody, octoUser: OctoUser@GitHubAuthentication): DeferredResult[_ <: ResponseEntity[Any]] = {
+    defer(toJavaObservable(toScalaObservable(command.writeContent(rawPaper.content, rawPaper.artifact)).map {
+      case Some(path) =>
+        command.savePaper(path, rawPaper.artifact, octoUser).toBlocking.first() match {
+          case Some(entity) => new ResponseEntity[Any](HttpStatus.CREATED)
+          case None => new ResponseEntity[Any](HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+      case None => new ResponseEntity[Any](HttpStatus.UNPROCESSABLE_ENTITY)
+    }))
   }
 
   //todo post content process save (reactive) akka?
