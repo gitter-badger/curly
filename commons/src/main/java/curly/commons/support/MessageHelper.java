@@ -1,9 +1,9 @@
 package curly.commons.support;
 
+import curly.commons.config.cloud.actuator.AmqpActuatorProperties;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.cloud.actuator.properties.AmqpActuatorProperties;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

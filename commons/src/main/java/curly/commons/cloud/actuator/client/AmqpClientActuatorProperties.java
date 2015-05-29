@@ -1,7 +1,7 @@
 package curly.commons.cloud.actuator.client;
 
+import curly.commons.config.cloud.actuator.AmqpActuatorProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.actuator.properties.AmqpActuatorProperties;
 import org.springframework.stereotype.Component;
 
 /**

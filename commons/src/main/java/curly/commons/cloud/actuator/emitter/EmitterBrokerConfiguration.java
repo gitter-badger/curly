@@ -1,5 +1,7 @@
 package curly.commons.cloud.actuator.emitter;
 
+import curly.commons.config.cloud.actuator.ActuatorBroker;
+import curly.commons.config.cloud.actuator.AmqpActuatorProperties;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -9,8 +11,6 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.actuator.config.ActuatorBroker;
-import org.springframework.cloud.actuator.properties.AmqpActuatorProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

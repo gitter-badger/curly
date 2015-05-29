@@ -1,6 +1,6 @@
 package curly.commons.config.cloud.actuator.emitter;
 
-import org.springframework.cloud.actuator.emitter.ActuatorEmitterConfiguration;
+import curly.commons.cloud.actuator.emitter.ActuatorEmitterConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

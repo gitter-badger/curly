@@ -1,12 +1,12 @@
 package curly.commons.cloud.actuator.emitter;
 
+import curly.commons.config.cloud.actuator.AmqpActuatorProperties;
+import curly.commons.support.MessageHelper;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.BeansEndpoint;
 import org.springframework.boot.actuate.endpoint.MetricsEndpoint;
-import org.springframework.cloud.actuator.properties.AmqpActuatorProperties;
-import org.springframework.cloud.actuator.support.MessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /**
