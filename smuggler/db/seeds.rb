@@ -5,11 +5,3 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-
-Paper.create([
-                 {owner: 1234, artifct: 1234, content_location: 'example.com/14234.md'},
-                 {owner: 1234, artifct: 12345, content_location: 'example.com/12364.md'},
-                 {owner: 1234, artifct: 12346, content_location: 'example.com/12354.md'},
-                 {owner: 12324, artifct: 12343, content_location: 'example.com/12334.md'},
-
-             ])
