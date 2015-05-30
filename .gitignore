@@ -1,5 +1,12 @@
 # Created by .ignore support plugin (hsz.mobi)
 
+# Ignore activator for PlayFramework
+
+!paperclip/activator
+!paperclip/activator-launch-1.3.2.jar
+
+
+
 ### Linux template
 *~
 

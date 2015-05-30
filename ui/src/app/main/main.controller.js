@@ -1,7 +1,7 @@
 'use strict';
 
 class MainCtrl {
-  constructor($scope) {
+  constructor ($scope) {
     $scope.awesomeThings = [
       {
         'title': 'AngularJS',
@@ -58,7 +58,7 @@ class MainCtrl {
         'logo': 'babel.png'
       }
     ];
-    $scope.awesomeThings.forEach(function (awesomeThing) {
+    $scope.awesomeThings.forEach(function(awesomeThing) {
       awesomeThing.rank = Math.random();
     });
   }

@@ -1,7 +1,7 @@
 'use strict';
 
 class NavbarCtrl {
-  constructor($scope) {
+  constructor ($scope) {
     $scope.date = new Date();
   }
 }
