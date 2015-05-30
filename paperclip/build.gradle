@@ -7,4 +7,5 @@ dependencies {
     compile "com.fasterxml.jackson.module:jackson-module-scala_2.11:2.5.2"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-rest"
+    testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
 }

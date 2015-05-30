@@ -31,7 +31,6 @@ import rx.lang.scala.JavaConversions._
 @RequestMapping(value = Array("/paperclip"))
 class PaperController @Autowired()(val command: PaperCommand) {
 
-
   /**
    * Get the raw content of a file matching the artifact id
    * @param artifact the artifact request it's paper

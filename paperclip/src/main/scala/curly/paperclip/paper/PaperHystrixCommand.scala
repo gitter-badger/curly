@@ -39,20 +39,9 @@ class PaperHystrixCommand @Autowired()(val repository: PaperRepository,
   override def getPaperByArtifact(artifact: String): Observable[Option[RawPaper]] = {
     new ObservableResult[Option[RawPaper]] {
       override def invoke(): Option[RawPaper] = {
-        val paper = Option(repository.findByArtifact(artifact))
+        val paper: = Option(repository.findByArtifact(artifact))
         readFromLocation(paper)
       }
-    }
-  }
-
-  private def readFromLocation(paper: Option[Paper]): Option[RawPaper] = {
-    paper match {
-      case Some(mPaper) => Option(storageAccessor.rawContent(mPaper.contentLocation)) match {
-        case
-          Some(mContent) => Some(new RawPaper(mPaper.owner, mPaper.artifact, mContent))
-        case _ => None
-      }
-      case _ => None
     }
   }
 
@@ -90,6 +79,17 @@ class PaperHystrixCommand @Autowired()(val repository: PaperRepository,
           case _ => None
         }
       }
+    }
+  }
+
+  private def readFromLocation(paper: Option[Paper]): Option[RawPaper] = {
+    paper match {
+      case Some(mPaper) => Option(storageAccessor.rawContent(mPaper.contentLocation)) match {
+        case
+          Some(mContent) => Some(new RawPaper(mPaper.owner, mPaper.artifact, mContent))
+        case _ => None
+      }
+      case _ => None
     }
   }
 
