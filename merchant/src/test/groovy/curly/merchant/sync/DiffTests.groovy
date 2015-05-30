@@ -15,8 +15,8 @@
  */
 package curly.merchant.sync
 
-import curly.merchant.ExportedOctoRepository
-import curly.merchant.OctoRepository
+import curly.merchant.domain.ExportedOctoRepository
+import curly.merchant.domain.OctoRepository
 import org.junit.Before
 import org.junit.Test
 import org.springframework.util.MultiValueMap

@@ -9,5 +9,5 @@ jar {
     baseName = 'sidecar'
 }
 springBoot {
-    mainClass = 'curly.SideCarApplication'
+    mainClass = 'curly.sidecar.SideCarApplication'
 }

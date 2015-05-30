@@ -15,7 +15,7 @@
  */
 package curly.merchant.sync
 import curly.commons.logging.annotation.Loggable
-import curly.merchant.ExportedOctoRepository
+import curly.merchant.domain.ExportedOctoRepository
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 /**

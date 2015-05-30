@@ -13,9 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.merchant
+package curly.merchant.web
 
 import curly.commons.github.OctoUser
+import curly.merchant.domain.ExportedOctoRepository
 import curly.merchant.sync.command.SyncCommand
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

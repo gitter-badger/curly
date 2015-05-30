@@ -13,21 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.sidecar
 
 import org.springframework.boot.SpringApplication
 import org.springframework.cloud.client.SpringCloudApplication
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy
+import org.springframework.cloud.netflix.sidecar.EnableSidecar
 
 /**
  * @author João Pedro Evangelista
  */
-@EnableZuulProxy
+@EnableSidecar
 @SpringCloudApplication
-class ZuulProxyApplication {
+public class SideCarApplication {
 
     static void main(String[] args) {
-        SpringApplication.run ZuulProxyApplication.class, args
+        SpringApplication.run SideCarApplication.class, args
     }
 
 }

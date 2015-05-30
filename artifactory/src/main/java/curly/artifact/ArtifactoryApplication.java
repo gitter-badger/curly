@@ -13,21 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.artifact;
 
-import org.springframework.boot.SpringApplication
-import org.springframework.cloud.client.SpringCloudApplication
-import org.springframework.cloud.netflix.sidecar.EnableSidecar
+import curly.commons.config.cache.annotation.EnableRedisCache;
+import curly.commons.config.context.EnableRingBufferExecutor;
+import curly.commons.logging.annotation.config.EnableLoggable;
+import org.springframework.boot.SpringApplication;
+import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
  * @author João Pedro Evangelista
+ * @since 25/04/15
  */
-@EnableSidecar
+@EnableLoggable
+@EnableRingBufferExecutor
+@EnableRedisCache
+@EnableMongoRepositories
 @SpringCloudApplication
-public class SideCarApplication {
+public class ArtifactoryApplication {
 
-    static void main(String[] args) {
-        SpringApplication.run SideCarApplication.class, args
+    public static void main(String[] args) {
+        SpringApplication.run(ArtifactoryApplication.class, args);
     }
 
 }

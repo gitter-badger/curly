@@ -16,7 +16,7 @@
 package curly.merchant.sync.command
 
 import curly.commons.github.OctoUser
-import curly.merchant.ExportedOctoRepository
+import curly.merchant.domain.ExportedOctoRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.context.request.async.DeferredResult
 

@@ -19,8 +19,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
 import curly.commons.config.feign.ex.InternalServerErrorException
 import curly.commons.github.OctoUser
 import curly.commons.logging.annotation.Loggable
-import curly.merchant.ExportedOctoRepository
 import curly.merchant.client.GitHubClient
+import curly.merchant.domain.ExportedOctoRepository
 import curly.merchant.repository.ExportedOctoRepositoryRepository
 import curly.merchant.sync.Diff
 import curly.merchant.sync.Operation

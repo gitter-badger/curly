@@ -13,28 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly;
+package curly.configserver
 
-import curly.commons.config.cache.annotation.EnableRedisCache;
-import curly.commons.config.context.EnableRingBufferExecutor;
-import curly.commons.logging.annotation.config.EnableLoggable;
-import org.springframework.boot.SpringApplication;
-import org.springframework.cloud.client.SpringCloudApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.boot.SpringApplication
+import org.springframework.cloud.client.SpringCloudApplication
+import org.springframework.cloud.config.server.EnableConfigServer
 
 /**
  * @author João Pedro Evangelista
- * @since 25/04/15
  */
-@EnableLoggable
-@EnableRingBufferExecutor
-@EnableRedisCache
-@EnableMongoRepositories
+@EnableConfigServer
 @SpringCloudApplication
-public class ArtifactoryApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(ArtifactoryApplication.class, args);
+public class ConfigServerApplication {
+    static void main(String[] args) {
+        SpringApplication.run ConfigServerApplication.class, args
     }
-
 }

@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.merchant
 
 import com.gemstone.gemfire.cache.GemFireCache
-import curly.merchant.ExportedOctoRepository
+import curly.merchant.domain.ExportedOctoRepository
 import org.springframework.boot.SpringApplication
 import org.springframework.cloud.client.SpringCloudApplication
 import org.springframework.context.annotation.Bean

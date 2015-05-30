@@ -15,7 +15,7 @@
  */
 package curly.merchant.repository
 
-import curly.merchant.ExportedOctoRepository
+import curly.merchant.domain.ExportedOctoRepository
 import org.springframework.data.gemfire.repository.GemfireRepository
 /**
  * @author Joao Pedro Evangelista

@@ -13,20 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.gatekeeper
 
 import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
+import org.springframework.cloud.client.SpringCloudApplication
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 
 /**
  * @author João Pedro Evangelista
  */
-@EnableEurekaServer
-@SpringBootApplication
-class EurekaServerApplication {
+@EnableZuulProxy
+@SpringCloudApplication
+class ZuulProxyApplication {
 
     static void main(String[] args) {
-        SpringApplication.run EurekaServerApplication.class, args
+        SpringApplication.run ZuulProxyApplication.class, args
     }
+
 }

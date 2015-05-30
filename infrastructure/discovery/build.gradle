@@ -9,6 +9,6 @@ jar {
     baseName = 'discovery'
 }
 springBoot {
-    mainClass = 'curly.EurekaServerApplication'
+    mainClass = 'curly.discovery.EurekaServerApplication'
     requiresUnpack = ['com.netflix.eureka:eureka-core', 'com.netflix.eureka:eureka-client']
 }

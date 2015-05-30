@@ -17,7 +17,7 @@ package curly.merchant.client
 
 import curly.commons.github.OctoUser
 import curly.commons.logging.annotation.Loggable
-import curly.merchant.OctoRepository
+import curly.merchant.domain.OctoRepository
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity

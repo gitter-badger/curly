@@ -12,5 +12,5 @@ jar {
     baseName = 'proxy'
 }
 springBoot {
-    mainClass = 'curly.ZuulProxyApplication'
+    mainClass = 'curly.gatekeeper.ZuulProxyApplication'
 }

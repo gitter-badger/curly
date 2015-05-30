@@ -9,5 +9,5 @@ jar {
     baseName = 'config-server'
 }
 springBoot {
-    mainClass = 'curly.ConfigServerApplication'
+    mainClass = 'curly.configserver.ConfigServerApplication'
 }

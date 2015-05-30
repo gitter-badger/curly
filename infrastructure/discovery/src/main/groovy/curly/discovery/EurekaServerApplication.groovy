@@ -13,19 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.discovery
 
 import org.springframework.boot.SpringApplication
-import org.springframework.cloud.client.SpringCloudApplication
-import org.springframework.cloud.config.server.EnableConfigServer
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
 
 /**
  * @author João Pedro Evangelista
  */
-@EnableConfigServer
-@SpringCloudApplication
-public class ConfigServerApplication {
+@EnableEurekaServer
+@SpringBootApplication
+class EurekaServerApplication {
+
     static void main(String[] args) {
-        SpringApplication.run ConfigServerApplication.class, args
+        SpringApplication.run EurekaServerApplication.class, args
     }
 }

@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly
+package curly.gatekeeper
 
 import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso
 import org.springframework.cloud.security.oauth2.sso.OAuth2SsoConfigurer

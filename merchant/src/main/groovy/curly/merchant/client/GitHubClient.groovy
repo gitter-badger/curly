@@ -16,7 +16,7 @@
 package curly.merchant.client
 
 import curly.commons.github.OctoUser
-import curly.merchant.OctoRepository
+import curly.merchant.domain.OctoRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.util.concurrent.ListenableFuture
 
