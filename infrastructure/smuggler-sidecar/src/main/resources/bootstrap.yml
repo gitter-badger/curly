@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: smuggler-sidecar
+  cloud:
+    config:
+      uri: http://localhost:10004/
+
