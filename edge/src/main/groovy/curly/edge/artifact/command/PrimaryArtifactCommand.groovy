@@ -16,7 +16,7 @@
 package curly.edge.artifact.command
 
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult
-import curly.edge.artifact.Artifact
+import curly.edge.artifact.domain.Artifact
 import curly.edge.artifact.repository.ArtifactClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

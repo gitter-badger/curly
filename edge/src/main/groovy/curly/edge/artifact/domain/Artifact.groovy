@@ -13,26 +13,39 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.edge.artifact.domain
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
-
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import org.springframework.data.annotation.Id
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @since 19/04/2015£
  */
-@Data
-@Document
-@NoArgsConstructor
-@AllArgsConstructor
-public class Type implements Serializable {
+@ToString
+@EqualsAndHashCode
+class Artifact implements Serializable {
 
-    private static final long serialVersionUID = -7040041440712207806L;
+    @Id
+    String id
 
-    private String name;
+    String author
+
+    String name
+
+    String homePage
+
+    Set<Language> languages
+
+    Set<Tag> tags
+
+    Category category
+
+    String incubation
+
+    String owner
+
+    boolean isNew() {
+        id == null
+    }
 }

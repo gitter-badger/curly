@@ -15,6 +15,7 @@
  */
 package curly.edge.artifact
 
+import curly.edge.artifact.domain.Artifact
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport
 import org.springframework.stereotype.Component
 

@@ -13,8 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.edge.artifact.domain
 
+import curly.edge.artifact.ArtifactController
+import curly.edge.artifact.ArtifactResource
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.PagedResources
 import org.springframework.hateoas.ResourceAssembler

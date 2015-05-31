@@ -13,41 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
-
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-
+package curly.edge.artifact.domain
 /**
  * @author Joao Pedro Evangelista
- * @since 19/04/2015£
+ * @since 19/04/2015
  */
-class Artifact implements Serializable {
-
-    @Id
-    String id
-
-    String author
+class Language implements Serializable {
 
     String name
 
-    String homePage
+    Language(String name) { this.name = name }
 
-    Set<Language> languages
-
-    Set<Type> types
-
-    Category category
-
-    String incubation
-
-    String owner
-
-    Artifact() {
-        this.id = id == null ? ObjectId.get().toHexString() : id;
-    }
-
-    boolean isNew() {
-        id == null
-    }
+    Language() {}
 }

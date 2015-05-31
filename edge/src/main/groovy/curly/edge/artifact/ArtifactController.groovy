@@ -17,6 +17,7 @@ package curly.edge.artifact
 
 import curly.commons.web.hateoas.MediaTypes
 import curly.commons.web.hateoas.PageProcessor
+import curly.edge.artifact.domain.Artifact
 import curly.edge.artifact.repository.ArtifactClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable

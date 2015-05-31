@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.edge.artifact.domain
 /**
  * @author Joao Pedro Evangelista
  * @since 19/04/2015

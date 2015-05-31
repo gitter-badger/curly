@@ -15,7 +15,7 @@
  */
 package curly.edge.artifact.command
 
-import curly.edge.artifact.Artifact
+import curly.edge.artifact.domain.Artifact
 
 /**
  * @author João Pedro Evangelista
