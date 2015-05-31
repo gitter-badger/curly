@@ -1,6 +1,6 @@
 [submodule "vector"]
 	path = vector
-	url = https://github.com/Netflix/vector.git
+	url = https://github.com/joaoevangelista/vector.git
 [submodule "curly-commons"]
 	path = curly-commons
 	url = https://github.com/joaoevangelista/curly-commons.git
