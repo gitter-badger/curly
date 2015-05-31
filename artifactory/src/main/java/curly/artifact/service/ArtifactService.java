@@ -13,30 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.service;
 
+import curly.artifact.domain.Artifact;
+import curly.commons.github.OctoUser;
 import org.springframework.data.domain.Page;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
+import org.springframework.data.domain.Pageable;
+import rx.Observable;
 
-import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author João Pedro Evangelista
  */
-public class PagedArtifact extends PagedResources<Artifact> {
-    protected PagedArtifact() {
-        super();
-    }
+public interface ArtifactService {
 
-    public PagedArtifact(Collection<Artifact> content, PageMetadata metadata, Link... links) {
-        super(content, metadata, links);
-    }
+    Observable<Optional<Page<Artifact>>> findAll(Pageable pageable);
 
-    public PagedArtifact(Page<Artifact> artifacts) {
-        super(artifacts.getContent(),
-                new PageMetadata(artifacts.getSize(),
-                        artifacts.getNumber(), artifacts.getTotalElements(),
-                        artifacts.getTotalPages()));
-    }
+    Observable<Optional<Artifact>> save(Artifact artifact, OctoUser octoUser);
+
+    Observable<Optional<Artifact>> findOne(String id);
+
+    void delete(String id, OctoUser user);
 }

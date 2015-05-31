@@ -13,10 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
+import curly.artifact.domain.Artifact;
 import curly.commons.github.OctoUser;
 import curly.commons.logging.annotation.Loggable;
 import curly.commons.security.negotiation.ResourceOperationsResolverAdapter;

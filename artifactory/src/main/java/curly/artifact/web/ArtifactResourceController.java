@@ -13,8 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.web;
 
+import curly.artifact.domain.Artifact;
+import curly.artifact.domain.PagedArtifact;
+import curly.artifact.service.ArtifactService;
 import curly.commons.github.GitHubAuthentication;
 import curly.commons.github.OctoUser;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +38,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.concurrent.Callable;
 
 import static curly.commons.rx.RxResult.defer;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * @author João Pedro Evangelista

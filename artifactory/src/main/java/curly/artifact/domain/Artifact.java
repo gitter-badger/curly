@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.domain;
 
 import curly.commons.security.OwnedResource;
 import lombok.AllArgsConstructor;
@@ -50,7 +50,7 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
 
     private Set<Language> languages;
 
-    private Set<Type> types;
+	private Set<Tag> tags;
 
     private Category category;
 
@@ -66,8 +66,8 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
         this.name = "";
         this.homePage = "";
         this.languages = new HashSet<>(0);
-        this.types = new HashSet<>(0);
-        this.category = new Category();
+		this.tags = new HashSet<>(0);
+		this.category = new Category();
         this.incubation = "";
         this.owner = "";
     }

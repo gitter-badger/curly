@@ -15,7 +15,11 @@
  */
 package curly.artifactory;
 
-import curly.artifact.*;
+import curly.artifact.ArtifactoryApplication;
+import curly.artifact.domain.Artifact;
+import curly.artifact.domain.Category;
+import curly.artifact.domain.Language;
+import curly.artifact.domain.Tag;
 import curly.commons.github.OctoUser;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -66,10 +70,10 @@ public abstract class SpringBootTest {
     public Artifact createArtifact(MongoTemplate mongoTemplate) {
         Artifact artifact = new Artifact();
         Set<Language> languages = new HashSet<>(0);
-        Set<Type> types = new HashSet<>(0);
-        types.add(new Type("document"));
-        types.add(new Type("nosql"));
-        languages.add(new Language("java"));
+		Set<Tag> tags = new HashSet<>(0);
+		tags.add(new Tag("document"));
+		tags.add(new Tag("nosql"));
+		languages.add(new Language("java"));
         languages.add(new Language("groovy"));
         languages.add(new Language("ruby"));
         artifact.setName("A lovers project");
@@ -78,8 +82,8 @@ public abstract class SpringBootTest {
         artifact.setHomePage("http://example.com");
         artifact.setIncubation(LocalDate.now().toString());
         artifact.setLanguages(languages);
-        artifact.setTypes(types);
-        mongoTemplate.insert(artifact);
+		artifact.setTags(tags);
+		mongoTemplate.insert(artifact);
         return artifact;
     }
 }

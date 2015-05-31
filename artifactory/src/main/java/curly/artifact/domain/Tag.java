@@ -13,25 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.domain;
 
-import curly.commons.github.OctoUser;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import rx.Observable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Optional;
+import java.io.Serializable;
 
 /**
- * @author João Pedro Evangelista
+ * @author Joao Pedro Evangelista
+ * @since 19/04/2015
  */
-public interface ArtifactService {
+@Data
+@Document
+@NoArgsConstructor
+@AllArgsConstructor
+public class Tag implements Serializable {
 
-    Observable<Optional<Page<Artifact>>> findAll(Pageable pageable);
+	private static final long serialVersionUID = -7040041440712207806L;
 
-    Observable<Optional<Artifact>> save(Artifact artifact, OctoUser octoUser);
-
-    Observable<Optional<Artifact>> findOne(String id);
-
-    void delete(String id, OctoUser user);
+	private String name;
 }
