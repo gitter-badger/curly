@@ -4,3 +4,6 @@
 [submodule "curly-commons"]
 	path = curly-commons
 	url = https://github.com/joaoevangelista/curly-commons.git
+[submodule "curly-config"]
+	path = curly-config
+	url = https://github.com/joaoevangelista/curly-config.git
