@@ -2,6 +2,6 @@
 
 
 cd ../../
-gradlew :configserver:bootRun
+gradlew :infrastructure:configserver:bootRun
 
 

@@ -6,7 +6,6 @@ include 'infrastructure:configserver'
 include 'infrastructure:discovery'
 include 'infrastructure:smuggler-sidecar'
 include 'infrastructure:aimer-sidecar'
-include 'infrastructure:paperclip-sidecar'
 include 'infrastructure:proxy'
-include 'merchant'
+include 'paperclip'
 
