@@ -1,8 +1,12 @@
 apply plugin: 'groovy'
+apply plugin: 'scala'
 
 dependencies {
     compile project(":curly-commons")
-    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    compile "org.scala-lang:scala-library:$scalaVersion"
+    compile "io.reactivex:rxscala_2.11:0.24.1"
+    compile "com.fasterxml.jackson.module:jackson-module-scala_2.11:2.5.2"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-rest"
+    testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
 }
