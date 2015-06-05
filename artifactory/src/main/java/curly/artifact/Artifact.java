@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.domain;
+package curly.artifact;
 
 import curly.commons.security.OwnedResource;
 import lombok.AllArgsConstructor;
@@ -37,43 +37,43 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = false)
 public class Artifact extends OwnedResource implements Identifiable<String>, Serializable {
 
-    private static final long serialVersionUID = 8357768165966900756L;
+	private static final long serialVersionUID = 8357768165966900756L;
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    private String author;
+	private String author;
 
-    private String name;
+	private String name;
 
-    private String homePage;
+	private String homePage;
 
-    private Set<Language> languages;
+	private Set<Language> languages;
 
-	private Set<Tag> tags;
+	private Set<Type> types;
 
-    private Category category;
+	private Category category;
 
-    private String incubation;
+	private String incubation;
 
-    public Artifact() {
-        //this.id = (id == null) ? ObjectId.get().toHexString() : id;
-    }
+	public Artifact() {
+		//this.id = (id == null) ? ObjectId.get().toHexString() : id;
+	}
 
-    public Artifact(String id) {
-        this.id = id;
-        this.author = "";
-        this.name = "";
-        this.homePage = "";
-        this.languages = new HashSet<>(0);
-		this.tags = new HashSet<>(0);
+	public Artifact(String id) {
+		this.id = id;
+		this.author = "";
+		this.name = "";
+		this.homePage = "";
+		this.languages = new HashSet<>(0);
+		this.types = new HashSet<>(0);
 		this.category = new Category();
-        this.incubation = "";
-        this.owner = "";
-    }
+		this.incubation = "";
+		this.owner = "";
+	}
 
-    @Override
-    public String getId() {
-        return id;
-    }
+	@Override
+	public String getId() {
+		return id;
+	}
 }

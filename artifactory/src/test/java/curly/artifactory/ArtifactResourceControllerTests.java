@@ -15,7 +15,7 @@
  */
 package curly.artifactory;
 
-import curly.artifact.domain.Artifact;
+import curly.artifact.Artifact;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

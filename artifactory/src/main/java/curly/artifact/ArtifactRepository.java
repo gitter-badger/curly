@@ -13,9 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.service;
+package curly.artifact;
 
-import curly.artifact.domain.Artifact;
 import curly.commons.logging.annotation.Loggable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,36 +30,36 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(exported = true)
 interface ArtifactRepository extends MongoRepository<Artifact, String> {
 
-    @Loggable
-    @Cacheable("byLanguage")
-    Page<Artifact> findByLanguages(String name, Pageable pageable);
+	@Loggable
+	@Cacheable("byLanguage")
+	Page<Artifact> findByLanguages(String name, Pageable pageable);
 
-    @Loggable
-    @Cacheable("byType")
-    Page<Artifact> findByTypes(String name, Pageable pageable);
+	@Loggable
+	@Cacheable("byType")
+	Page<Artifact> findByTypes(String name, Pageable pageable);
 
-    @Loggable
-    @Cacheable("byCategory")
-    Page<Artifact> findByCategory(String name, Pageable pageable);
+	@Loggable
+	@Cacheable("byCategory")
+	Page<Artifact> findByCategory(String name, Pageable pageable);
 
-    @Override
-    @SuppressWarnings("unchecked")
-    @Loggable
-    @CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"})
-    Artifact save(Artifact artifact);
+	@Override
+	@SuppressWarnings("unchecked")
+	@Loggable
+	@CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"})
+	Artifact save(Artifact artifact);
 
-    @Override
-    @Loggable
-    @Cacheable("singleArtifact")
-    Artifact findOne(String id);
+	@Override
+	@Loggable
+	@Cacheable("singleArtifact")
+	Artifact findOne(String id);
 
-    @Override
-    @Loggable
-    @CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"})
-    void delete(Artifact artifact);
+	@Override
+	@Loggable
+	@CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"})
+	void delete(Artifact artifact);
 
-    @Override
-    @Loggable
-    @Cacheable("artifacts")
-    Page<Artifact> findAll(Pageable pageable);
+	@Override
+	@Loggable
+	@Cacheable("artifacts")
+	Page<Artifact> findAll(Pageable pageable);
 }

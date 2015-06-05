@@ -15,6 +15,7 @@
  */
 package curly.artifact;
 
+
 import curly.commons.config.cache.annotation.EnableRedisCache;
 import curly.commons.config.context.EnableRingBufferExecutor;
 import curly.commons.logging.annotation.config.EnableLoggable;

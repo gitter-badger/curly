@@ -15,11 +15,7 @@
  */
 package curly.artifactory;
 
-import curly.artifact.ArtifactoryApplication;
-import curly.artifact.domain.Artifact;
-import curly.artifact.domain.Category;
-import curly.artifact.domain.Language;
-import curly.artifact.domain.Tag;
+import curly.artifact.*;
 import curly.commons.github.OctoUser;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -70,20 +66,22 @@ public abstract class SpringBootTest {
     public Artifact createArtifact(MongoTemplate mongoTemplate) {
         Artifact artifact = new Artifact();
         Set<Language> languages = new HashSet<>(0);
-		Set<Tag> tags = new HashSet<>(0);
-		tags.add(new Tag("document"));
-		tags.add(new Tag("nosql"));
+		Set<Type> types = new HashSet<>(0);
+		types.add(new Type("document"));
+		types.add(new Type("nosql"));
 		languages.add(new Language("java"));
-        languages.add(new Language("groovy"));
+		languages.add(new Language("groovy"));
         languages.add(new Language("ruby"));
-        artifact.setName("A lovers project");
-        artifact.setAuthor("joaoevangelista");
+		languages.add(new Language("scala"));
+		languages.add(new Language("javascript"));
+		artifact.setName("curly");
+		artifact.setAuthor("joaoevangelista");
         artifact.setCategory(new Category("database"));
         artifact.setHomePage("http://example.com");
         artifact.setIncubation(LocalDate.now().toString());
         artifact.setLanguages(languages);
-		artifact.setTags(tags);
+		artifact.setTypes(types);
 		mongoTemplate.insert(artifact);
-        return artifact;
+		return artifact;
     }
 }

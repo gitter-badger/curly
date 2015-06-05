@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.domain;
+package curly.artifact;
 
 import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Link;
@@ -25,18 +25,18 @@ import java.util.Collection;
  * @author João Pedro Evangelista
  */
 public class PagedArtifact extends PagedResources<Artifact> {
-    protected PagedArtifact() {
-        super();
-    }
+	protected PagedArtifact() {
+		super();
+	}
 
-    public PagedArtifact(Collection<Artifact> content, PageMetadata metadata, Link... links) {
-        super(content, metadata, links);
-    }
+	public PagedArtifact(Collection<Artifact> content, PageMetadata metadata, Link... links) {
+		super(content, metadata, links);
+	}
 
-    public PagedArtifact(Page<Artifact> artifacts) {
-        super(artifacts.getContent(),
-                new PageMetadata(artifacts.getSize(),
-                        artifacts.getNumber(), artifacts.getTotalElements(),
-                        artifacts.getTotalPages()));
-    }
+	public PagedArtifact(Page<Artifact> artifacts) {
+		super(artifacts.getContent(),
+				new PageMetadata(artifacts.getSize(),
+						artifacts.getNumber(), artifacts.getTotalElements(),
+						artifacts.getTotalPages()));
+	}
 }

@@ -13,9 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.domain;
+package curly.artifact;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -26,16 +28,11 @@ import java.io.Serializable;
  */
 @Data
 @Document
-public class Category implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Type implements Serializable {
 
-    private static final long serialVersionUID = 2741852981600031808L;
+	private static final long serialVersionUID = -7040041440712207806L;
 
-    String name;
-
-    public Category(String name) {
-        this.name = name;
-    }
-
-    public Category() {
-    }
+	private String name;
 }
