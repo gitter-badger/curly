@@ -54,7 +54,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	@Override
 	@HystrixCommand(fallbackMethod = "defaultFindAll")
 	public Observable<Optional<Page<Artifact>>> findAll(Pageable pageable) {
-		log.trace("Finding for page {}", pageable.getPageNumber());
+		log.debug("Finding for page {}", pageable.getPageNumber());
 		return new ObservableResult<Optional<Page<Artifact>>>() {
 			@Override
 			public Optional<Page<Artifact>> invoke() {
@@ -67,7 +67,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	@Override
 	@Retryable
 	public Observable<Optional<Artifact>> save(Artifact artifact, OctoUser octoUser) {
-		log.trace("Saving entity {} ...", artifact);
+		log.debug("Saving entity {} ...", artifact);
 		return new ObservableResult<Optional<Artifact>>() {
 			@Override
 			public Optional<Artifact> invoke() {
@@ -81,7 +81,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	@Override
 	@HystrixCommand(fallbackMethod = "defaultFindOne")
 	public Observable<Optional<Artifact>> findOne(String id) {
-		log.trace("Finding for {}", id);
+		log.debug("Finding for {}", id);
 		return new ObservableResult<Optional<Artifact>>() {
 			@Override
 			public Optional<Artifact> invoke() {
@@ -99,7 +99,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	public void delete(String id, OctoUser user) {
 		Assert.notNull(user, "OctoUser must be not null");
 		Assert.hasText(id, "Id must be not empty");
-		log.trace("Looking for entity with id {}", id);
+		log.debug("Looking for entity with id {}", id);
 		findOne(id).filter(artifact -> isOwnedBy(artifact.orElseThrow(ResourceNotFoundException::new), user))
 				.doOnNext(artifact -> repository.delete(artifact.get()))
 				.doOnError(throwable ->
@@ -111,7 +111,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	@SuppressWarnings("unused")
 	@HystrixCommand
 	private Optional<Page<Artifact>> defaultFindAll(Pageable pageable) {
-		log.trace("Falling back with empty collection");
+		log.debug("Falling back with empty collection");
 		return Optional.of(new PageImpl<>(Collections.emptyList()));
 	}
 
@@ -119,7 +119,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	@SuppressWarnings("unused")
 	@HystrixCommand
 	private Optional<Artifact> defaultFindOne(String id) {
-		log.trace("Falling back with {}", id);
+		log.debug("Falling back with {}", id);
 		return Optional.of(new Artifact(id));
 	}
 }
