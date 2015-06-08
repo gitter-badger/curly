@@ -17,6 +17,7 @@ package curly.artifact;
 
 import curly.commons.logging.annotation.Loggable;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,35 +32,32 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 interface ArtifactRepository extends MongoRepository<Artifact, String> {
 
 	@Loggable
-	@Cacheable("byLanguage")
 	Page<Artifact> findByLanguages(String name, Pageable pageable);
 
 	@Loggable
-	@Cacheable("byType")
 	Page<Artifact> findByTypes(String name, Pageable pageable);
 
 	@Loggable
-	@Cacheable("byCategory")
 	Page<Artifact> findByCategory(String name, Pageable pageable);
 
 	@Override
 	@SuppressWarnings("unchecked")
 	@Loggable
-	@CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"})
+	@CachePut(value = {"artifacts", "singleArtifact"})
 	Artifact save(Artifact artifact);
 
 	@Override
 	@Loggable
-	@Cacheable("singleArtifact")
+	@Cacheable(value = "singleArtifact")
 	Artifact findOne(String id);
 
 	@Override
 	@Loggable
-	@CacheEvict({"artifacts", "singleArtifact", "byLanguage", "byType", "byCategory"})
+	@CacheEvict(value = {"artifacts", "singleArtifact"})
 	void delete(Artifact artifact);
 
 	@Override
 	@Loggable
-	@Cacheable("artifacts")
+	@Cacheable(value = "artifacts")
 	Page<Artifact> findAll(Pageable pageable);
 }

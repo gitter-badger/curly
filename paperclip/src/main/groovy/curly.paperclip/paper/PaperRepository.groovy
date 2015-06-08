@@ -15,19 +15,25 @@
  */
 package curly.paperclip.paper
 
-import curly.commons.github.OctoUser
-import rx.Observable
+import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
 /**
  * @author Joao Pedro Evangelista
  */
-trait PaperCommand {
+@RepositoryRestResource(exported = false)
+interface PaperRepository extends MongoRepository<Paper, String> {
 
-  def getPaperByArtifact(artifact: String): Observable[Option[Paper]]
+    // @Cacheable(value = ["paper"], key = "#item")
+    Paper findByItem(String item)
 
-  def getPaperForOwner(artifact: String, owner: Option[OctoUser]): Observable[Option[Paper]]
+    // @Cacheable(value = ["paper"], key = "#item")
+    Paper findByItemAndOwner(String item, String owner)
 
-  def savePaper(paper: Paper, octoUser: OctoUser): Observable[Option[Paper]]
+    @Override
+    // @CacheEvict(value = ["paper"], key = "#paper.item")
+    void delete(Paper paper)
 
-  def deletePaper(paperId: String, octoUser: OctoUser): Unit
+    // @CachePut(value = ["paper"], key = "#paper.item")
+    Paper save(Paper paper)
 }

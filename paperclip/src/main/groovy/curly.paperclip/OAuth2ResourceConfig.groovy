@@ -15,40 +15,26 @@
  */
 package curly.paperclip
 
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource
-import org.springframework.context.annotation.{Bean, Configuration}
+import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.retry.annotation.EnableRetry
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
 
 /**
- * @author Joao Evangelista
+ * @author Joao Pedro Evangelista
  */
-@EnableRetry
-@SpringBootApplication
-class PaperclipApplication {
-  @Bean def defaultScalaModule = DefaultScalaModule
-}
-
 @Configuration
 @EnableOAuth2Resource
-class OAuth2Resource extends ResourceServerConfigurerAdapter {
-  override def configure(http: HttpSecurity): Unit = {
-    http
-      .anonymous()
-      .and()
-      .authorizeRequests()
-      .antMatchers(HttpMethod.GET, "/paperclip/**").permitAll()
-      .anyRequest().authenticated()
-  }
-}
+class OAuth2ResourceConfig extends ResourceServerConfigurerAdapter {
 
-object Runner {
-  def main(args: Array[String]) {
-    SpringApplication.run(classOf[PaperclipApplication], args: _*)
-  }
+    @Override
+    void configure(HttpSecurity http) throws Exception {
+        http
+                .anonymous()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers("/**").authenticated()
+    }
 }

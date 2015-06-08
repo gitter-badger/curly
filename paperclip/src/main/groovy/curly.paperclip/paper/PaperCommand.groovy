@@ -15,14 +15,19 @@
  */
 package curly.paperclip.paper
 
-import org.springframework.data.mongodb.repository.MongoRepository
+import curly.commons.github.OctoUser
+import rx.Observable
 
 /**
  * @author Joao Pedro Evangelista
  */
-trait PaperRepository extends MongoRepository[Paper, String] {
+interface PaperCommand {
 
-  def findByItem(artifact: String): Paper
+    Observable<Optional<Paper>> getByItem(String item)
 
-  def findByItemAndOwner(artifact: String, owner: String): Paper
+    Observable<Optional<Paper>> getByOwner(String item, Optional<OctoUser> user)
+
+    void delete(Paper paper, Optional<OctoUser> user)
+
+    Optional<Paper> save(Paper paper, Optional<OctoUser> user)
 }

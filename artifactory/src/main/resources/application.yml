@@ -34,9 +34,6 @@ io:
        cacheNames:
         - artifacts
         - singleArtifact
-        - byLanguage
-        - byType
-        - byCategory
        cacheExpirations:
         - 10000
         - 10000

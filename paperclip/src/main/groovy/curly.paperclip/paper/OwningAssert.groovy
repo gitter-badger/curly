@@ -15,15 +15,21 @@
  */
 package curly.paperclip.paper
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation._
+import groovy.transform.PackageScope
 
 /**
  * @author Joao Pedro Evangelista
  */
-@RestController
-@RequestMapping(value = Array("/paperclip"))
-class PaperController @Autowired()(val command: PaperCommand) {
+@PackageScope
+final class OwningAssert {
 
+    private OwningAssert() {}
 
+    public static boolean matchOwners(Paper paper, String owner) {
+        paper.owner == owner
+    }
+
+    public static boolean wasModified(Paper saved, String owner, Paper paper) {
+        saved.owner == owner && saved.item == paper.item
+    }
 }

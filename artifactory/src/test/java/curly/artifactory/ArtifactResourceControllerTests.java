@@ -73,16 +73,17 @@ public class ArtifactResourceControllerTests extends SpringBootTest {
     @Test
     public void testArtifactResource() throws Exception {
         String id = artifact.getId();
-        mockMvc.perform(
-                asyncDispatch(
+		Artifact byId = mongoTemplate.findById(id, Artifact.class);
+		mockMvc.perform(
+				asyncDispatch(
                         mockMvc.perform(get("/arts/{id}", id))
                                 .andExpect(status().isOk())
                                 .andExpect(request().asyncStarted())
-                                .andExpect(request().asyncResult(ResponseEntity.ok(artifact)))
-                                .andReturn()))
+								.andExpect(request().asyncResult(ResponseEntity.ok(byId)))
+								.andReturn()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(json(artifact, messageConverter)));
-    }
+				.andExpect(content().json(json(byId, messageConverter)));
+	}
 
     @Test
     public void testSaveResource() throws Exception {

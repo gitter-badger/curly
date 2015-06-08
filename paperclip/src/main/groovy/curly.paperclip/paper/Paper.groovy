@@ -15,36 +15,24 @@
  */
 package curly.paperclip.paper
 
+import curly.commons.security.OwnedResource
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import groovy.transform.TupleConstructor
 import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
 
 /**
- * Entity representation of a MongoDB document
- *
  * @author Joao Pedro Evangelista
  */
-@Document
-class Paper(val owner: String, val item: String, val contentLocation: String) {
+@ToString
+@TupleConstructor
+@EqualsAndHashCode
+class Paper extends OwnedResource {
 
-  var id: String@Id = _
+    @Id
+    String id
 
-  override def equals(other: Any): Boolean = other match {
-    case that: Paper =>
-      (that canEqual this) &&
-        id == that.id &&
-        owner == that.owner &&
-        item == that.item &&
-        contentLocation == that.contentLocation
-    case _ => false
-  }
+    String item
 
-  //noinspection ComparingUnrelatedTypes
-  def canEqual(other: Any): Boolean = other.isInstanceOf[Paper]
-
-  override def hashCode(): Int = {
-    val state = Seq(id, owner, item, contentLocation)
-    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
-  }
-
-
+    String content
 }
