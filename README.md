@@ -1,14 +1,10 @@
 #{urly
 
-![Logo](https://raw.githubusercontent.com/joaoevangelista/curly/master/src/logo60.png)
-
 [![Build Status](https://travis-ci.org/joaoevangelista/curly.svg)](https://travis-ci.org/joaoevangelista/curly)
 
+
 [![forthebadge](http://forthebadge.com/images/badges/compatibility-betamax.svg)](http://forthebadge.com)
-
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
-
-[![forthebadge](http://forthebadge.com/images/badges/gluten-free.svg)](http://forthebadge.com)
+[![forthebadge](http://forthebadge.com/images/badges/no-ragrets.svg)](http://forthebadge.com)
 ---------------------------------------------------------------------------
 
 
@@ -20,40 +16,21 @@ Curly is a *concept* of an application where you can upload, detail, favorite, a
 Collect it into your account and also show yours stuff to the rest of world
 
 
-####It's built with Spring, Netflix OSS, Spray, Rails, written in Java, Scala, Groovy, Ruby, Kotlin*
- 
-
-
+####It's *being built* with Spring, Netflix OSS, Rails, Finatra, Sails, written in Java, Scala, Groovy, Ruby for Javascript
 -----------------------------------------------------------------------------
 
+TODO: Stuff
 
+- [x] ReactiveX
+- [x] Spring Cloud
+    - [x] Netflix Hystrix
+    - [ ] Netflix Feign
+    - [x] Netflix Prana
+    - [x] Config Server
+    - [x] Eureka
+    - [ ] Cloud Bus
 
-{urly is composed by the following microservices
-
-- ###Edge
-    * Running on port: 8079
-
-- ###ReadMe
-    * Running on port: 8085
-
-
-- ###Artifact
-      * Running on port: 8084
-
-
-- ###Authentication Server
-     * Powered by GitHub
-            
-
-- ###Infrastructure
-    * ####Eureka
-     * Running on port: 10003
-             
-    * ####Configuration Server
-     * Running on port: 10004
-               
-    * ####Zuul Proxy
-      * Running on port: 10002
-        
-    * ####Turbine
-      * Running on port: 11090
+- [x] SailsJS
+- [ ] Finatra
+- [ ] RabbitMQ Broker
+-----------------------------------------------------------------------------

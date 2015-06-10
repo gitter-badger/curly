@@ -18,20 +18,19 @@ package curly.paperclip.paper
 import curly.commons.github.GitHubAuthentication
 import curly.commons.github.OctoUser
 import curly.commons.logging.annotation.Loggable
+import curly.commons.web.ApiErrors
 import org.bson.types.ObjectId
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.context.request.async.DeferredResult
 import rx.Observable
 
 import javax.inject.Inject
 
 import static curly.commons.rx.RxResult.defer
-import static org.springframework.http.HttpStatus.BAD_REQUEST
+import static org.springframework.http.HttpStatus.*
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE as JSON
 
 /**
@@ -51,7 +50,7 @@ class PaperResourceController {
     @Loggable
     @RequestMapping(value = "/{item}", method = RequestMethod.GET, produces = JSON)
     DeferredResult<ResponseEntity<Paper>> getOneByItem(@PathVariable String item) {
-        isValid(item)
+        if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))
 
         defer command.getByItem(item).map({
             it.<ResourceNotFoundException> orElseThrow({
@@ -63,14 +62,14 @@ class PaperResourceController {
     }
 
     static def isValid(String item) {
-        if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))
+
     }
 
     @Loggable
     @RequestMapping(value = "/owner/{item}", method = RequestMethod.GET, produces = JSON)
     DeferredResult<ResponseEntity<Paper>> getOneByItemAndOwner(@PathVariable String item,
                                                                @GitHubAuthentication OctoUser octoUser) {
-        isValid(item)
+        if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))
         defer command.getByOwner(item, Optional.ofNullable(octoUser)).map({
             it.orElseThrow({ new ResourceNotFoundException("Resource for item $item cannot been found!") })
         }).map({
@@ -78,5 +77,24 @@ class PaperResourceController {
         })
     }
 
+    @Loggable
+    @RequestMapping(value = "/{item}", method = RequestMethod.DELETE)
+    DeferredResult<ResponseEntity<?>> delete(@PathVariable String item,
+                                             @GitHubAuthentication OctoUser octoUser) {
+        if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))
+        command.delete(item, Optional.ofNullable(octoUser))
+        defer Observable.just(new ResponseEntity(NO_CONTENT))
+    }
 
+    @Loggable
+    @RequestMapping(method = [RequestMethod.PUT, RequestMethod.POST])
+    DeferredResult<ResponseEntity<?>> save(@RequestBody Paper paper,
+                                           @GitHubAuthentication OctoUser octoUser,
+                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return defer(Observable.just(new ResponseEntity(new ApiErrors(BAD_REQUEST, bindingResult), BAD_REQUEST)))
+        }
+        command.save(paper, Optional.ofNullable(octoUser))
+        defer Observable.just(new ResponseEntity(CREATED))
+    }
 }

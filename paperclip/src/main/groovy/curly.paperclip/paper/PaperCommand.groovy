@@ -27,7 +27,7 @@ interface PaperCommand {
 
     Observable<Optional<Paper>> getByOwner(String item, Optional<OctoUser> user)
 
-    void delete(Paper paper, Optional<OctoUser> user)
+    void delete(String item, Optional<OctoUser> user)
 
     Optional<Paper> save(Paper paper, Optional<OctoUser> user)
 }

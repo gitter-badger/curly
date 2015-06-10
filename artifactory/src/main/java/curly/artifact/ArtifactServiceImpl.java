@@ -100,10 +100,12 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 		Assert.notNull(user, "OctoUser must be not null");
 		Assert.hasText(id, "Id must be not empty");
 		log.debug("Looking for entity with id {}", id);
-		findOne(id).filter(artifact -> isOwnedBy(artifact.orElseThrow(ResourceNotFoundException::new), user))
-				.doOnNext(artifact -> repository.delete(artifact.get()))
+		findOne(id)
+				.map(opt -> opt.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
+				.filter(artifact -> isOwnedBy(artifact, user))
 				.doOnError(throwable ->
-						log.error("Cannot process #delete({},{}) nested exception is, {}", id, user.getId()));
+						log.error("Cannot process #delete({},{}) nested exception is, {}", id, user.getId()))
+				.subscribe(repository::delete);
 	}
 
 

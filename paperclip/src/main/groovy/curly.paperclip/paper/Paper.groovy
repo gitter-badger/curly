@@ -19,6 +19,7 @@ import curly.commons.security.OwnedResource
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
+import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.data.annotation.Id
 
 /**
@@ -32,6 +33,7 @@ class Paper extends OwnedResource {
     @Id
     String id
 
+    @NotEmpty
     String item
 
     String content

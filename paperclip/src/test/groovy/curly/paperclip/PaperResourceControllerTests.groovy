@@ -20,16 +20,17 @@ import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.context.WebApplicationContext
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup
-
 /**
  * @author Joao Pedro Evangelista
  */
@@ -48,8 +49,10 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     @Before
     public void setUp() throws Exception {
         paper = createPaper(mongoTemplate)
-        mockMvc = webAppContextSetup(applicationContext).build()
-        println paper
+        mockMvc = webAppContextSetup(applicationContext)
+                .alwaysDo(print())
+                .alwaysExpect(status().is2xxSuccessful())
+                .build()
     }
 
 
@@ -75,5 +78,29 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
                         .andReturn()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(json(paper, new MappingJackson2HttpMessageConverter())))
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        mockMvc.perform(asyncDispatch(
+                mockMvc.perform(delete("/papers/{item}", paper.item)
+                        .principal(octoUser()))
+                        .andExpect(request().asyncStarted())
+                        .andExpect(request().asyncResult(new ResponseEntity(HttpStatus.NO_CONTENT)))
+                        .andReturn()))
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        mockMvc.perform(asyncDispatch(
+                mockMvc.perform(post("/papers")
+                        .principal(octoUser())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(paper, new MappingJackson2HttpMessageConverter())))
+                        .andExpect(request().asyncStarted())
+                        .andExpect(request().asyncResult(new ResponseEntity(HttpStatus.CREATED)))
+                        .andReturn()
+        ))
+
     }
 }

@@ -20,33 +20,31 @@ import com.netflix.hystrix.contrib.javanica.command.ObservableResult
 import curly.commons.config.feign.ex.UnauthorizedException
 import curly.commons.github.OctoUser
 import curly.commons.logging.annotation.Loggable
+import curly.commons.security.negotiation.ResourceOperationsResolverAdapter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 import rx.Observable
 
 import javax.inject.Inject
 
-import static curly.paperclip.paper.OwningAssert.matchOwners
-import static curly.paperclip.paper.OwningAssert.wasModified
-import static java.util.Optional.empty
 import static java.util.Optional.ofNullable
-
 
 /**
  * @author Joao Pedro Evangelista
  */
 @Service
-class PaperCommandImpl implements PaperCommand {
+class PaperCommandImpl extends ResourceOperationsResolverAdapter<Paper, OctoUser> implements PaperCommand {
 
-    private PaperRepository repository
+    private PaperService repository
 
     private static final Logger logger = LoggerFactory.getLogger(PaperCommandImpl)
 
     @Inject
-    PaperCommandImpl(PaperRepository paperRepository) {
-        this.repository = paperRepository
+    PaperCommandImpl(PaperService repository) {
+        this.repository = repository
     }
 
     @Loggable
@@ -57,6 +55,7 @@ class PaperCommandImpl implements PaperCommand {
         new ObservableResult<Optional<Paper>>() {
             @Override
             Optional<Paper> invoke() {
+                logger.debug("Requesting item {}", item)
                 ofNullable(repository.findByItem(item))
             }
         }
@@ -70,6 +69,7 @@ class PaperCommandImpl implements PaperCommand {
         new ObservableResult<Optional<Paper>>() {
             @Override
             Optional<Paper> invoke() {
+                logger.debug("Requesting item {}")
                 ofNullable(repository.findByItemAndOwner(item, user
                         .orElseThrow({ new UnauthorizedException() })
                         .id.toString()))
@@ -82,29 +82,20 @@ class PaperCommandImpl implements PaperCommand {
     @Override
     @Retryable
     @HystrixCommand
-    void delete(Paper paper, Optional<OctoUser> user) {
-        def owner = user.orElseThrow({ new UnauthorizedException() }).id.toString()
-        if (paper.getOwner() == owner) {
-            logger.info("Paper's and owner matched, deleting {}", paper.id)
-            repository.delete(paper)
-        } else {
-            logger.warn(
-                    "Attempt of deleting a non owned resource cotgh, who attempted {} in resource {} of {} ",
-                    owner, paper.id, paper.owner)
-        }
+    void delete(String item, Optional<OctoUser> user) {
+        OctoUser octoUser = user.orElseThrow({ new UnauthorizedException() })
+        this.getByOwner(item, user)
+                .map({ it.orElseThrow({ new ResourceNotFoundException() }) })
+                .filter({ isOwnedBy(it, octoUser) })
+                .subscribe({ repository.delete(it) })
+
     }
 
     @Override
     Optional<Paper> save(Paper paper, Optional<OctoUser> user) {
-        def owner = user.orElseThrow({ new UnauthorizedException() }).id.toString()
-        if (merge(paper)) {
-            if (wasModified(repository.findOne(paper.id), owner, paper)) return ofNullable(repository.save(paper))
-        } else if (matchOwners(paper, owner)) return ofNullable(repository.save(paper))
-        logger.error("Cannot assign a paper for the one which was modified or it's owners don't match")
-        empty()
+        def owner = user.orElseThrow({ new UnauthorizedException() })
+        checkMatch(paper, owner)
+        ofNullable(repository.save(paper))
     }
 
-    private static boolean merge(Paper paper) {
-        paper.id != null
-    }
 }
