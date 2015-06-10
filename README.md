@@ -16,21 +16,23 @@ Curly is a *concept* of an application where you can upload, detail, favorite, a
 Collect it into your account and also show yours stuff to the rest of world
 
 
-####It's *being built* with Spring, Netflix OSS, Rails, Finatra, Sails, written in Java, Scala, Groovy, Ruby for Javascript
+####It's *being built* with Spring, Netflix OSS, Rails, Sails, written in Java, Scala, Groovy, Ruby for Javascript
 -----------------------------------------------------------------------------
 
 TODO: Stuff
 
 - [x] ReactiveX
-- [x] Spring Cloud
+- [ ] Spring Cloud
     - [x] Netflix Hystrix
     - [ ] Netflix Feign
     - [x] Netflix Prana
     - [x] Config Server
     - [x] Eureka
     - [ ] Cloud Bus
-
+- [ ] Rails
+- [ ] Scala
 - [x] SailsJS
-- [ ] Finatra
 - [ ] RabbitMQ Broker
+ 
+
 -----------------------------------------------------------------------------
