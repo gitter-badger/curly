@@ -13,8 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.service;
 
+import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;

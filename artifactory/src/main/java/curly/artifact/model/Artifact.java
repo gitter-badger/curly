@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.model;
 
 import curly.commons.security.OwnedResource;
 import lombok.AllArgsConstructor;

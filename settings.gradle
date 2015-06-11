@@ -8,4 +8,5 @@ include 'infrastructure:smuggler-sidecar'
 include 'infrastructure:aimer-sidecar'
 include 'infrastructure:proxy'
 include 'paperclip'
+include 'tagger'
 

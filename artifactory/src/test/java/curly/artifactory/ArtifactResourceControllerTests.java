@@ -15,10 +15,11 @@
  */
 package curly.artifactory;
 
-import curly.artifact.Artifact;
+import curly.artifact.model.Artifact;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,10 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.nio.charset.StandardCharsets;
+
+import static org.springframework.restdocs.RestDocumentation.document;
+import static org.springframework.restdocs.RestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,76 +43,86 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  */
 public class ArtifactResourceControllerTests extends SpringBootTest {
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    private Artifact artifact;
+	private Artifact artifact;
 
-    private MappingJackson2HttpMessageConverter messageConverter;
+	private MappingJackson2HttpMessageConverter messageConverter;
 
-    @Before
-    public void setUp() throws Exception {
-        this.messageConverter = new MappingJackson2HttpMessageConverter();
-        this.artifact = createArtifact(mongoTemplate);
-        this.mockMvc = webAppContextSetup(webApplicationContext)
-                .alwaysDo(print())
-                .alwaysExpect(status().is2xxSuccessful())
-                .build();
-    }
+	@Value("${server.port}")
+	private Integer port;
 
-    @Test
-    public void testArtifactResources() throws Exception {
-        mockMvc.perform(
-                asyncDispatch(
-                        mockMvc.perform(get("/arts"))
-                                .andExpect(request().asyncStarted())
-                                .andReturn()));
+	@Before
+	public void setUp() throws Exception {
+		this.messageConverter = new MappingJackson2HttpMessageConverter();
+		this.artifact = createArtifact(mongoTemplate);
+		this.mockMvc = webAppContextSetup(webApplicationContext)
+				.apply(
+						documentationConfiguration()
+								.uris().withHost("localhost").withPort(port).withScheme(" http")
+								.and()
+								.snippets().withEncoding(StandardCharsets.UTF_8.name()))
 
-    }
+				.alwaysDo(print())
+				.alwaysDo(document("artifactory"))
+				.alwaysExpect(status().is2xxSuccessful())
+				.build();
+	}
 
-    @Test
-    public void testArtifactResource() throws Exception {
-        String id = artifact.getId();
+	@Test
+	public void testArtifactResources() throws Exception {
+		mockMvc.perform(
+				asyncDispatch(
+						mockMvc.perform(get("/arts"))
+								.andExpect(request().asyncStarted())
+								.andReturn()));
+
+	}
+
+	@Test
+	public void testArtifactResource() throws Exception {
+		String id = artifact.getId();
 		Artifact byId = mongoTemplate.findById(id, Artifact.class);
 		mockMvc.perform(
 				asyncDispatch(
-                        mockMvc.perform(get("/arts/{id}", id))
-                                .andExpect(status().isOk())
-                                .andExpect(request().asyncStarted())
+						mockMvc.perform(get("/arts/{id}", id))
+								.andExpect(status().isOk())
+								.andExpect(request().asyncStarted())
 								.andExpect(request().asyncResult(ResponseEntity.ok(byId)))
 								.andReturn()))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().json(json(byId, messageConverter)));
 	}
 
-    @Test
-    public void testSaveResource() throws Exception {
-        mockMvc.perform(
-                asyncDispatch(
-                        mockMvc.perform(post("/arts")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(json(artifact, messageConverter))
-                                .principal(octoUser()))
-                                .andExpect(request().asyncStarted())
-                                .andExpect(request().asyncResult(new ResponseEntity<>(HttpStatus.CREATED)))
-                                .andReturn()));
-    }
+	@Test
+	public void testSaveResource() throws Exception {
+		mockMvc.perform(
+				asyncDispatch(
+						mockMvc.perform(post("/arts")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(json(artifact, messageConverter))
+								.principal(octoUser()))
+								.andExpect(request().asyncStarted())
+								.andExpect(request().asyncResult(new ResponseEntity<>(HttpStatus.CREATED)))
+								.andReturn()));
+	}
 
-    @Test
-    public void testDeleteResource() throws Exception {
-        String id = artifact.getId();
-        mockMvc.perform(
-                asyncDispatch(
-                        mockMvc.perform(delete("/arts/{id}", id)
-                                .principal(octoUser()))
-                                .andExpect(request().asyncStarted())
-                                .andExpect(request().asyncResult(new ResponseEntity<>(HttpStatus.NO_CONTENT)))
-                                .andReturn()));
-    }
+	@Test
+	public void testDeleteResource() throws Exception {
+		String id = artifact.getId();
+		mockMvc.perform(
+				asyncDispatch(
+						mockMvc.perform(delete("/arts/{id}", id)
+								.principal(octoUser()))
+								.andExpect(request().asyncStarted())
+								.andExpect(request().asyncResult(new ResponseEntity<>(HttpStatus.NO_CONTENT)))
+								.andReturn()));
+	}
 }
 

@@ -15,7 +15,11 @@
  */
 package curly.artifactory;
 
-import curly.artifact.*;
+import curly.artifact.ArtifactoryApplication;
+import curly.artifact.model.Artifact;
+import curly.artifact.model.Category;
+import curly.artifact.model.Language;
+import curly.artifact.model.Type;
 import curly.commons.github.OctoUser;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;

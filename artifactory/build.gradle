@@ -1,7 +1,20 @@
 apply plugin: 'spring-boot'
-
+apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+ext {
+    generatedDocumentation = file('docs/api')
+}
 dependencies {
     compile project(":curly-commons")
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-rest"
+    testCompile 'org.springframework.restdocs:spring-restdocs:0.1.0.BUILD-SNAPSHOT'
+}
+test {
+    systemProperty 'org.springframework.restdocs.outputDir', generatedDocumentation
+    outputs.dir generatedDocumentation
+}
+asciidoctor {
+    attributes 'generated': generatedDocumentation
+    inputs.dir generatedDocumentation
+    dependsOn test
 }

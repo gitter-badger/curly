@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact;
+package curly.artifact.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,11 +28,12 @@ import java.io.Serializable;
  */
 @Data
 @Document
-@NoArgsConstructor
 @AllArgsConstructor
-public class Type implements Serializable {
+@NoArgsConstructor
+public class Language implements Serializable {
 
-	private static final long serialVersionUID = -7040041440712207806L;
+	private static final long serialVersionUID = -6081780441315740356L;
 
 	private String name;
+
 }

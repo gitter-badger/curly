@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.2.4.RELEASE'
         asciidoctorVersion = '1.5.2'
         managementVersion = '0.5.0.RELEASE'
         kotlinVersion = '0.11.91.1'
@@ -27,16 +27,17 @@ apply plugin: 'idea'
 allprojects {
 
     group = 'curly'
-    version = '0.0.1.BUILD-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'license'
+    apply plugin: 'io.spring.dependency-management'
 
     repositories {
         jcenter()
         mavenCentral()
         maven { url "https://repo.spring.io/libs-snapshot/" }
         maven { url "http://repo.spring.io/libs-milestone/" }
-
     }
-    apply plugin: 'license'
 
     ext {
         groovyVersion = '2.4.3'
@@ -48,7 +49,7 @@ allprojects {
         rxscalaVersion = '0.24.1'
         reactorVersion = '2.0.0.RELEASE'
         securityJWTVersion = '1.0.3.RELEASE'
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.2.4.RELEASE'
         springCloudVersion = '1.0.2.BUILD-SNAPSHOT'
         springIOPlatformVersion = '1.1.2.RELEASE'
         scalatestVersion = '2.2.4'
@@ -60,6 +61,8 @@ allprojects {
     ext['spring-data-releasetrain.version'] = 'Fowler-RELEASE'
     ext['undertow.version'] = '1.2.5.Final'
     ext['jackson.version'] = '2.5.2'
+
+
 
 
     license {
@@ -74,8 +77,7 @@ allprojects {
         }
     }
 
-    apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
+
 
     dependencyManagement {
         imports {
@@ -83,6 +85,7 @@ allprojects {
             mavenBom "org.springframework.cloud:spring-cloud-starter-parent:$springCloudVersion"
             mavenBom "org.springframework.boot:spring-boot-starter:$springBootVersion"
         }
+
         dependencies {
             dependency("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
                 exclude "org.springframework.boot:spring-boot-starter-tomcat"
@@ -103,6 +106,7 @@ allprojects {
         testCompile "com.jayway.jsonpath:json-path"
         testCompile "org.skyscreamer:jsonassert:1.2.3"
     }
+
 }
 
 task wrapper(type: Wrapper) {
