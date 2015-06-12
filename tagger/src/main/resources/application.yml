@@ -31,5 +31,8 @@ logging:
       springframework:
         web: DEBUG
     curly: TRACE
+    com:
+      netflix:
+        discovery: OFF
   file: application.log
 

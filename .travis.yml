@@ -8,3 +8,4 @@ before_install:
 services:
   - mongodb
   - redis-server
+  - rabbitmq
