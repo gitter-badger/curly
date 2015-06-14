@@ -9,4 +9,5 @@ include 'infrastructure:aimer-sidecar'
 include 'infrastructure:proxy'
 include 'paperclip'
 include 'tagger'
+include 'formula'
 
