@@ -16,7 +16,8 @@
 package curly.tagger.service;
 
 import curly.tagger.model.Tag;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -24,30 +25,54 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Simple service layer to encapsulate repository access
+ *
  * @author João Evangelista
  */
+@Slf4j
 @Service
-class TagServiceImpl implements TagService {
+class DefaultTagService implements TagService {
 
 	private final TagRepository repository;
-	private final MongoTemplate mongoTemplate;
 
 	@Inject
-	TagServiceImpl(TagRepository repository, MongoTemplate mongoTemplate) {
+	DefaultTagService(TagRepository repository) {
 		this.repository = repository;
-		this.mongoTemplate = mongoTemplate;
+
 	}
 
+	/**
+	 * Save and if there is already a tag with the name, suppress it!
+	 *
+	 * @param tags to be saved
+	 */
 	@Override
-	public void save(Set<Tag> tag) {
-		this.repository.save(tag);
+	public void save(Set<Tag> tags) {
+		tags.stream().forEach(tag -> {
+			try {
+				this.repository.save(tag);
+			} catch (DuplicateKeyException e) {
+				//just log and ignore
+				log.debug("Received duplicated key", e);
+			}
+		});
 	}
 
+	/**
+	 * Find the tag of param
+	 * @param tag to look up for
+	 * @return a tag if found or null otherwise
+	 */
 	@Override
 	public Tag find(String tag) {
 		return this.repository.findByName(tag);
 	}
 
+	/**
+	 * Query the database for the first 10 result matching pattern of param
+	 * @param tag the tag, or part of it to search for
+	 * @return 10 top results
+	 */
 	@Override
 	public List<Tag> query(String tag) {
 		return this.repository.findTop10ByNameLike(tag);
