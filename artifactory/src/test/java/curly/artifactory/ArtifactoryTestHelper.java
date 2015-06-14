@@ -15,12 +15,15 @@
  */
 package curly.artifactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import curly.artifact.ArtifactoryApplication;
 import curly.artifact.model.Artifact;
 import curly.artifact.model.Category;
 import curly.artifact.model.Language;
-import curly.artifact.model.Type;
+import curly.artifact.model.Tag;
 import curly.commons.github.OctoUser;
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -44,48 +47,54 @@ import java.util.Set;
 @OAuth2ContextConfiguration
 @SpringApplicationConfiguration(classes = {ArtifactoryApplication.class})
 @WebIntegrationTest
-public abstract class SpringBootTest {
+public abstract class ArtifactoryTestHelper {
 
 
-    public static String json(Object o, HttpMessageConverter<Object> httpMessageConverter) {
-        MockHttpOutputMessage message = new MockHttpOutputMessage();
-        try {
-            httpMessageConverter.write(o, jsonMediaType(), message);
-        } catch (IOException ignore) {
-        }
-        return message.getBodyAsString();
-    }
+	public static String json(Object o, HttpMessageConverter<Object> httpMessageConverter) {
+		MockHttpOutputMessage message = new MockHttpOutputMessage();
+		try {
+			httpMessageConverter.write(o, jsonMediaType(), message);
+		} catch (IOException ignore) {
+		}
+		return message.getBodyAsString();
+	}
 
-    public static MediaType jsonMediaType() {
-        return new MediaType(MediaType.APPLICATION_JSON.getType(),
-                MediaType.APPLICATION_JSON.getSubtype(),
-                Charset.forName("utf-8"));
-    }
+	public static MediaType jsonMediaType() {
+		return new MediaType(MediaType.APPLICATION_JSON.getType(),
+				MediaType.APPLICATION_JSON.getSubtype(),
+				Charset.forName("utf-8"));
+	}
 
-    public OctoUser octoUser() {
-        return new OctoUser("evangelistajoaop@gmail.com", true, 6969, 0, 1, 10, "http://example.com/example.jpg", "",
-                "", "", "", "", "joaoevangelista", "Joao Pedro Evangelista", OctoUser.TYPE_USER, "http://example.com");
-    }
-
-    public Artifact createArtifact(MongoTemplate mongoTemplate) {
-        Artifact artifact = new Artifact();
-        Set<Language> languages = new HashSet<>(0);
-		Set<Type> types = new HashSet<>(0);
-		types.add(new Type("document"));
-		types.add(new Type("nosql"));
+	public static Artifact createArtifact(MongoTemplate mongoTemplate) {
+		Artifact artifact = new Artifact();
+		Set<Language> languages = new HashSet<>(0);
+		Set<Tag> tags = new HashSet<>(0);
+		tags.add(new Tag("document"));
+		tags.add(new Tag("nosql"));
 		languages.add(new Language("java"));
 		languages.add(new Language("groovy"));
-        languages.add(new Language("ruby"));
+		languages.add(new Language("ruby"));
 		languages.add(new Language("scala"));
 		languages.add(new Language("javascript"));
 		artifact.setName("curly");
 		artifact.setAuthor("joaoevangelista");
-        artifact.setCategory(new Category("database"));
-        artifact.setHomePage("http://example.com");
-        artifact.setIncubation(LocalDate.now().toString());
-        artifact.setLanguages(languages);
-		artifact.setTypes(types);
+		artifact.setCategory(new Category("database"));
+		artifact.setHomePage("http://example.com");
+		artifact.setIncubation(LocalDate.now().toString());
+		artifact.setLanguages(languages);
+		artifact.setTags(tags);
 		mongoTemplate.insert(artifact);
+		Assert.assertTrue(artifact.getId() != null);
+		try {
+			System.out.println(new ObjectMapper().writeValueAsString(artifact));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		return artifact;
-    }
+	}
+
+	public OctoUser octoUser() {
+		return new OctoUser("evangelistajoaop@gmail.com", true, 6969, 0, 1, 10, "http://example.com/example.jpg", "",
+				"", "", "", "", "joaoevangelista", "Joao Pedro Evangelista", OctoUser.TYPE_USER, "http://example.com");
+	}
 }

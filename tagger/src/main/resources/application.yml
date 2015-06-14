@@ -29,7 +29,7 @@ logging:
   level:
     org:
       springframework:
-        web: DEBUG
+        web: INFO
     curly: TRACE
     com:
       netflix:

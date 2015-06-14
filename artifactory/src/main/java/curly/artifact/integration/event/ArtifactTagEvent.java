@@ -13,21 +13,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.service;
+package curly.artifact.integration.event;
 
-import curly.tagger.model.Tag;
+import curly.artifact.model.Artifact;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.util.Assert;
 
-import java.util.List;
 import java.util.Set;
 
 /**
+ * Event to handle tags when a new artifact is created, it is all based on the {@link Artifact#getTags()}
+ * do not using this it will cause ClassCastExceptions
+ *
  * @author João Evangelista
  */
-public interface TagService {
+public class ArtifactTagEvent extends ApplicationEvent {
 
-	void save(Set<Tag> tags);
+	/**
+	 * Create a new ApplicationEvent.
+	 *
+	 * @param source the component that published the event (never {@code null})
+	 */
+	public ArtifactTagEvent(Object source) {
+		super(source);
+		Assert.isInstanceOf(Set.class, source, "The source must be a Set<Tag> !! This will propagate errors through the chain!!");
+	}
 
-	Tag find(String tag);
-
-	List<Tag> query(String tag);
 }

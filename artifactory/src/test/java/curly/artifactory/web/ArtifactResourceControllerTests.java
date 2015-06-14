@@ -13,9 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifactory;
+package curly.artifactory.web;
 
 import curly.artifact.model.Artifact;
+import curly.artifactory.ArtifactoryTestHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 /**
  * @author Joao Pedro Evangelista
  */
-public class ArtifactResourceControllerTests extends SpringBootTest {
+public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;

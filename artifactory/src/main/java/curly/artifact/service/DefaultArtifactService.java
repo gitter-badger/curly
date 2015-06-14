@@ -17,12 +17,16 @@ package curly.artifact.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
+import curly.artifact.integration.event.ArtifactTagEvent;
+import curly.artifact.integration.event.CreatedArtifactEvent;
 import curly.artifact.model.Artifact;
 import curly.commons.github.OctoUser;
 import curly.commons.logging.annotation.Loggable;
 import curly.commons.security.negotiation.ResourceOperationsResolverAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -41,13 +45,15 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
-public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artifact, OctoUser>
-		implements ArtifactService {
+public class DefaultArtifactService extends ResourceOperationsResolverAdapter<Artifact, OctoUser>
+		implements ArtifactService, ApplicationEventPublisherAware {
 
 	private final ArtifactRepository repository;
 
+	private ApplicationEventPublisher applicationEventPublisher;
+
 	@Autowired
-	public ArtifactServiceImpl(ArtifactRepository artifactRepository) {
+	public DefaultArtifactService(ArtifactRepository artifactRepository) {
 		this.repository = artifactRepository;
 	}
 
@@ -73,9 +79,23 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 			@Override
 			public Optional<Artifact> invoke() {
 				checkMatch(artifact, octoUser);
-				return Optional.ofNullable(repository.save(artifact));
+				return handle(repository.save(artifact));
 			}
 		};
+	}
+
+	private Optional<Artifact> handle(Artifact save) {
+		if (save != null) {
+			publishEvents(save);
+			return Optional.of(save);
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	private void publishEvents(Artifact entity) {
+		applicationEventPublisher.publishEvent(new ArtifactTagEvent(entity.getTags()));
+		applicationEventPublisher.publishEvent(new CreatedArtifactEvent(entity));
 	}
 
 	@Loggable
@@ -105,7 +125,7 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 				.map(opt -> opt.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
 				.filter(artifact -> isOwnedBy(artifact, user))
 				.doOnError(throwable ->
-						log.error("Cannot process #delete({},{}) nested exception is, {}", id, user.getId()))
+						log.error("Cannot process #delete({},{}) nested exception is, {}", id, user.getId(), throwable))
 				.subscribe(repository::delete);
 	}
 
@@ -124,5 +144,11 @@ public class ArtifactServiceImpl extends ResourceOperationsResolverAdapter<Artif
 	private Optional<Artifact> defaultFindOne(String id) {
 		log.debug("Falling back with {}", id);
 		return Optional.of(new Artifact(id));
+	}
+
+
+	@Override
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 }

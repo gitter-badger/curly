@@ -1,3 +1,18 @@
+/*
+ *        Copyright 2015 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package curly.tagger.controller;
 
 import com.google.common.base.Optional;
@@ -13,6 +28,7 @@ import rx.Observable;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.Set;
 
 import static curly.commons.rx.RxResult.defer;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -55,8 +71,8 @@ class TagController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public DeferredResult<ResponseEntity<?>> save(@Valid @RequestBody Tag tag) {
-		tagCommand.save(tag);
+	public DeferredResult<ResponseEntity<?>> save(@Valid @RequestBody Set<Tag> tags) {
+		tagCommand.save(tags);
 		return defer(Observable.just(new ResponseEntity<>(CREATED)));
 	}
 }

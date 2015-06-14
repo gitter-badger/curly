@@ -13,24 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.model;
+package curly.artifactory.integration;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 /**
  * @author João Evangelista
  */
 @Data
-public class SearchResult {
+@AllArgsConstructor
+@NoArgsConstructor
+class Tag {
 
-	private final List<Tag> result;
+	private String id;
+	private String name;
 
-	private final int size;
-
-	public SearchResult(List<Tag> result) {
-		this.result = result;
-		size = result.size();
-	}
 }

@@ -36,7 +36,7 @@ interface ArtifactRepository extends MongoRepository<Artifact, String> {
 	Page<Artifact> findByLanguages(String name, Pageable pageable);
 
 	@Loggable
-	Page<Artifact> findByTypes(String name, Pageable pageable);
+	Page<Artifact> findByTags(String name, Pageable pageable);
 
 	@Loggable
 	Page<Artifact> findByCategory(String name, Pageable pageable);

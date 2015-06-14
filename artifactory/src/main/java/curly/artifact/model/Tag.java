@@ -13,24 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.model;
+package curly.artifact.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * @author João Evangelista
+ * @author Joao Pedro Evangelista
+ * @since 19/04/2015
  */
 @Data
-public class SearchResult {
+@Document
+@NoArgsConstructor
+@AllArgsConstructor
+public class Tag implements Serializable {
 
-	private final List<Tag> result;
+	private static final long serialVersionUID = -7040041440712207806L;
 
-	private final int size;
-
-	public SearchResult(List<Tag> result) {
-		this.result = result;
-		size = result.size();
-	}
+	private String name;
 }

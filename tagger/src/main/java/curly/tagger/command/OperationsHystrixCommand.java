@@ -15,20 +15,39 @@
  */
 package curly.tagger.command;
 
-import com.google.common.base.Optional;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import curly.commons.logging.annotation.Loggable;
 import curly.tagger.model.Tag;
-import rx.Observable;
+import curly.tagger.service.TagService;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
  * @author João Evangelista
  */
-public interface TagCommand {
-	Observable<Optional<Tag>> get(String tag);
+@Service("insertCommand")
+public class OperationsHystrixCommand implements InsertCommand {
 
-	Observable<Optional<List<Tag>>> like(String tag);
+	private final TagService tagService;
 
-	void save(Set<Tag> tag);
+	@Inject
+	public OperationsHystrixCommand(@NotNull TagService tagService) {
+		this.tagService = tagService;
+	}
+
+	@Override
+	@Loggable
+	@Retryable
+	@HystrixCommand
+	public void save(Set<Tag> tags) {
+		tagService.save(tags);
+	}
+
+	public TagService getTagService() {
+		return tagService;
+	}
 }

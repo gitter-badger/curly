@@ -13,26 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.model;
+package curly.artifact.integration.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
+import curly.artifact.model.Artifact;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.util.Assert;
 
 /**
- * @author Joao Pedro Evangelista
- * @since 19/04/2015
+ * @author João Evangelista
  */
-@Data
-@Document
-@NoArgsConstructor
-@AllArgsConstructor
-public class Type implements Serializable {
-
-	private static final long serialVersionUID = -7040041440712207806L;
-
-	private String name;
+public class CreatedArtifactEvent extends ApplicationEvent {
+	/**
+	 * Create a new ApplicationEvent.
+	 *
+	 * @param source the component that published the event (never {@code null})
+	 */
+	public CreatedArtifactEvent(Object source) {
+		super(source);
+		Assert.isInstanceOf(Artifact.class, source,
+				"The source must be a Artifact !! This will propagate errors through the chain!!");
+	}
 }

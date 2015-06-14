@@ -17,20 +17,22 @@ package curly.artifact;
 
 
 import curly.commons.config.cache.annotation.EnableRedisCache;
-import curly.commons.config.context.EnableRingBufferExecutor;
+import curly.commons.config.context.EnableWorkQueueExecutor;
 import curly.commons.logging.annotation.config.EnableLoggable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 
 /**
  * @author João Pedro Evangelista
  * @since 25/04/15
  */
+@RibbonClient("artifactory")
+@EnableFeignClients
 @EnableLoggable
-@EnableRingBufferExecutor
+@EnableWorkQueueExecutor
 @EnableRedisCache
-@EnableMongoRepositories
 @SpringCloudApplication
 public class ArtifactoryApplication {
 

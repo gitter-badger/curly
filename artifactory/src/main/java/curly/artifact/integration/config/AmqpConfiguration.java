@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.config;
+package curly.artifact.integration.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -34,12 +34,27 @@ public class AmqpConfiguration {
 	}
 
 	@Bean
-	TopicExchange exchange() {
+	Queue notifierQueue() {
+		return new Queue("artifactory.notification.queue", false);
+	}
+
+	@Bean
+	TopicExchange tagExchange() {
 		return new TopicExchange("tag-exchange");
 	}
 
 	@Bean
-	Binding binding(TopicExchange exchange, Queue tagQueue) {
-		return BindingBuilder.bind(tagQueue).to(exchange).with(tagQueue.getName());
+	TopicExchange notifierExchange() {
+		return new TopicExchange("notification-exchange");
+	}
+
+	@Bean
+	Binding tagBinding(TopicExchange tagExchange, Queue tagQueue) {
+		return BindingBuilder.bind(tagQueue).to(tagExchange).with(tagQueue.getName());
+	}
+
+	@Bean
+	Binding notifierBinding(TopicExchange notifierExchange, Queue notifierQueue) {
+		return BindingBuilder.bind(notifierQueue).to(notifierExchange).with(notifierQueue.getName());
 	}
 }

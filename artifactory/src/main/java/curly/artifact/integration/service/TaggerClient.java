@@ -13,24 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.model;
+package curly.artifact.integration.service;
 
-import lombok.Data;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author João Evangelista
  */
-@Data
-public class SearchResult {
+@FeignClient("tagger")
+public interface TaggerClient {
 
-	private final List<Tag> result;
-
-	private final int size;
-
-	public SearchResult(List<Tag> result) {
-		this.result = result;
-		size = result.size();
-	}
+	@RequestMapping(value = "/tags", method = RequestMethod.POST)
+	ResponseEntity<?> postEvent(@RequestBody Set<curly.artifact.model.Tag> tag);
 }

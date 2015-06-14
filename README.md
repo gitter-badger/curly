@@ -32,7 +32,7 @@ TODO: Stuff
 - [ ] Rails
 - [ ] Scala
 - [x] SailsJS
-- [ ] RabbitMQ Broker
- 
+- [X] RabbitMQ Broker
+
 
 -----------------------------------------------------------------------------

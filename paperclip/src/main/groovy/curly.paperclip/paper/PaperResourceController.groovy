@@ -21,6 +21,7 @@ import curly.commons.logging.annotation.Loggable
 import curly.commons.web.ApiErrors
 import org.bson.types.ObjectId
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
@@ -31,8 +32,6 @@ import javax.inject.Inject
 
 import static curly.commons.rx.RxResult.defer
 import static org.springframework.http.HttpStatus.*
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE as JSON
-
 /**
  * @author Joao Pedro Evangelista
  */
@@ -48,7 +47,7 @@ class PaperResourceController {
     }
 
     @Loggable
-    @RequestMapping(value = "/{item}", method = RequestMethod.GET, produces = JSON)
+    @RequestMapping(value = "/{item}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     DeferredResult<ResponseEntity<Paper>> getOneByItem(@PathVariable String item) {
         if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))
 
@@ -61,12 +60,9 @@ class PaperResourceController {
         })
     }
 
-    static def isValid(String item) {
-
-    }
 
     @Loggable
-    @RequestMapping(value = "/owner/{item}", method = RequestMethod.GET, produces = JSON)
+    @RequestMapping(value = "/owner/{item}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     DeferredResult<ResponseEntity<Paper>> getOneByItemAndOwner(@PathVariable String item,
                                                                @GitHubAuthentication OctoUser octoUser) {
         if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))

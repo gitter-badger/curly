@@ -50,14 +50,13 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
 
 	private Set<Language> languages;
 
-	private Set<Type> types;
+	private Set<Tag> tags;
 
 	private Category category;
 
 	private String incubation;
 
 	public Artifact() {
-		//this.id = (id == null) ? ObjectId.get().toHexString() : id;
 	}
 
 	public Artifact(String id) {
@@ -66,7 +65,7 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
 		this.name = "";
 		this.homePage = "";
 		this.languages = new HashSet<>(0);
-		this.types = new HashSet<>(0);
+		this.tags = new HashSet<>(0);
 		this.category = new Category();
 		this.incubation = "";
 		this.owner = "";

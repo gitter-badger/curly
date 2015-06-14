@@ -13,24 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.model;
-
-import lombok.Data;
-
-import java.util.List;
+package curly.artifact.integration.service;
 
 /**
  * @author João Evangelista
  */
-@Data
-public class SearchResult {
+public interface EventEmitter<T> {
 
-	private final List<Tag> result;
 
-	private final int size;
-
-	public SearchResult(List<Tag> result) {
-		this.result = result;
-		size = result.size();
-	}
+	void emit(T artifact);
 }
