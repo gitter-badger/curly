@@ -51,7 +51,7 @@ public class DefaultTagEventListener {
 			log.info("Received messages {} on tag.queue, notifying Bus...", messages);
 			eventBus.notify("tag.bus", Event.wrap(messages));
 		} else {
-			log.error("Cannot catch message instance!! ");
+			log.error("Cannot use NULL message!!");
 		}
 
 	}

@@ -53,14 +53,9 @@ public class EventHandler {
 	@Selector("tag.bus")
 	public void handle(Set<TagMessage> message) {
 		log.info("Initiating processor for tag message received on Event Bus");
-		if (message != null) {
 			insertCommand.save(message
 					.stream()
 					.map(TagMessage::toTag)
 					.collect(Collectors.toSet()));
-
-		} else {
-			log.error("Message received on Event Bus was NULL!!");
-		}
 	}
 }

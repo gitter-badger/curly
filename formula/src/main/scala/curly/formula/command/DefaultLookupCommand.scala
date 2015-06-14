@@ -14,6 +14,7 @@ import rx.Observable
  */
 @Service
 class DefaultLookupCommand @Autowired()(val service: CategoryService) extends LookupCommand {
+
   @HystrixCommand
   @Retryable(maxAttempts = 1)
   override def get(name: String): Observable[Option[Category]] = new ObservableResult[Option[Category]] {
