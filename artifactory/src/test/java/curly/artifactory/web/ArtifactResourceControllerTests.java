@@ -29,10 +29,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.nio.charset.StandardCharsets;
-
-import static org.springframework.restdocs.RestDocumentation.document;
-import static org.springframework.restdocs.RestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -64,14 +60,14 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 		this.messageConverter = new MappingJackson2HttpMessageConverter();
 		this.artifact = createArtifact(mongoTemplate);
 		this.mockMvc = webAppContextSetup(webApplicationContext)
-				.apply(
+			/*	.apply(
 						documentationConfiguration()
 								.uris().withHost("localhost").withPort(port).withScheme(" http")
 								.and()
 								.snippets().withEncoding(StandardCharsets.UTF_8.name()))
 
-				.alwaysDo(print())
-				.alwaysDo(document("artifactory"))
+			*/.alwaysDo(print())
+				//		.alwaysDo(document("artifactory"))
 				.alwaysExpect(status().is2xxSuccessful())
 				.build();
 	}
