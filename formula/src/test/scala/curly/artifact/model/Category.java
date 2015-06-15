@@ -13,34 +13,29 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.listener;
+package curly.artifact.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import curly.tagger.model.Tag;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
 
 /**
- * @author João Evangelista
+ * @author Joao Pedro Evangelista
+ * @since 19/04/2015
  */
 @Data
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TagMessage {
+@Document
+public class Category implements Serializable {
 
-	private String id;
-	private String name;
+	private static final long serialVersionUID = 2741852981600031808L;
 
-	public TagMessage(String id, String name) {
-		this.id = id;
+	String name;
+
+	public Category(String name) {
 		this.name = name;
 	}
 
-	public static TagMessage from(Tag tag) {
-		return new TagMessage(tag.getId(), tag.getName());
-	}
-
-	public Tag toTag() {
-		return new Tag(this.id, this.name);
+	public Category() {
 	}
 }

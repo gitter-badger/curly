@@ -55,7 +55,7 @@ public class CategoryCommander implements EventEmitter<Artifact> {
 	@Loggable
 	@Retryable
 	@HystrixCommand
-	public void emitFallBack(Object source) {
+	public void emitFallback(Object source) {
 		Artifact artifact = (Artifact) source;
 		log.info("Fallback starting, sending via HTTP, source {}", artifact);
 		categoryClient.postEvent(artifact.getCategory());

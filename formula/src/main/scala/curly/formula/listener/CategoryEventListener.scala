@@ -15,28 +15,29 @@
  */
 package curly.formula.listener
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import curly.commons.config.reactor.Reactor
 import curly.formula.Category
 import org.slf4j.LoggerFactory
+import org.springframework.amqp.core.Message
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.messaging.Message
-import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 import reactor.bus.{Event, EventBus}
-
 /**
  * @author João Evangelista
  */
 @Component
-class CategoryEventListener @Autowired()(@Reactor val eventBus: EventBus) {
+class CategoryEventListener @Autowired()(@Reactor val eventBus: EventBus, objectMapper: ObjectMapper) {
 
   val logger = LoggerFactory.getLogger(classOf[CategoryEventListener])
 
   @RabbitListener(queues = Array("category.queue"))
-  def onReceive(@Payload message: Message[Category]): Unit = {
+  def onReceive(message: Message): Unit = {
     Option(message) match {
-      case Some(x) => eventBus.notify("category.bus", Event.wrap(x.getPayload))
+      case Some(x) =>
+        val o = objectMapper.readValue(x.getBody, classOf[Category])
+        eventBus.notify("category.bus", Event.wrap(o))
       case None => logger.error("Cannot use NULL message!!")
     }
   }

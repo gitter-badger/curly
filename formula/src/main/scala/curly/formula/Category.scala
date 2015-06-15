@@ -15,6 +15,7 @@
  */
 package curly.formula
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -22,4 +23,16 @@ import org.springframework.data.mongodb.core.mapping.Document
  * @author João Evangelista
  */
 @Document
-case class Category(@Id id: String, name: String) extends Serializable
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Category extends Serializable {
+
+
+  @Id var id: String = null
+  var name: String = _
+
+  def this(name: String) = {
+    this()
+    this.name = name
+  }
+}
+

@@ -15,19 +15,23 @@
  */
 package curly.tagger;
 
-import com.google.common.collect.ImmutableSet;
+import curly.tagger.listener.TagMessage;
 import curly.tagger.model.Tag;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -37,6 +41,7 @@ import java.util.Set;
  *
  * @author João Evangelista
  */
+@DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TaggerApplication.class)
 public class EventHandlerTests {
@@ -47,8 +52,12 @@ public class EventHandlerTests {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@Autowired
+	private RabbitAdmin rabbitAdmin;
+
 	@Before
 	public void setUp() throws Exception {
+		rabbitAdmin.purgeQueue("tag.queue", true);
 	}
 
 	@Test
@@ -67,10 +76,11 @@ public class EventHandlerTests {
 		return mongoTemplate.count(new Query(), Tag.class);
 	}
 
-	private Set<Tag> createTag() {
-		Tag tag = new Tag(null, "sometag");
-		Tag tag2 = new Tag(null, "sometag2");
-		return ImmutableSet.<Tag>builder().add(tag, tag2).build();
+	private Set<TagMessage> createTag() {
+		TagMessage tag = new TagMessage(null, "sometag");
+		TagMessage tag2 = new TagMessage(null, "sometag2");
+
+		return new HashSet<>(Arrays.asList(tag, tag2));
 
 	}
 }

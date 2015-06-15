@@ -15,12 +15,15 @@
  */
 package curly.formula.controller
 
-import curly.commons.rx.RxResult
+import javax.validation.Valid
+
+import curly.commons.rx.RxResult.defer
+import curly.formula.Category
 import curly.formula.command.{InsertCommand, LookupCommand}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.{PathVariable, RequestMapping, RequestMethod, RestController}
+import org.springframework.http.{HttpStatus, MediaType, ResponseEntity}
+import org.springframework.web.bind.annotation._
 import rx.lang.scala.JavaConversions._
 
 /**
@@ -30,12 +33,26 @@ import rx.lang.scala.JavaConversions._
 @RequestMapping(Array("/categories"))
 class CategoryController @Autowired()(val insertCommand: InsertCommand, val lookupCommand: LookupCommand) {
 
-  @RequestMapping(value = Array("/{category}"), method = Array(RequestMethod.GET))
+  @RequestMapping(value = Array("/{category}"), method = Array(RequestMethod.GET), produces = Array(MediaType.APPLICATION_JSON_VALUE))
   def get(@PathVariable category: String) = {
-    RxResult.defer(toJavaObservable(toScalaObservable(lookupCommand.get(category)).map {
+    defer(toJavaObservable(toScalaObservable(lookupCommand.get(category)).map {
       case Some(c) => ResponseEntity.ok(c)
       case None => throw new ResourceNotFoundException()
     }))
+  }
+
+  @RequestMapping(value = Array("/search"), method = Array(RequestMethod.GET), produces = Array(MediaType.APPLICATION_JSON_VALUE))
+  def search(@RequestParam(value = "q", defaultValue = "") part: String) = {
+    defer(toJavaObservable(toScalaObservable(lookupCommand.like(part)).map {
+      case Some(c) => ResponseEntity.ok(c)
+      case None => throw new ResourceNotFoundException()
+    }))
+  }
+
+  @RequestMapping(method = Array(RequestMethod.POST), consumes = Array(MediaType.APPLICATION_JSON_VALUE))
+  def save(@Valid @RequestBody category: Category) = {
+    insertCommand.save(category)
+    defer(rx.Observable.just(new ResponseEntity[Any](HttpStatus.CREATED)))
   }
 
 

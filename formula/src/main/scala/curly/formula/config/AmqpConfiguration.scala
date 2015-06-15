@@ -16,6 +16,9 @@
 package curly.formula.config
 
 import org.springframework.amqp.core.{BindingBuilder, Queue, TopicExchange}
+import org.springframework.amqp.rabbit.connection.ConnectionFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.amqp.support.converter.{Jackson2JsonMessageConverter, MessageConverter}
 import org.springframework.context.annotation.{Bean, Configuration}
 
 /**
@@ -28,8 +31,17 @@ class AmqpConfiguration {
 
   @Bean def artifactoryExchange() = new TopicExchange("artifactory-exchange")
 
+
   @Bean def categoryBinding(categoryQueue: Queue, artifactoryExchange: TopicExchange) = BindingBuilder
     .bind(categoryQueue)
     .to(artifactoryExchange)
     .`with`(categoryQueue.getName)
+
+  @Bean def messageConverter: MessageConverter = new Jackson2JsonMessageConverter
+
+  @Bean def rabbitTemplate(connectionFactory: ConnectionFactory, messageConverter: MessageConverter): RabbitTemplate = {
+    val rabbitTemplate: RabbitTemplate = new RabbitTemplate(connectionFactory)
+    rabbitTemplate.setMessageConverter(messageConverter)
+    rabbitTemplate
+  }
 }

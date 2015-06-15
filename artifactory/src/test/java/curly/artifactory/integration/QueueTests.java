@@ -25,6 +25,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Set;
@@ -32,6 +33,7 @@ import java.util.Set;
 /**
  * @author João Evangelista
  */
+@DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ArtifactoryApplication.class)
 public class QueueTests {

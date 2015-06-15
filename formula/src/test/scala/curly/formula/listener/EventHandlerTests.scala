@@ -15,10 +15,12 @@
  */
 package curly.formula.listener
 
+import curly.artifact.model
 import curly.formula.{Category, FormulaApplication}
 import org.junit.runner.RunWith
-import org.junit.{Assert, Test}
+import org.junit.{Assert, Before, Test}
 import org.springframework.amqp.core.AmqpTemplate
+import org.springframework.amqp.rabbit.core.RabbitAdmin
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationConfiguration
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -33,13 +35,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 class EventHandlerTests {
   @Autowired private var amqpTemplate: AmqpTemplate = null
   @Autowired private var mongoTemplate: MongoTemplate = null
+  @Autowired private var rabbitAdmin: RabbitAdmin = null
 
+  @Before def setup() = rabbitAdmin.purgeQueue("category.queue", true)
 
   @Test
   @throws[Exception]
   def testHandling() = {
     val before = count
-    amqpTemplate.convertAndSend("category.queue", Category(null, "full-stack"))
+    val o = amqpTemplate.receiveAndConvert("category.queue")
+
+    amqpTemplate.convertAndSend("category.queue", new model.Category("full-stack"))
     Thread.sleep(5000) // wait some time to process it
     val after = count
     Assert.assertTrue("The number of items before action must be lower than after", before < after)
