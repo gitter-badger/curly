@@ -19,9 +19,9 @@ class CategoryEventListener @Autowired()(@Reactor val eventBus: EventBus) {
   val logger = LoggerFactory.getLogger(classOf[CategoryEventListener])
 
   @RabbitListener(queues = Array("category.queue"))
-  def onReceive(@Payload message: Message[Set[Category]]): Unit = {
+  def onReceive(@Payload message: Message[Category]): Unit = {
     Option(message) match {
-      case Some(x) => eventBus.notify("category.bus", Event.wrap(x))
+      case Some(x) => eventBus.notify("category.bus", Event.wrap(x.getPayload))
       case None => logger.error("Cannot use NULL message!!")
     }
   }

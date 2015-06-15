@@ -39,22 +39,28 @@ public class AmqpConfiguration {
 	}
 
 	@Bean
-	TopicExchange tagExchange() {
-		return new TopicExchange("tag-exchange");
+	Queue categoryQueue() {
+		return new Queue("category.queue", false);
 	}
 
 	@Bean
-	TopicExchange notifierExchange() {
-		return new TopicExchange("notification-exchange");
+	TopicExchange exchange() {
+		return new TopicExchange("artifactory-exchange");
+	}
+
+
+	@Bean
+	Binding tagBinding(TopicExchange exchange, Queue tagQueue) {
+		return BindingBuilder.bind(tagQueue).to(exchange).with(tagQueue.getName());
 	}
 
 	@Bean
-	Binding tagBinding(TopicExchange tagExchange, Queue tagQueue) {
-		return BindingBuilder.bind(tagQueue).to(tagExchange).with(tagQueue.getName());
+	Binding notifierBinding(TopicExchange exchange, Queue notifierQueue) {
+		return BindingBuilder.bind(notifierQueue).to(exchange).with(notifierQueue.getName());
 	}
 
 	@Bean
-	Binding notifierBinding(TopicExchange notifierExchange, Queue notifierQueue) {
-		return BindingBuilder.bind(notifierQueue).to(notifierExchange).with(notifierQueue.getName());
+	Binding categoryBinding(TopicExchange exchange, Queue categoryQueue) {
+		return BindingBuilder.bind(categoryQueue).to(exchange).with(categoryQueue.getName());
 	}
 }

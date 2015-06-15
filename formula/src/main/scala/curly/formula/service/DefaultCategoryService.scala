@@ -18,13 +18,11 @@ class DefaultCategoryService @Autowired()(val repository: CategoryRepository) ex
 
   override def find(name: String): Option[Category] = Option(repository.findByName(name))
 
-  override def save(names: Set[Category]): Unit = {
-    names.foreach(f => {
-      try repository.save(f) catch {
-        case ex: DuplicateKeyException => logger.warn("key {} already exists and cannot be replaced!!", f.name)
+  override def save(category: Category): Unit = {
+    try repository.save(category) catch {
+      case ex: DuplicateKeyException => logger.warn("key {} already exists and cannot be replaced!!", category.name)
         case e: Exception => throw new IllegalStateException(e)
       }
-    })
   }
 
   override def query(name: String): Option[Set[Category]] = Option(repository.findByNameLike(name).asScala.toSet)

@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author João Evangelista
  */
@@ -29,11 +31,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class CreatedArtifactEventHandler implements ApplicationListener<CreatedArtifactEvent> {
 
-	private final EventEmitter<Artifact> artifactEventEmitter;
+	private final List<EventEmitter<Artifact>> eventEmitters;
 
 	@Autowired
-	public CreatedArtifactEventHandler(EventEmitter<Artifact> artifactEventEmitter) {
-		this.artifactEventEmitter = artifactEventEmitter;
+	public CreatedArtifactEventHandler(List<EventEmitter<Artifact>> eventEmitters) {
+		this.eventEmitters = eventEmitters;
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class CreatedArtifactEventHandler implements ApplicationListener<CreatedA
 		log.info("Got event source {} on handler", source);
 		if (source instanceof Artifact) {
 			log.info("Emitting source of event of type Artifact...");
-			artifactEventEmitter.emit(((Artifact) source));
+			this.eventEmitters.stream().forEach(eventEmitter -> eventEmitter.emit((Artifact) source));
 		} else {
 			log.warn("Not a catchable instance type from event source!!");
 		}

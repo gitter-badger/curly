@@ -34,12 +34,12 @@ public class AmqpConfiguration {
 	}
 
 	@Bean
-	TopicExchange exchange() {
-		return new TopicExchange("tag-exchange");
+	TopicExchange artifactoryExchange() {
+		return new TopicExchange("artifactory-exchange");
 	}
 
 	@Bean
-	Binding binding(TopicExchange exchange, Queue tagQueue) {
-		return BindingBuilder.bind(tagQueue).to(exchange).with(tagQueue.getName());
+	Binding binding(TopicExchange artifactoryExchange, Queue tagQueue) {
+		return BindingBuilder.bind(tagQueue).to(artifactoryExchange).with(tagQueue.getName());
 	}
 }

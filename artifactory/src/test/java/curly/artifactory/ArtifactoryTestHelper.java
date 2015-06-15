@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
@@ -66,6 +67,7 @@ public abstract class ArtifactoryTestHelper {
 	}
 
 	public static Artifact createArtifact(MongoTemplate mongoTemplate) {
+		mongoTemplate.findAllAndRemove(new Query(), Artifact.class);
 		Artifact artifact = new Artifact();
 		Set<Language> languages = new HashSet<>(0);
 		Set<Tag> tags = new HashSet<>(0);

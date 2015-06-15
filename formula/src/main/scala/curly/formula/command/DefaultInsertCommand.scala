@@ -17,7 +17,7 @@ class DefaultInsertCommand @Autowired()(val service: CategoryService)
   @Loggable
   @Retryable
   @HystrixCommand
-  override def save(tags: Set[Category]): Unit = {
+  override def save(tags: Category): Unit = {
     service.save(tags)
   }
 }

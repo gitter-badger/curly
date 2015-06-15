@@ -10,6 +10,6 @@ trait CategoryService {
 
   def query(name: String): Option[Set[Category]]
 
-  def save(tags: Set[Category]): Unit
+  def save(tags: Category): Unit
 
 }

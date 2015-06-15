@@ -16,7 +16,7 @@
 package curly.artifact.integration.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import curly.artifact.model.Tag;
+import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import java.util.Set;
  * @author João Evangelista
  */
 @Service
-public class TagCommander implements EventEmitter<Set<Tag>> {
+public class TagCommander implements EventEmitter<Artifact> {
 
 	private final AmqpTemplate amqpTemplate;
 	private final TaggerClient taggerClient;
@@ -40,22 +40,19 @@ public class TagCommander implements EventEmitter<Set<Tag>> {
 		this.taggerClient = taggerClient;
 	}
 
-
 	@Override
 	@Loggable
 	@Retryable(maxAttempts = 1)
 	@HystrixCommand(fallbackMethod = "emitEventFallback")
-	public void emit(Set<Tag> tags) {
-		amqpTemplate.convertAndSend("tag.queue", tags);
-
+	public void emit(Artifact artifact) {
+		amqpTemplate.convertAndSend("tag.queue", artifact.getTags());
 	}
 
-	//@Loggable
-	@SuppressWarnings("unchecked")
+	@Loggable
 	@Retryable(maxAttempts = 1)
 	public void emitEventFallback(Object source) {
 		if (source instanceof Set) {
-			taggerClient.postEvent(((Set<Tag>) source));
+			taggerClient.postEvent(((Artifact) source).getTags());
 		}
 	}
 }

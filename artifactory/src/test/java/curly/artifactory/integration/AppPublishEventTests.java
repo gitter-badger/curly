@@ -16,7 +16,6 @@
 package curly.artifactory.integration;
 
 import curly.artifact.ArtifactoryApplication;
-import curly.artifact.integration.event.ArtifactTagEvent;
 import curly.artifact.integration.event.CreatedArtifactEvent;
 import curly.artifact.model.Artifact;
 import curly.artifactory.ArtifactoryTestHelper;
@@ -50,7 +49,7 @@ public class AppPublishEventTests {
 	@SuppressWarnings("unchecked")
 	public void testTagPublishEvent() throws Exception {
 		Artifact artifact = ArtifactoryTestHelper.createArtifact(mongoTemplate);
-		applicationEventPublisher.publishEvent(new ArtifactTagEvent(artifact.getTags()));
+		applicationEventPublisher.publishEvent(new CreatedArtifactEvent(artifact));
 		Object o = amqpTemplate.receiveAndConvert("tag.queue");
 		if (o instanceof Set) {
 			Set<Tag> tags = (Set<Tag>) o;
@@ -68,14 +67,13 @@ public class AppPublishEventTests {
 		Artifact artifact = ArtifactoryTestHelper.createArtifact(mongoTemplate);
 		applicationEventPublisher.publishEvent(new CreatedArtifactEvent(artifact));
 		Object o = amqpTemplate.receiveAndConvert("artifactory.notification.queue");
-		if (o instanceof Artifact) {
-			Artifact received = ((Artifact) o);
-			System.out.println("\n--------------->\n" + received);
-			Assert.assertEquals("must be equals", received, artifact);
-		} else {
-			System.err.println("not processable instance" + o);
-			Assert.assertTrue(false);
-		}
+		System.out.println(o);
+		Assert.assertTrue("not processable instance", o instanceof Artifact);
+
+		Artifact received = ((Artifact) o);
+		System.out.println("\n--------------->\n" + received);
+		Assert.assertEquals("must be equals", received, artifact);
+
 
 	}
 }

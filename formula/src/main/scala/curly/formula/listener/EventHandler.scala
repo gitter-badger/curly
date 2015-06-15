@@ -17,7 +17,7 @@ class EventHandler @Autowired()(val insertCommand: InsertCommand, @Reactor val e
   val logger = LoggerFactory.getLogger(classOf[EventHandler])
 
   @Selector("category.bus")
-  def handle(message: Set[Category]): Unit = {
+  def handle(message: Category): Unit = {
     logger.info("Initiating processor for tag message received on Event Bus")
     insertCommand.save(message)
   }

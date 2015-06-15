@@ -11,10 +11,10 @@ class AmqpConfiguration {
 
   @Bean def categoryQueue() = new Queue("category.queue", false)
 
-  @Bean def categoryExchange() = new TopicExchange("category-exchange")
+  @Bean def artifactoryExchange() = new TopicExchange("artifactory-exchange")
 
-  @Bean def categoryBinding(categoryQueue: Queue, categoryExchange: TopicExchange) = BindingBuilder
+  @Bean def categoryBinding(categoryQueue: Queue, artifactoryExchange: TopicExchange) = BindingBuilder
     .bind(categoryQueue)
-    .to(categoryExchange)
+    .to(artifactoryExchange)
     .`with`(categoryQueue.getName)
 }
