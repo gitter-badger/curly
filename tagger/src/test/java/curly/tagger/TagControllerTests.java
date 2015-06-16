@@ -18,10 +18,16 @@ package curly.tagger;
 import curly.tagger.model.Tag;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -36,6 +42,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author João Evangelista
  */
+@DirtiesContext
+@RunWith(SpringJUnit4ClassRunner.class)
+@OAuth2ContextConfiguration
+@SpringApplicationConfiguration(classes = {TaggerApplication.class})
+@WebIntegrationTest
 public class TagControllerTests extends TagHelper {
 
 	private Tag tag;

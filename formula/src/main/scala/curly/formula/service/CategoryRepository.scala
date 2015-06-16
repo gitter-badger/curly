@@ -13,34 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.listener;
+package curly.formula.service
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import curly.tagger.model.Tag;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.{Set => JSet}
+
+import curly.formula.Category
+import org.springframework.data.mongodb.repository.MongoRepository
 
 /**
  * @author João Evangelista
  */
-@Data
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TagMessage {
+trait CategoryRepository extends MongoRepository[Category, String] {
 
-	private String id;
-	private String name;
+  def findByName(name: String): Category
 
-	public TagMessage(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+  def findByNameLike(name: String): JSet[Category]
 
-	public static TagMessage from(Tag tag) {
-		return new TagMessage(tag.getId(), tag.getName());
-	}
-
-	public Tag toTag() {
-		return new Tag(this.id, this.name);
-	}
 }

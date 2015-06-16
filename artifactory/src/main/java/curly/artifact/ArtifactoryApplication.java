@@ -17,7 +17,7 @@ package curly.artifact;
 
 
 import curly.commons.config.cache.annotation.EnableRedisCache;
-import curly.commons.config.context.EnableWorkQueueExecutor;
+import curly.commons.config.context.EnableRingBufferExecutor;
 import curly.commons.logging.annotation.config.EnableLoggable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
@@ -31,7 +31,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 @RibbonClient("artifactory")
 @EnableFeignClients
 @EnableLoggable
-@EnableWorkQueueExecutor
+@EnableRingBufferExecutor
 @EnableRedisCache
 @SpringCloudApplication
 public class ArtifactoryApplication {

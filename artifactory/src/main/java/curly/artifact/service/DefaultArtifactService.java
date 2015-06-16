@@ -17,7 +17,6 @@ package curly.artifact.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
-import curly.artifact.integration.event.ArtifactTagEvent;
 import curly.artifact.integration.event.CreatedArtifactEvent;
 import curly.artifact.model.Artifact;
 import curly.commons.github.OctoUser;
@@ -94,7 +93,6 @@ public class DefaultArtifactService extends ResourceOperationsResolverAdapter<Ar
 	}
 
 	private void publishEvents(Artifact entity) {
-		applicationEventPublisher.publishEvent(new ArtifactTagEvent(entity.getTags()));
 		applicationEventPublisher.publishEvent(new CreatedArtifactEvent(entity));
 	}
 

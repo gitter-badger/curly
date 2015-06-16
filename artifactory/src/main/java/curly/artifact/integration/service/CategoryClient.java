@@ -13,34 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.listener;
+package curly.artifact.integration.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import curly.tagger.model.Tag;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import curly.artifact.model.Category;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author João Evangelista
  */
-@Data
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TagMessage {
+@FeignClient("formula")
+public interface CategoryClient {
 
-	private String id;
-	private String name;
-
-	public TagMessage(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public static TagMessage from(Tag tag) {
-		return new TagMessage(tag.getId(), tag.getName());
-	}
-
-	public Tag toTag() {
-		return new Tag(this.id, this.name);
-	}
+	@RequestMapping(value = "/categories", method = RequestMethod.POST)
+	ResponseEntity<?> postEvent(@RequestBody Category categories);
 }

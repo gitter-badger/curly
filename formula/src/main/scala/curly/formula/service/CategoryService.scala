@@ -13,34 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.listener;
+package curly.formula.service
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import curly.tagger.model.Tag;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import curly.formula.Category
 
 /**
  * @author João Evangelista
  */
-@Data
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TagMessage {
+trait CategoryService {
+  def find(name: String): Option[Category]
 
-	private String id;
-	private String name;
+  def query(name: String): Option[Set[Category]]
 
-	public TagMessage(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+  def save(tags: Category): Unit
 
-	public static TagMessage from(Tag tag) {
-		return new TagMessage(tag.getId(), tag.getName());
-	}
-
-	public Tag toTag() {
-		return new Tag(this.id, this.name);
-	}
 }

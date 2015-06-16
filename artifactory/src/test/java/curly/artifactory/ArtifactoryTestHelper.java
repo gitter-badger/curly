@@ -28,10 +28,12 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -43,6 +45,7 @@ import java.util.Set;
 /**
  * @author Joao Pedro Evangelista
  */
+@DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @OAuth2ContextConfiguration
 @SpringApplicationConfiguration(classes = {ArtifactoryApplication.class})
@@ -66,6 +69,7 @@ public abstract class ArtifactoryTestHelper {
 	}
 
 	public static Artifact createArtifact(MongoTemplate mongoTemplate) {
+		mongoTemplate.findAllAndRemove(new Query(), Artifact.class);
 		Artifact artifact = new Artifact();
 		Set<Language> languages = new HashSet<>(0);
 		Set<Tag> tags = new HashSet<>(0);

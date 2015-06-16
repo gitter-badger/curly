@@ -18,41 +18,46 @@ package curly.artifact.integration.service;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 /**
  * @author João Evangelista
  */
+@Slf4j
 @Service
-public class TagCommander implements EventEmitter<Artifact> {
+public class CategoryCommander implements EventEmitter<Artifact> {
 
 	private final AmqpTemplate amqpTemplate;
-	private final TaggerClient taggerClient;
+
+	private final CategoryClient categoryClient;
 
 	@Autowired
-	public TagCommander(AmqpTemplate amqpTemplate, TaggerClient taggerClient) {
+	public CategoryCommander(AmqpTemplate amqpTemplate, CategoryClient categoryClient) {
 		this.amqpTemplate = amqpTemplate;
-		this.taggerClient = taggerClient;
+		this.categoryClient = categoryClient;
 	}
+
 
 	@Override
 	@Loggable
-	@Retryable(maxAttempts = 1)
-	@HystrixCommand(fallbackMethod = "emitEventFallback")
+	@Retryable
+	@HystrixCommand(fallbackMethod = "emitFallback")
 	public void emit(Artifact artifact) {
-		amqpTemplate.convertAndSend("tag.queue", artifact.getTags());
+		log.info("Emitting event of source {}", artifact);
+		amqpTemplate.convertAndSend("category.queue", artifact.getCategory());
 	}
 
+
 	@Loggable
-	@Retryable(maxAttempts = 1)
-	public void emitEventFallback(Object source) {
-		if (source instanceof Set) {
-			taggerClient.postEvent(((Artifact) source).getTags());
-		}
+	@Retryable
+	@HystrixCommand
+	public void emitFallback(Object source) {
+		Artifact artifact = (Artifact) source;
+		log.info("Fallback starting, sending via HTTP, source {}", artifact);
+		categoryClient.postEvent(artifact.getCategory());
 	}
 }

@@ -13,34 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.listener;
+package curly.formula.command
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import curly.tagger.model.Tag;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
+import curly.commons.logging.annotation.Loggable
+import curly.formula.Category
+import curly.formula.service.CategoryService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.retry.annotation.Retryable
+import org.springframework.stereotype.Service
 
 /**
  * @author João Evangelista
  */
-@Data
-@NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class TagMessage {
-
-	private String id;
-	private String name;
-
-	public TagMessage(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public static TagMessage from(Tag tag) {
-		return new TagMessage(tag.getId(), tag.getName());
-	}
-
-	public Tag toTag() {
-		return new Tag(this.id, this.name);
-	}
+@Service
+class DefaultInsertCommand @Autowired()(val service: CategoryService)
+  extends InsertCommand {
+  @Loggable
+  @Retryable
+  @HystrixCommand
+  override def save(tags: Category): Unit = {
+    service.save(tags)
+  }
 }

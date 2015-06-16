@@ -20,6 +20,5 @@ package curly.artifact.integration.service;
  */
 public interface EventEmitter<T> {
 
-
 	void emit(T artifact);
 }
