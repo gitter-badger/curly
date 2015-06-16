@@ -17,17 +17,11 @@ package curly.tagger;
 
 import curly.commons.github.OctoUser;
 import curly.tagger.model.Tag;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
-import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -35,11 +29,6 @@ import java.io.IOException;
 /**
  * @author João Evangelista
  */
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@OAuth2ContextConfiguration
-@SpringApplicationConfiguration(classes = {TaggerApplication.class})
-@WebIntegrationTest
 public class TagHelper {
 
 	public static String json(Object o, HttpMessageConverter<Object> httpMessageConverter) {

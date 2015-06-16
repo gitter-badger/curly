@@ -15,7 +15,10 @@
  */
 package curly.formula.config
 
+import curly.commons.reactor.DispatcherFactory
+import curly.formula.listener.CategoryEventListener
 import org.springframework.amqp.core.{BindingBuilder, Queue, TopicExchange}
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.amqp.support.converter.{Jackson2JsonMessageConverter, MessageConverter}
@@ -43,5 +46,13 @@ class AmqpConfiguration {
     val rabbitTemplate: RabbitTemplate = new RabbitTemplate(connectionFactory)
     rabbitTemplate.setMessageConverter(messageConverter)
     rabbitTemplate
+  }
+
+  @Bean def rabbitListenerContainerFactory(connectionFactory: ConnectionFactory): SimpleRabbitListenerContainerFactory = {
+    val smpContainer = new SimpleRabbitListenerContainerFactory
+    smpContainer.setTaskExecutor(DispatcherFactory.workQueueDispatcher(classOf[CategoryEventListener]))
+    smpContainer.setMaxConcurrentConsumers(16)
+    smpContainer.setConnectionFactory(connectionFactory: ConnectionFactory)
+    smpContainer
   }
 }
