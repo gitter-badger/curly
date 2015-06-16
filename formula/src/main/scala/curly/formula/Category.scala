@@ -17,6 +17,7 @@ package curly.formula
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 
 /**
@@ -28,11 +29,29 @@ class Category extends Serializable {
 
 
   @Id var id: String = null
-  var name: String = _
+  @Indexed var name: String = _
 
   def this(name: String) = {
     this()
     this.name = name
   }
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Category =>
+      (that canEqual this) &&
+        id == that.id &&
+        name == that.name
+    case _ => false
+  }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Category]
+
+  override def hashCode(): Int = {
+    val state = Seq(id, name)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
+
+
+  override def toString = s"Category(id=$id, name=$name)"
 }
 
