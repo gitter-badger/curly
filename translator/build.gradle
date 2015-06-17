@@ -1,0 +1,34 @@
+apply plugin: 'kotlin'
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir "src/main/kotlin"
+        }
+    }
+    test {
+        kotlin {
+            srcDir "test/main/kotlin"
+        }
+    }
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
+
+
+jar {
+    baseName = 'translator'
+    version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+dependencies {
+    compile project(":curly-commons")
+    compile "org.springframework.boot:spring-boot-starter-redis"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.6.0-rc2'
+}

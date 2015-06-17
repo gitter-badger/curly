@@ -3,7 +3,7 @@ buildscript {
         springBootVersion = '1.2.4.RELEASE'
         asciidoctorVersion = '1.5.2'
         managementVersion = '0.5.0.RELEASE'
-        kotlinVersion = '0.11.91.1'
+        kotlinVersion = '0.12.412'
     }
     repositories {
         jcenter()
@@ -16,6 +16,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
         classpath "io.spring.gradle:dependency-management-plugin:$managementVersion"
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:$asciidoctorVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
         classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:2.2.+'
     }
