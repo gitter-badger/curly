@@ -16,9 +16,9 @@
 package curly.translator
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.HashMap
 
@@ -33,10 +33,13 @@ public RestController open class ColorsController {
         this.colors = colors
     }
 
-    RequestMapping(value = array("/colors"), method = array(RequestMethod.POST))
-    fun get(RequestBody lang: Set<String>): Map<String, String> {
+    RequestMapping(value = "/colors", method = arrayOf(RequestMethod.GET))
+    fun get(RequestParam(value = "langs") langs: Array<String>): Map<String, String> {
         var output: MutableMap<String, String> = HashMap()
-        lang.forEach { val color = colors.getColorMap().get(it.toLowerCase()); output.put(it, color!!) }
+        langs.forEach {
+            val color = colors.getColorMap().get(it.toLowerCase());
+            if (!color.isNullOrBlank()) output.put(it, color!!)
+        }
         return output
     }
 

@@ -1,5 +1,5 @@
 apply plugin: 'kotlin'
-
+apply plugin: 'spring-boot'
 sourceSets {
     main {
         kotlin {

@@ -29,7 +29,8 @@ public data Service open class ColorsLoader {
     private val langMap: HashMap<String, String>
 
     init {
-        val file = ClassPathResource("colors.json", this.javaClass.getClassLoader()).getFile()
+        val file = ClassPathResource("classpath:/colors.json", this.javaClass.getClassLoader()).getFile()
+
         langMap = ObjectMapper().readValue(file, javaClass<HashMap<String, String>>())
     }
 
