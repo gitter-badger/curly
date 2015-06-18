@@ -10,4 +10,4 @@ include 'infrastructure:proxy'
 include 'paperclip'
 include 'tagger'
 include 'formula'
-
+include 'translator'
