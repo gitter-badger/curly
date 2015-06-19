@@ -1,6 +1,6 @@
 #{urly ![Logo](https://raw.githubusercontent.com/crly/webapp/master/public/assets/images/logo60.png)   
 
-[![Build Status](https://travis-ci.org/joaoevangelista/curly.svg)](https://travis-ci.org/joaoevangelista/curly)
+[![Build Status](https://travis-ci.org/crly/curly.svg?branch=master)](https://travis-ci.org/crly/curly)
 
 
 [![forthebadge](http://forthebadge.com/images/badges/no-ragrets.svg)](http://forthebadge.com) [![forthebadge](http://forthebadge.com/images/badges/compatibility-betamax.svg)](http://forthebadge.com)
