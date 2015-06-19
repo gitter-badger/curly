@@ -3,7 +3,7 @@ buildscript {
         springBootVersion = '1.2.4.RELEASE'
         asciidoctorVersion = '1.5.2'
         managementVersion = '0.5.0.RELEASE'
-        kotlinVersion = '0.12.412'
+        kotlinVersion = '0.12.613'
     }
     repositories {
         jcenter()
@@ -44,7 +44,7 @@ allprojects {
 
     ext {
         groovyVersion = '2.4.3'
-        kotlinVersion = '0.12.412'
+        kotlinVersion = '0.12.613'
         javaVersion = '1.8'
         metricsVersion = '3.1.2'
         mongoDriverVersion = '3.0.0'
