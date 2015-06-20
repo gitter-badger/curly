@@ -15,8 +15,8 @@
  */
 package curly.edge.artifact.domain
 
-import curly.edge.artifact.ArtifactController
-import curly.edge.artifact.ArtifactResource
+import curly.edge.artifact.web.ArtifactController
+import curly.edge.artifact.web.ArtifactResource
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.PagedResources
 import org.springframework.hateoas.ResourceAssembler

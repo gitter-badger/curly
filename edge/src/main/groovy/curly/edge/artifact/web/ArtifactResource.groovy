@@ -13,7 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package curly.edge.artifact.web
+
+import curly.edge.artifact.domain.Artifact
+import org.springframework.hateoas.Link
+import org.springframework.hateoas.Resource
+
 /**
  * @author João Pedro Evangelista
  */
-package curly.edge.readme;
+class ArtifactResource extends Resource<Artifact> {
+    ArtifactResource(Artifact content, Link... links) {
+        super(content, links)
+    }
+}

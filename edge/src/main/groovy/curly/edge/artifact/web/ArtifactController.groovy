@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.edge.artifact.web
 
 import curly.commons.web.hateoas.MediaTypes
 import curly.commons.web.hateoas.PageProcessor

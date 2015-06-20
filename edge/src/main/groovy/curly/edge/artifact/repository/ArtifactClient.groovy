@@ -15,9 +15,9 @@
  */
 package curly.edge.artifact.repository
 
-import curly.edge.artifact.ArtifactResource
 import curly.edge.artifact.domain.Artifact
 import curly.edge.artifact.domain.PagedArtifact
+import curly.edge.artifact.web.ArtifactResource
 import org.springframework.cloud.netflix.feign.FeignClient
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity

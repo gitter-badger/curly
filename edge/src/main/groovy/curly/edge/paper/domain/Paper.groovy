@@ -13,17 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.edge.paper.domain
 
-import curly.edge.artifact.domain.Artifact
-import org.springframework.hateoas.Link
-import org.springframework.hateoas.Resource
+import curly.commons.security.OwnedResource
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import groovy.transform.TupleConstructor
+import org.hibernate.validator.constraints.NotEmpty
+import org.springframework.data.annotation.Id
 
 /**
- * @author João Pedro Evangelista
+ * @author Joao Pedro Evangelista
  */
-class ArtifactResource extends Resource<Artifact> {
-    ArtifactResource(Artifact content, Link... links) {
-        super(content, links)
-    }
+@ToString
+@TupleConstructor
+@EqualsAndHashCode
+class Paper extends OwnedResource {
+
+    @Id
+    String id
+
+    @NotEmpty
+    String item
+
+    String content
 }

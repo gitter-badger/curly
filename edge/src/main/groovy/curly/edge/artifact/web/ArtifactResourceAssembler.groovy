@@ -13,9 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.edge.artifact
+package curly.edge.artifact.web
 
 import curly.edge.artifact.domain.Artifact
+import curly.edge.paper.web.PaperController
+import org.springframework.hateoas.mvc.ControllerLinkBuilder
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport
 import org.springframework.stereotype.Component
 
@@ -37,7 +39,9 @@ class ArtifactResourceAssembler extends ResourceAssemblerSupport<Artifact, Artif
     @Override
     ArtifactResource toResource(Artifact entity) {
         return new ArtifactResource(
-                entity, linkTo(ArtifactController).slash(entity.id).withSelfRel()
+                entity,
+                ControllerLinkBuilder.linkTo(ArtifactController).slash(entity.id).withSelfRel(),
+                linkTo(PaperController).slash(entity.id).withRel("paper")
         )
     }
 }
