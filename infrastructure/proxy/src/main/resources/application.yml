@@ -13,9 +13,6 @@ eureka:
 zuul:
   stripPrefix: false
   routes:
-    ui:
-      path: /#!/**
-      url: http://localhost:3000
     edge: /api/**
     artifactory: /artifactory/**
 
@@ -24,8 +21,8 @@ spring:
   oauth2:
     sso:
       home:
-          secure: false
-          path : /, /#!/
+        secure: false
+        path : /, /#!/
       loginPath: /login
       logoutPath: /logout
     client:
@@ -43,6 +40,7 @@ security:
   ignored: /bower_components/**, /assets/**, /app/**, /src/**, /components/**, /ui/**, /browser_sync/**
   user:
     password: nessa
+
 management:
   security:
     role: ADMIN

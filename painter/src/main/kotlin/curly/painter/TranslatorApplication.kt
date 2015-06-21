@@ -13,24 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.model;
+package curly.painter
 
-import lombok.Data;
-
-import java.util.List;
+import curly.commons.config.context.EnableRingBufferExecutor
+import curly.commons.logging.annotation.config.EnableLoggable
+import org.springframework.boot.SpringApplication
+import org.springframework.cloud.client.SpringCloudApplication
+import kotlin.platform.platformStatic
 
 /**
  * @author João Evangelista
  */
-@Data
-public final class SearchResult {
+EnableLoggable
+EnableRingBufferExecutor
+SpringCloudApplication
+open class TranslatorApplication {
 
-	private final List<Tag> result;
+    companion object {
+        platformStatic public fun main(args: Array<String>) {
+            SpringApplication.run(javaClass<TranslatorApplication>(), *args)
+        }
+    }
 
-	private final int size;
-
-	public SearchResult(List<Tag> result) {
-		this.result = result;
-		size = result.size();
-	}
 }

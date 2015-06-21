@@ -26,18 +26,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableOAuth2Resource
 public class OAuth2ResourceConfig extends ResourceServerConfigurerAdapter {
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.formLogin().loginPage("/login").permitAll()
-                .and()
-                .anonymous()
-                .key("anonymous")
-                .authorities("ROLE_USER")
-                .and()
-                .authorizeRequests()
-                .antMatchers("/arts/**").permitAll()
-                .antMatchers("/foo/**").permitAll()
-                .anyRequest().authenticated();
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
+		http
+				.anonymous()
+				.and()
+				.authorizeRequests()
+				.antMatchers("/arts/**").permitAll()
+				.anyRequest().authenticated();
 
-    }
+	}
 }

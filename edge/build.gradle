@@ -1,9 +1,0 @@
-apply plugin: 'groovy'
-apply plugin: 'spring-boot'
-
-dependencies {
-    compile project(":curly-commons")
-    compile "org.springframework.boot:spring-boot-starter-data-rest"
-    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-}

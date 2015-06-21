@@ -14,10 +14,9 @@ spring:
     config:
       server:
         git:
-          uri: git@github.com:joaoevangelista/librarian-config.git
+          uri: git@github.com:crly/curly-config.git
 
 
 security:
-  sessions: NEVER
   user:
     password: nessa

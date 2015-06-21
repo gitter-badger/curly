@@ -48,6 +48,8 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
 
 	private String homePage;
 
+	private String githubPage;
+
 	private Set<Language> languages;
 
 	private Set<Tag> tags;
@@ -64,6 +66,7 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
 		this.author = "";
 		this.name = "";
 		this.homePage = "";
+		this.githubPage = "";
 		this.languages = new HashSet<>(0);
 		this.tags = new HashSet<>(0);
 		this.category = new Category();

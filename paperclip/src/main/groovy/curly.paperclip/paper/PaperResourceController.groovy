@@ -18,7 +18,7 @@ package curly.paperclip.paper
 import curly.commons.github.GitHubAuthentication
 import curly.commons.github.OctoUser
 import curly.commons.logging.annotation.Loggable
-import curly.commons.web.ApiErrors
+import curly.commons.web.ModelErrors
 import org.bson.types.ObjectId
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.http.MediaType
@@ -88,7 +88,7 @@ class PaperResourceController {
                                            @GitHubAuthentication OctoUser octoUser,
                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return defer(Observable.just(new ResponseEntity(new ApiErrors(BAD_REQUEST, bindingResult), BAD_REQUEST)))
+            return defer(Observable.just(new ResponseEntity(new ModelErrors(BAD_REQUEST, bindingResult), BAD_REQUEST)))
         }
         command.save(paper, Optional.ofNullable(octoUser))
         defer Observable.just(new ResponseEntity(CREATED))

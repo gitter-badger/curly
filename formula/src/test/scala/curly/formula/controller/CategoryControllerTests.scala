@@ -17,7 +17,7 @@ package curly.formula.controller
 
 import java.io.IOException
 
-import curly.formula.{Category, FormulaApplication}
+import curly.formula.{Category, FormulaApplication, SearchResult}
 import org.junit.runner.RunWith
 import org.junit.{Before, Test}
 import org.springframework.beans.factory.annotation.Autowired
@@ -98,7 +98,7 @@ class CategoryControllerTests {
   def testSearch(): Unit = {
     mockMvc.perform(asyncDispatch(mockMvc.perform(get("/categories/search").param("q", "full"))
       .andExpect(request().asyncStarted())
-      .andExpect(request().asyncResult(ResponseEntity.ok(Set(category))))
+      .andExpect(request().asyncResult(ResponseEntity.ok(new SearchResult(Set(category)))))
       .andDo(print())
       .andReturn()))
       .andDo(print())

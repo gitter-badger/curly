@@ -15,11 +15,12 @@
  */
 package curly.formula.controller
 
+
 import javax.validation.Valid
 
 import curly.commons.rx.RxResult.defer
-import curly.formula.Category
 import curly.formula.command.{InsertCommand, LookupCommand}
+import curly.formula.{Category, SearchResult}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.http.{HttpStatus, MediaType, ResponseEntity}
@@ -44,7 +45,7 @@ class CategoryController @Autowired()(val insertCommand: InsertCommand, val look
   @RequestMapping(value = Array("/search"), method = Array(RequestMethod.GET), produces = Array(MediaType.APPLICATION_JSON_VALUE))
   def search(@RequestParam(value = "q", defaultValue = "") part: String) = {
     defer(toJavaObservable(toScalaObservable(lookupCommand.like(part)).map {
-      case Some(c) => ResponseEntity.ok(c)
+      case Some(c) => ResponseEntity.ok(new SearchResult(c))
       case None => throw new ResourceNotFoundException()
     }))
   }

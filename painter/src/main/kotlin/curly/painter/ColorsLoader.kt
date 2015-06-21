@@ -13,24 +13,29 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.tagger.model;
+package curly.painter
 
-import lombok.Data;
-
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.core.io.ClassPathResource
+import org.springframework.stereotype.Service
+import java.util.HashMap
 
 /**
  * @author João Evangelista
  */
-@Data
-public final class SearchResult {
 
-	private final List<Tag> result;
+public data Service open class ColorsLoader {
 
-	private final int size;
+    private val langMap: HashMap<String, String>
 
-	public SearchResult(List<Tag> result) {
-		this.result = result;
-		size = result.size();
-	}
+    init {
+        val file = ClassPathResource("classpath:/colors.json", this.javaClass.getClassLoader()).getFile()
+
+        langMap = ObjectMapper().readValue(file, javaClass<HashMap<String, String>>())
+    }
+
+    fun getColorMap(): Map<String, String> {
+        return langMap
+    }
+
 }

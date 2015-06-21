@@ -60,6 +60,7 @@ allprojects {
         spockVersion = '1.0-groovy-2.4'
         springSessionVersion = '1.0.0.RELEASE'
     }
+
     ext['spring-hateoas.version'] = '0.17.0.RELEASE'
     ext['spring-data-releasetrain.version'] = 'Fowler-RELEASE'
     ext['undertow.version'] = '1.2.5.Final'
