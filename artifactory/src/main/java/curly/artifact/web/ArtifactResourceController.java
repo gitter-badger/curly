@@ -13,24 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.controller;
+package curly.artifact.web;
 
 import curly.artifact.model.Artifact;
-import curly.artifact.model.PagedArtifact;
 import curly.artifact.service.ArtifactService;
 import curly.commons.github.GitHubAuthentication;
 import curly.commons.github.OctoUser;
-import curly.commons.rx.RxResult;
 import curly.commons.web.BadRequestException;
 import curly.commons.web.ModelErrors;
+import curly.commons.web.hateoas.MediaTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,65 +52,71 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/arts")
+@RequestMapping("/artifacts")
 class ArtifactResourceController {
 
 	private final ArtifactService artifactService;
 
+	private final ArtifactResourceAssembler resourceAssembler;
+
 	@Autowired
-	ArtifactResourceController(ArtifactService artifactService) {
+	ArtifactResourceController(ArtifactService artifactService, ArtifactResourceAssembler resourceAssembler) {
 		this.artifactService = artifactService;
+		this.resourceAssembler = resourceAssembler;
 	}
 
-	@RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
-		log.trace("Querying resources with page {}, size {}", pageable.getPageNumber(), pageable.getPageSize());
-		artifactService.findAll(pageable);
-		return defer(
-				artifactService.findAll(pageable)
-						.map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
-						.map(PagedArtifact::new)
-						.map(ResponseEntity::ok)
-		);
+	/**
+	 * Process a page of Artifacts into a HAL representation or return 404 if not found or was null value
+	 *
+	 * @param pageable  acquired from url parameters
+	 * @param assembler inject by Spring
+	 * @return Observable of a HttpEntity of a Paged Resources of Artifacts
+	 */
+	@RequestMapping(method = GET, produces = MediaTypes.HAL_JSON)
+	public Observable<HttpEntity<PagedResources<ArtifactResource>>> artifactResources(@NotNull @PageableDefault(20) Pageable pageable,
+																					  @NotNull PagedResourcesAssembler<Artifact> assembler) {
+
+		return artifactService.findAll(pageable)
+				.map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
+				.map(artifacts -> assembler.toResource(artifacts, resourceAssembler))
+				.map(ResponseEntity::ok);
 	}
 
-	@RequestMapping(
-			value = "/{id}",
-			method = GET,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
-		log.trace("Querying single resource based on id {}", id);
+	@RequestMapping(value = "/{id}", method = GET, produces = MediaTypes.HAL_JSON)
+	public DeferredResult<HttpEntity<ArtifactResource>> artifactResource(@PathVariable("id") String id) {
+
 		if (!ObjectId.isValid(id)) throw new BadRequestException("Provided id " + id + " is not valid!");
 
-		return defer(
-				artifactService.findOne(id)
-						.map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
-						.map(ResponseEntity::ok));
+		return defer(artifactService.findOne(id)
+				.map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
+				.map(resourceAssembler::toResource)
+				.map(ResponseEntity::ok));
 	}
 
 
 	@RequestMapping(method = {POST, PUT})
 	public DeferredResult<HttpEntity<?>> saveResource(@Valid @RequestBody Artifact artifact,
-													  @GitHubAuthentication OctoUser octoUser,
-													  BindingResult bindingResult) {
-		log.debug("Performing save operations based on user {}", octoUser.getId());
+													  @NotNull @GitHubAuthentication OctoUser octoUser,
+													  @NotNull BindingResult bindingResult) {
+
 		if (bindingResult.hasErrors()) {
-			return RxResult.defer(Observable.just(new ResponseEntity<>(new ModelErrors(BAD_REQUEST, bindingResult), BAD_REQUEST)));
+			return defer(Observable.just(new ResponseEntity<>(new ModelErrors(bindingResult), BAD_REQUEST)));
 		}
+
 		artifactService.save(artifact, octoUser);
-		return RxResult.defer(Observable.just(new ResponseEntity<>(CREATED)));
+		return defer(Observable.just(new ResponseEntity<>(CREATED)));
 	}
 
 	@RequestMapping(
 			value = "/{id}",
 			method = DELETE)
 	public DeferredResult<HttpEntity<?>> deleteResource(@PathVariable("id") String id,
-														@GitHubAuthentication OctoUser octoUser) {
-		log.trace("Performing deletion operations based on user {}", octoUser.getId());
+														@NotNull @GitHubAuthentication OctoUser octoUser) {
+
 		if (!ObjectId.isValid(id)) throw new BadRequestException("Provided id " + id + " is not valid!");
 
 		artifactService.delete(id, octoUser);
-		return RxResult.defer(Observable.just(new ResponseEntity<>(NO_CONTENT)));
+		return defer(Observable.just(new ResponseEntity<>(NO_CONTENT)));
 	}
 
 }

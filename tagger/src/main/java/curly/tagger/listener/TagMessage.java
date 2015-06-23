@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import curly.tagger.model.Tag;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author João Evangelista
@@ -36,10 +37,12 @@ public class TagMessage {
 		this.name = name;
 	}
 
-	public static TagMessage from(Tag tag) {
+	@NotNull
+	public static TagMessage from(@NotNull Tag tag) {
 		return new TagMessage(tag.getId(), tag.getName());
 	}
 
+	@NotNull
 	public Tag toTag() {
 		return new Tag(this.id, this.name);
 	}

@@ -21,7 +21,9 @@ jar {
     version = '0.0.1-SNAPSHOT'
 }
 
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.8
+//noinspection GroovyUnusedAssignment
 targetCompatibility = 1.8
 
 

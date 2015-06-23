@@ -16,6 +16,7 @@
 package curly.tagger;
 
 import curly.tagger.model.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,10 +57,6 @@ public class TagControllerTests extends TagHelper {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	private static String withControllerPath(String fragment) {
-		return "/tags" + fragment;
-	}
-
 	@Before
 	public void setUp() throws Exception {
 		this.tag = createTag(mongoTemplate);
@@ -77,6 +74,11 @@ public class TagControllerTests extends TagHelper {
 				.andReturn()))
 				.andExpect(content().contentType(jsonMediaType()))
 				.andExpect(content().json(json(tag, new MappingJackson2HttpMessageConverter())));
+	}
+
+	@NotNull
+	private static String withControllerPath(String fragment) {
+		return "/tags" + fragment;
 	}
 
 	@Test

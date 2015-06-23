@@ -16,6 +16,7 @@
 package curly.tagger.service;
 
 import curly.tagger.model.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -25,7 +26,9 @@ import java.util.List;
  */
 interface TagRepository extends MongoRepository<Tag, String> {
 
+	@NotNull
 	Tag findByName(String name);
 
+	@NotNull
 	List<Tag> findTop10ByNameLike(String tag);
 }

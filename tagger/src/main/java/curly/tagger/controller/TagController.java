@@ -17,11 +17,14 @@ package curly.tagger.controller;
 
 import com.google.common.base.Optional;
 import curly.commons.logging.annotation.Loggable;
-import curly.tagger.command.TagCommand;
+import curly.commons.web.ModelErrors;
+import curly.tagger.command.ReaderCommand;
+import curly.tagger.command.WriterCommand;
 import curly.tagger.model.SearchResult;
 import curly.tagger.model.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import rx.Observable;
@@ -31,8 +34,7 @@ import javax.validation.Valid;
 import java.util.Set;
 
 import static curly.commons.rx.RxResult.defer;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 /**
  * @author João Evangelista
@@ -41,18 +43,21 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("/tags")
 class TagController {
 
-	private final TagCommand tagCommand;
+	private final ReaderCommand readerCommand;
+
+	private final WriterCommand writerCommand;
 
 	@Inject
-	public TagController(TagCommand tagCommand) {
-		this.tagCommand = tagCommand;
+	public TagController(ReaderCommand readerCommand, WriterCommand writerCommand) {
+		this.readerCommand = readerCommand;
+		this.writerCommand = writerCommand;
 	}
 
-
+	//todo hateoas links to artifacts using this tag?
 	@Loggable
-	@RequestMapping(value = "/{tag}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{tag}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = "Accept: curly.api/v1")
 	public DeferredResult<ResponseEntity<Tag>> get(@PathVariable String tag) {
-		return defer(tagCommand.get(tag)
+		return defer(readerCommand.get(tag)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.map(ResponseEntity::ok)
@@ -60,9 +65,9 @@ class TagController {
 	}
 
 	@Loggable
-	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = "Accept: curly.api/v1")
 	public DeferredResult<ResponseEntity<SearchResult>> search(@RequestParam(value = "q", defaultValue = "") String query) {
-		return defer(tagCommand.like(query)
+		return defer(readerCommand.like(query)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.map(SearchResult::new)
@@ -70,9 +75,13 @@ class TagController {
 				.defaultIfEmpty(new ResponseEntity<>(NOT_FOUND)));
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public DeferredResult<ResponseEntity<?>> save(@Valid @RequestBody Set<Tag> tags) {
-		tagCommand.save(tags);
+	@RequestMapping(method = RequestMethod.POST, headers = "Accept: curly.internal/v1")
+	public DeferredResult<ResponseEntity<?>> save(@Valid @RequestBody Set<Tag> tags, BindingResult bindingResult) {
+		if (bindingResult.hasErrors())
+			return defer(Observable.just(new ResponseEntity<>(new ModelErrors(bindingResult), BAD_REQUEST)));
+
+		writerCommand.save(tags);
+
 		return defer(Observable.just(new ResponseEntity<>(CREATED)));
 	}
 }

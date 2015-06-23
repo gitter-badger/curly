@@ -19,46 +19,49 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * @author João Evangelista
  */
 @Slf4j
-@Component
-public class CreationCommander implements EventEmitter<Artifact> {
+@Service
+public class OnCreatedCategoryEmitter implements EventEmitter<Artifact> {
 
 	private final AmqpTemplate amqpTemplate;
 
-	private final NotifierClient notifierClient;
+	private final CategoryClient categoryClient;
 
 	@Autowired
-	public CreationCommander(AmqpTemplate amqpTemplate, NotifierClient notifierClient) {
+	public OnCreatedCategoryEmitter(AmqpTemplate amqpTemplate, CategoryClient categoryClient) {
+		Assert.notNull(amqpTemplate, "AmqpTemplate, must be not null!");
+		Assert.notNull(categoryClient, "CategoryClient, must be not null!");
 		this.amqpTemplate = amqpTemplate;
-		this.notifierClient = notifierClient;
+		this.categoryClient = categoryClient;
 	}
+
 
 	@Override
 	@Loggable
-	@Retryable(maxAttempts = 1)
+	@Retryable
 	@HystrixCommand(fallbackMethod = "emitFallback")
-	public void emit(Artifact artifact) {
-		log.info("Emitting artifact to notification system");
-		amqpTemplate.convertAndSend("artifactory.notification.queue", artifact);
+	public void emit(@NotNull Artifact artifact) {
+		log.info("Emitting event of source {}", artifact);
+		amqpTemplate.convertAndSend("category.queue", artifact.getCategory());
 	}
 
+
+	@Loggable
+	@Retryable
 	@HystrixCommand
-	public void emitFallback(Object object) {
-		if (object instanceof Artifact) {
-			ResponseEntity<?> responseEntity = notifierClient.postNotification(((Artifact) object));
-			log.info("Fallback emitted event through HTTP response is {}", responseEntity.getStatusCode().value());
-		}
-
+	public void emitFallback(Object source) {
+		Artifact artifact = (Artifact) source;
+		log.info("Fallback starting, sending via HTTP, source {}", artifact);
+		categoryClient.postEvent(artifact.getCategory());
 	}
-
-
 }

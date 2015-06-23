@@ -16,21 +16,21 @@
 package curly.tagger.listener;
 
 import curly.commons.config.reactor.Reactor;
-import curly.tagger.command.InsertCommand;
+import curly.tagger.command.WriterCommand;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.messaging.Message;
+import org.springframework.util.Assert;
 import reactor.bus.EventBus;
 import reactor.spring.context.annotation.Consumer;
 import reactor.spring.context.annotation.Selector;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Handle event dispatched by the event bus on {@link DefaultTagEventListener#onReceive(Message)} )}
+ * Handle event dispatched by the event bus on {@link DefaultTagEventListener#onReceive(org.springframework.amqp.core.Message)} )}
  *
  * @author João Evangelista
  */
@@ -40,22 +40,25 @@ public class EventHandler {
 
 	@SuppressWarnings({"FieldCanBeLocal", "unused"})
 	private final EventBus eventBus;
-	private final InsertCommand insertCommand;
+
+	private final WriterCommand writerCommand;
 
 	@Inject
 	public EventHandler(@NotNull @Reactor EventBus eventBus,
-						@NotNull @Qualifier("insertCommand") InsertCommand insertCommand) {
+						@NotNull @Qualifier("writerCommand") WriterCommand writerCommand) {
+		Assert.notNull(eventBus, "EventBus must be not null!");
+		Assert.notNull(writerCommand, "WriterCommand must be not null!");
 		this.eventBus = eventBus;
-		this.insertCommand = insertCommand;
+		this.writerCommand = writerCommand;
 	}
 
 
 	@Selector("tag.bus")
-	public void handle(Set<TagMessage> message) {
-		log.info("Initiating processor for tag message received on Event Bus");
-			insertCommand.save(message
-					.stream()
-					.map(TagMessage::toTag)
-					.collect(Collectors.toSet()));
+	public void handle(@NotNull Set<TagMessage> message) {
+		log.info("Initiating processor for tag message" + message + " received on Event Bus");
+		writerCommand.save(message
+				.stream()
+				.map(TagMessage::toTag)
+				.collect(Collectors.toSet()));
 	}
 }

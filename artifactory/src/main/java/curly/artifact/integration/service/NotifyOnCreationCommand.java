@@ -18,41 +18,52 @@ package curly.artifact.integration.service;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.stereotype.Service;
-
-import java.util.Set;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * @author João Evangelista
  */
-@Service
-public class TagCommander implements EventEmitter<Artifact> {
+@Slf4j
+@Component
+public class NotifyOnCreationCommand implements EventEmitter<Artifact> {
 
 	private final AmqpTemplate amqpTemplate;
-	private final TaggerClient taggerClient;
+
+	private final NotifierClient notifierClient;
 
 	@Autowired
-	public TagCommander(AmqpTemplate amqpTemplate, TaggerClient taggerClient) {
+	public NotifyOnCreationCommand(AmqpTemplate amqpTemplate, NotifierClient notifierClient) {
+		Assert.notNull(amqpTemplate, "AmqpTemplate, must be not null!");
+		Assert.notNull(notifierClient, "NotifierClient, must be not null!");
 		this.amqpTemplate = amqpTemplate;
-		this.taggerClient = taggerClient;
+		this.notifierClient = notifierClient;
 	}
 
 	@Override
 	@Loggable
-	@Retryable(maxAttempts = 1)
-	@HystrixCommand(fallbackMethod = "emitEventFallback")
-	public void emit(Artifact artifact) {
-		amqpTemplate.convertAndSend("tag.queue", artifact.getTags());
+	@Retryable
+	@HystrixCommand(fallbackMethod = "emitFallback")
+	public void emit(@NotNull Artifact artifact) {
+		log.info("Emitting artifact to notification system");
+		amqpTemplate.convertAndSend("artifactory.notification.queue", artifact);
 	}
 
-	@Loggable
-	@Retryable(maxAttempts = 1)
-	public void emitEventFallback(Object source) {
-		if (source instanceof Set) {
-			taggerClient.postEvent(((Artifact) source).getTags());
+	@Retryable
+	@HystrixCommand
+	public void emitFallback(@NotNull Object object) {
+		if (object instanceof Artifact) {
+			ResponseEntity<?> responseEntity = notifierClient.postNotification(((Artifact) object));
+			log.info("Fallback emitted event through HTTP response is {}", responseEntity.getStatusCode().value());
 		}
+
 	}
+
+
 }

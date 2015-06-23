@@ -15,6 +15,7 @@ test {
     outputs.dir generatedDocumentation
 }
 asciidoctor {
+    //noinspection GroovyAssignabilityCheck
     attributes 'generated': generatedDocumentation
     inputs.dir generatedDocumentation
     dependsOn test

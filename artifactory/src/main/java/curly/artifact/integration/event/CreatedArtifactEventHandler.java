@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -29,12 +30,13 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class CreatedArtifactEventHandler implements ApplicationListener<CreatedArtifactEvent> {
+class CreatedArtifactEventHandler implements ApplicationListener<CreatedArtifactEvent> {
 
 	private final List<EventEmitter<Artifact>> eventEmitters;
 
 	@Autowired
 	public CreatedArtifactEventHandler(List<EventEmitter<Artifact>> eventEmitters) {
+		Assert.notNull(eventEmitters, "EventEmitters, must be not null!");
 		this.eventEmitters = eventEmitters;
 	}
 
@@ -46,7 +48,7 @@ public class CreatedArtifactEventHandler implements ApplicationListener<CreatedA
 			log.info("Emitting source of event of type Artifact...");
 			this.eventEmitters.stream().forEach(eventEmitter -> eventEmitter.emit((Artifact) source));
 		} else {
-			log.warn("Not a catchable instance type from event source!!");
+			log.warn("Not a catchable instance type from event source, source was" + source + "!!");
 		}
 	}
 }

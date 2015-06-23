@@ -13,28 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.paperclip.paper
+package curly.tagger.command;
 
-import curly.commons.security.OwnedResource
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
-import groovy.transform.TupleConstructor
-import org.hibernate.validator.constraints.NotEmpty
-import org.springframework.data.annotation.Id
+import curly.tagger.model.Tag;
+
+import java.util.Set;
 
 /**
- * @author Joao Pedro Evangelista
+ * @author João Evangelista
  */
-@ToString
-@TupleConstructor
-@EqualsAndHashCode
-class Paper extends OwnedResource {
+public interface WriterCommand {
 
-    @Id
-    String id
-
-    @NotEmpty
-    String item
-
-    String content
+	void save(Set<Tag> tags);
 }

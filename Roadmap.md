@@ -17,4 +17,6 @@ a websocket endpoint
 
 #Meister
 
-the search
+the search engine
+query example: `lang:java tags:[foo, bar, ab c]`
+

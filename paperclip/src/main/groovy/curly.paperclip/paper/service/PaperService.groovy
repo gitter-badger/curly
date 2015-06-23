@@ -13,13 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.paperclip.paper
+package curly.paperclip.paper.service
 
+import curly.paperclip.paper.model.Paper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
+import org.springframework.util.Assert
 
 /**
  * @author João Evangelista
@@ -31,6 +33,7 @@ class PaperService {
 
     @Autowired
     PaperService(PaperRepository repository) {
+        Assert.notNull(repository, "PaperRepository, must be not null!")
         this.repository = repository
     }
 

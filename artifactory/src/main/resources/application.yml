@@ -9,8 +9,10 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
 
+
+#Spring
 spring:
-  oauth2:
+  oauth2: #Oauth2 Config
       client:
         clientId: cae4925a4ce2feb76ec8
         clientSecret: 41df89b5d95976f0028045889e2c2596fbd6b417
@@ -22,11 +24,14 @@ spring:
         preferTokenInfo: false
         loadBalanced: true
 
-debug:
+
+#Security
 security:
   user:
     password: mylove
 
+
+#Redis cache config
 
 io:
   redis:
@@ -89,5 +94,5 @@ hystrix:
     default:
       execution:
         isolation:
-          thread:
-            timeoutInMilliseconds: 60000
+          strategy: SEMAPHORE
+

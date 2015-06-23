@@ -17,8 +17,10 @@ package curly.tagger.service;
 
 import curly.tagger.model.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -37,8 +39,8 @@ class DefaultTagService implements TagService {
 
 	@Inject
 	DefaultTagService(TagRepository repository) {
+		Assert.notNull(repository, "TagRepository must be not null!");
 		this.repository = repository;
-
 	}
 
 	/**
@@ -47,7 +49,7 @@ class DefaultTagService implements TagService {
 	 * @param tags to be saved
 	 */
 	@Override
-	public void save(Set<Tag> tags) {
+	public void save(@NotNull Set<Tag> tags) {
 		tags.stream().forEach(tag -> {
 			try {
 				this.repository.save(tag);
@@ -63,6 +65,7 @@ class DefaultTagService implements TagService {
 	 * @param tag to look up for
 	 * @return a tag if found or null otherwise
 	 */
+	@NotNull
 	@Override
 	public Tag find(String tag) {
 		return this.repository.findByName(tag);
@@ -73,6 +76,7 @@ class DefaultTagService implements TagService {
 	 * @param tag the tag, or part of it to search for
 	 * @return 10 top results
 	 */
+	@NotNull
 	@Override
 	public List<Tag> query(String tag) {
 		return this.repository.findTop10ByNameLike(tag);

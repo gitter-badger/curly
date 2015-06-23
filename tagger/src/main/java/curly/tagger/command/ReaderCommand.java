@@ -20,15 +20,13 @@ import curly.tagger.model.Tag;
 import rx.Observable;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author João Evangelista
  */
-public interface TagCommand {
+public interface ReaderCommand {
 	Observable<Optional<Tag>> get(String tag);
 
 	Observable<Optional<List<Tag>>> like(String tag);
 
-	void save(Set<Tag> tag);
 }

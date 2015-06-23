@@ -13,8 +13,8 @@ eureka:
 zuul:
   stripPrefix: false
   routes:
-    edge: /api/**
-    artifactory: /artifactory/**
+    artifactory: /api/artifacts/
+
 
 
 spring:

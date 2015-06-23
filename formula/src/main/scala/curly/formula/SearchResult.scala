@@ -1,7 +1,7 @@
 package curly.formula
 
 /**
- * @authorJoão Evangelista
+ * @authorJoaoEvangelista
  */
 class SearchResult(categories: Set[Category]) {
   var size = categories.size

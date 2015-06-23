@@ -16,7 +16,9 @@
 package curly.artifactory.web;
 
 import curly.artifact.model.Artifact;
+import curly.artifact.web.ArtifactResourceAssembler;
 import curly.artifactory.ArtifactoryTestHelper;
+import curly.commons.web.hateoas.MediaTypes;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,9 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
+
+	@Autowired
+	private ArtifactResourceAssembler assembler;
 
 	private MockMvc mockMvc;
 
@@ -76,7 +81,7 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 	public void testArtifactResources() throws Exception {
 		mockMvc.perform(
 				asyncDispatch(
-						mockMvc.perform(get("/arts"))
+						mockMvc.perform(get("/artifacts"))
 								.andExpect(request().asyncStarted())
 								.andReturn()));
 
@@ -88,20 +93,19 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 		Artifact byId = mongoTemplate.findById(id, Artifact.class);
 		mockMvc.perform(
 				asyncDispatch(
-						mockMvc.perform(get("/arts/{id}", id))
+						mockMvc.perform(get("/artifacts/{id}", id))
 								.andExpect(status().isOk())
 								.andExpect(request().asyncStarted())
-								.andExpect(request().asyncResult(ResponseEntity.ok(byId)))
+								.andExpect(request().asyncResult(ResponseEntity.ok(assembler.toResource(byId))))
 								.andReturn()))
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(content().json(json(byId, messageConverter)));
+				.andExpect(content().contentType(MediaTypes.HAL_JSON));
 	}
 
 	@Test
 	public void testSaveResource() throws Exception {
 		mockMvc.perform(
 				asyncDispatch(
-						mockMvc.perform(post("/arts")
+						mockMvc.perform(post("/artifacts")
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(json(artifact, messageConverter))
 								.principal(octoUser()))
@@ -115,7 +119,7 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 		String id = artifact.getId();
 		mockMvc.perform(
 				asyncDispatch(
-						mockMvc.perform(delete("/arts/{id}", id)
+						mockMvc.perform(delete("/artifacts/{id}", id)
 								.principal(octoUser()))
 								.andExpect(request().asyncStarted())
 								.andExpect(request().asyncResult(new ResponseEntity<>(HttpStatus.NO_CONTENT)))

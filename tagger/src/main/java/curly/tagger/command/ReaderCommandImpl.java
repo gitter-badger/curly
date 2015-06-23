@@ -37,17 +37,17 @@ import static com.google.common.base.Optional.fromNullable;
  */
 @Slf4j
 @Command
-public class TagHystrixCommand extends OperationsHystrixCommand implements TagCommand {
+public class ReaderCommandImpl implements ReaderCommand {
 
 	private final TagService tagService;
 
 	@Inject
-	public TagHystrixCommand(@NotNull TagService tagService) {
-		super(tagService);
-		this.tagService = getTagService();
+	public ReaderCommandImpl(@NotNull TagService tagService) {
+		this.tagService = tagService;
 	}
 
 
+	@org.jetbrains.annotations.NotNull
 	@Override
 	@Loggable
 	@Retryable(maxAttempts = 1)
@@ -62,6 +62,7 @@ public class TagHystrixCommand extends OperationsHystrixCommand implements TagCo
 	}
 
 
+	@org.jetbrains.annotations.NotNull
 	@Override
 	@Loggable
 	@HystrixCommand

@@ -16,6 +16,7 @@
 package curly.tagger.model;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,11 +26,12 @@ import java.util.List;
 @Data
 public final class SearchResult {
 
+	@NotNull
 	private final List<Tag> result;
 
 	private final int size;
 
-	public SearchResult(List<Tag> result) {
+	public SearchResult(@NotNull List<Tag> result) {
 		this.result = result;
 		size = result.size();
 	}

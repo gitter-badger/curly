@@ -17,6 +17,7 @@ package curly.tagger;
 
 import curly.tagger.listener.TagMessage;
 import curly.tagger.model.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,6 +77,7 @@ public class EventHandlerTests {
 		return mongoTemplate.count(new Query(), Tag.class);
 	}
 
+	@NotNull
 	private Set<TagMessage> createTag() {
 		TagMessage tag = new TagMessage(null, "sometag");
 		TagMessage tag2 = new TagMessage(null, "sometag2");

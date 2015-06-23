@@ -23,6 +23,7 @@ import curly.artifact.model.Category;
 import curly.artifact.model.Language;
 import curly.artifact.model.Tag;
 import curly.commons.github.OctoUser;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -53,7 +54,7 @@ import java.util.Set;
 public abstract class ArtifactoryTestHelper {
 
 
-	public static String json(Object o, HttpMessageConverter<Object> httpMessageConverter) {
+	public static String json(Object o, @NotNull HttpMessageConverter<Object> httpMessageConverter) {
 		MockHttpOutputMessage message = new MockHttpOutputMessage();
 		try {
 			httpMessageConverter.write(o, jsonMediaType(), message);
@@ -62,13 +63,15 @@ public abstract class ArtifactoryTestHelper {
 		return message.getBodyAsString();
 	}
 
+	@NotNull
 	public static MediaType jsonMediaType() {
 		return new MediaType(MediaType.APPLICATION_JSON.getType(),
 				MediaType.APPLICATION_JSON.getSubtype(),
 				Charset.forName("utf-8"));
 	}
 
-	public static Artifact createArtifact(MongoTemplate mongoTemplate) {
+	@NotNull
+	public static Artifact createArtifact(@NotNull MongoTemplate mongoTemplate) {
 		mongoTemplate.findAllAndRemove(new Query(), Artifact.class);
 		Artifact artifact = new Artifact();
 		Set<Language> languages = new HashSet<>(0);
@@ -97,6 +100,7 @@ public abstract class ArtifactoryTestHelper {
 		return artifact;
 	}
 
+	@NotNull
 	public OctoUser octoUser() {
 		return new OctoUser("evangelistajoaop@gmail.com", true, 6969, 0, 1, 10, "http://example.com/example.jpg", "",
 				"", "", "", "", "joaoevangelista", "Joao Pedro Evangelista", OctoUser.TYPE_USER, "http://example.com");

@@ -13,14 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.integration.service;
+package curly.paperclip.paper.command
 
-import org.jetbrains.annotations.NotNull;
+import curly.commons.github.OctoUser
+import curly.paperclip.paper.model.Paper
+import rx.Observable
 
 /**
- * @author João Evangelista
+ * @author Joao Pedro Evangelista
  */
-public interface EventEmitter<T> {
+interface PaperCommand {
 
-	void emit(@NotNull T artifact);
+    Observable<Optional<Paper>> getByItem(String item)
+
+    Observable<Optional<Paper>> getByOwner(String item, Optional<OctoUser> user)
+
+    void delete(String item, Optional<OctoUser> user)
+
+    Optional<Paper> save(Paper paper, Optional<OctoUser> user)
 }

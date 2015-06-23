@@ -17,6 +17,7 @@ package curly.tagger;
 
 import curly.commons.github.OctoUser;
 import curly.tagger.model.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ import java.io.IOException;
  */
 public class TagHelper {
 
-	public static String json(Object o, HttpMessageConverter<Object> httpMessageConverter) {
+	public static String json(Object o, @NotNull HttpMessageConverter<Object> httpMessageConverter) {
 		MockHttpOutputMessage message = new MockHttpOutputMessage();
 		try {
 			httpMessageConverter.write(o, jsonMediaType(), message);
@@ -40,17 +41,20 @@ public class TagHelper {
 		return message.getBodyAsString();
 	}
 
+	@NotNull
 	public static MediaType jsonMediaType() {
 		return new MediaType(MediaType.APPLICATION_JSON.getType(),
 				MediaType.APPLICATION_JSON.getSubtype());
 	}
 
+	@NotNull
 	public OctoUser octoUser() {
 		return new OctoUser("evangelistajoaop@gmail.com", true, 6969, 0, 1, 10, "http://example.com/example.jpg", "",
 				"", "", "", "", "joaoevangelista", "Joao Pedro Evangelista", OctoUser.TYPE_USER, "http://example.com");
 	}
 
-	public Tag createTag(MongoTemplate mongoTemplate) {
+	@NotNull
+	public Tag createTag(@NotNull MongoTemplate mongoTemplate) {
 		mongoTemplate.findAllAndRemove(new Query(), Tag.class);
 		Tag tag = new Tag(null, "love");
 		mongoTemplate.insert(tag);

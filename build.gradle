@@ -50,10 +50,10 @@ allprojects {
         mongoDriverVersion = '3.0.0'
         rxjavaVersion = '1.0.8'
         rxscalaVersion = '0.24.1'
-        reactorVersion = '2.0.0.RELEASE'
+        reactorVersion = '2.0.3.RELEASE'
         securityJWTVersion = '1.0.3.RELEASE'
         springBootVersion = '1.2.4.RELEASE'
-        springCloudVersion = '1.0.2.BUILD-SNAPSHOT'
+        springCloudVersion = '1.0.2.RELEASE'
         springIOPlatformVersion = '1.1.2.RELEASE'
         scalatestVersion = '2.2.4'
         scalaVersion = '2.11.6'
@@ -61,12 +61,11 @@ allprojects {
         springSessionVersion = '1.0.0.RELEASE'
     }
 
+    ext['reactor.version'] = reactorVersion
     ext['spring-hateoas.version'] = '0.17.0.RELEASE'
     ext['spring-data-releasetrain.version'] = 'Fowler-RELEASE'
     ext['undertow.version'] = '1.2.5.Final'
     ext['jackson.version'] = '2.5.2'
-
-
 
 
     license {
@@ -87,10 +86,11 @@ allprojects {
         imports {
             mavenBom "io.spring.platform:platform-bom:$springIOPlatformVersion"
             mavenBom "org.springframework.cloud:spring-cloud-starter-parent:$springCloudVersion"
-            mavenBom "org.springframework.boot:spring-boot-starter:$springBootVersion"
         }
 
+        //noinspection GroovyAssignabilityCheck
         dependencies {
+            //noinspection GroovyAssignabilityCheck
             dependency("org.springframework.boot:spring-boot-starter-web:$springBootVersion") {
                 exclude "org.springframework.boot:spring-boot-starter-tomcat"
             }

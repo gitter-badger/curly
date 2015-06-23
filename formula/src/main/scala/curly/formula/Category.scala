@@ -44,6 +44,7 @@ class Category extends Serializable {
     case _ => false
   }
 
+  //noinspection ComparingUnrelatedTypes
   def canEqual(other: Any): Boolean = other.isInstanceOf[Category]
 
   override def hashCode(): Int = {

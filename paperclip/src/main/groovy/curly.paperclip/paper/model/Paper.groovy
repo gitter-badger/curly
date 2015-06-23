@@ -13,21 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.paperclip.paper
+package curly.paperclip.paper.model
 
-import curly.commons.github.OctoUser
-import rx.Observable
+import curly.commons.security.OwnedResource
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import groovy.transform.TupleConstructor
+import org.hibernate.validator.constraints.NotEmpty
+import org.springframework.data.annotation.Id
 
 /**
  * @author Joao Pedro Evangelista
  */
-interface PaperCommand {
+@ToString
+@TupleConstructor
+@EqualsAndHashCode
+class Paper extends OwnedResource {
 
-    Observable<Optional<Paper>> getByItem(String item)
+    @Id
+    String id
 
-    Observable<Optional<Paper>> getByOwner(String item, Optional<OctoUser> user)
+    @NotEmpty
+    String item
 
-    void delete(String item, Optional<OctoUser> user)
-
-    Optional<Paper> save(Paper paper, Optional<OctoUser> user)
+    String content
 }

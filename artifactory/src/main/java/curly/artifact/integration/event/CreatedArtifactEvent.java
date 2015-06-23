@@ -16,6 +16,7 @@
 package curly.artifact.integration.event;
 
 import curly.artifact.model.Artifact;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.util.Assert;
 
@@ -28,7 +29,7 @@ public class CreatedArtifactEvent extends ApplicationEvent {
 	 *
 	 * @param source the component that published the event (never {@code null})
 	 */
-	public CreatedArtifactEvent(Object source) {
+	public CreatedArtifactEvent(@NotNull Object source) {
 		super(source);
 		Assert.isInstanceOf(Artifact.class, source,
 				"The source must be a Artifact !! This will propagate errors through the chain!!");

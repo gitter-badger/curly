@@ -15,7 +15,7 @@
  */
 package curly.paperclip
 
-import curly.paperclip.paper.Paper
+import curly.paperclip.paper.model.Paper
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired

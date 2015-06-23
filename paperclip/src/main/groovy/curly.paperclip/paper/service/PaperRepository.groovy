@@ -13,8 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.paperclip.paper
+package curly.paperclip.paper.service
 
+import curly.paperclip.paper.model.Paper
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 

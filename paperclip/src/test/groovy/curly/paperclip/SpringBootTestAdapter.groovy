@@ -16,7 +16,7 @@
 package curly.paperclip
 
 import curly.commons.github.OctoUser
-import curly.paperclip.paper.Paper
+import curly.paperclip.paper.model.Paper
 import org.junit.runner.RunWith
 import org.springframework.boot.test.SpringApplicationConfiguration
 import org.springframework.boot.test.WebIntegrationTest
