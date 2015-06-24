@@ -19,7 +19,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
@@ -50,7 +49,7 @@ public class OnCreatedCategoryEmitter implements EventEmitter<Artifact> {
 	@Loggable
 	@Retryable
 	@HystrixCommand(fallbackMethod = "emitFallback")
-	public void emit(@NotNull Artifact artifact) {
+	public void emit(Artifact artifact) {
 		log.info("Emitting event of source {}", artifact);
 		amqpTemplate.convertAndSend("category.queue", artifact.getCategory());
 	}

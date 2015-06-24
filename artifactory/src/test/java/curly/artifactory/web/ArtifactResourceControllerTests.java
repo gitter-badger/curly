@@ -16,14 +16,18 @@
 package curly.artifactory.web;
 
 import curly.artifact.model.Artifact;
-import curly.artifact.web.ArtifactResourceAssembler;
+import curly.artifact.model.PagedArtifact;
+import curly.artifact.web.ArtifactResource;
 import curly.artifactory.ArtifactoryTestHelper;
 import curly.commons.web.hateoas.MediaTypes;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +53,7 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 	private WebApplicationContext webApplicationContext;
 
 	@Autowired
-	private ArtifactResourceAssembler assembler;
+	private ResourceAssembler<Artifact, ArtifactResource> assembler;
 
 	private MockMvc mockMvc;
 
@@ -79,11 +83,10 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 
 	@Test
 	public void testArtifactResources() throws Exception {
-		mockMvc.perform(
-				asyncDispatch(
-						mockMvc.perform(get("/artifacts"))
-								.andExpect(request().asyncStarted())
-								.andReturn()));
+		TestRestTemplate testRestTemplate = new TestRestTemplate();
+		ResponseEntity<PagedArtifact> entity = testRestTemplate.getForEntity("http://localhost:8084/artifacts", PagedArtifact.class);
+		Assert.assertTrue(entity.getStatusCode().is2xxSuccessful());
+		Assert.assertNotNull(entity.getBody());
 
 	}
 

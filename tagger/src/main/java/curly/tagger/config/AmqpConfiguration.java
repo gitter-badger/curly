@@ -15,7 +15,6 @@
  */
 package curly.tagger.config;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -33,30 +32,29 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AmqpConfiguration {
 
-	@NotNull
+
 	@Bean
 	Queue tagQueue() {
 		return new Queue("tag.queue", false);
 	}
 
-	@NotNull
+
 	@Bean
 	TopicExchange artifactoryExchange() {
 		return new TopicExchange("artifactory-exchange");
 	}
 
-	@Bean
-	Binding binding(@NotNull TopicExchange artifactoryExchange, @NotNull Queue tagQueue) {
+	@Bean Binding binding(TopicExchange artifactoryExchange, Queue tagQueue) {
 		return BindingBuilder.bind(tagQueue).to(artifactoryExchange).with(tagQueue.getName());
 	}
 
-	@NotNull
+
 	@Bean
 	MessageConverter messageConverter() {
 		return new Jackson2JsonMessageConverter();
 	}
 
-	@NotNull
+
 	@Bean
 	RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
 		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);

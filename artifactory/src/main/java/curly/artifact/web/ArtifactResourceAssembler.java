@@ -1,7 +1,6 @@
 package curly.artifact.web;
 
 import curly.artifact.model.Artifact;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ class ArtifactResourceAssembler extends ResourceAssemblerSupport<Artifact, Artif
 		super(ArtifactResourceController.class, ArtifactResource.class);
 	}
 
-	@NotNull
+
 	@Override
 	public ArtifactResource toResource(Artifact entity) {
 		return new ArtifactResource(entity,

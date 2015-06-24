@@ -16,7 +16,6 @@
 package curly.artifact.integration.service;
 
 import curly.artifact.model.Tag;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +30,7 @@ import java.util.Set;
 @FeignClient("tagger")
 public interface TaggerClient {
 
-	@NotNull
+
 	@RequestMapping(value = "/tags", method = RequestMethod.POST)
 	ResponseEntity<?> postEvent(@RequestBody Set<Tag> tag);
 }

@@ -27,7 +27,6 @@ import org.springframework.retry.annotation.Retryable;
 import rx.Observable;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static com.google.common.base.Optional.fromNullable;
@@ -42,7 +41,7 @@ public class ReaderCommandImpl implements ReaderCommand {
 	private final TagService tagService;
 
 	@Inject
-	public ReaderCommandImpl(@NotNull TagService tagService) {
+	public ReaderCommandImpl(TagService tagService) {
 		this.tagService = tagService;
 	}
 

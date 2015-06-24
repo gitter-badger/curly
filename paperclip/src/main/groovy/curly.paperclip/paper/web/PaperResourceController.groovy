@@ -84,6 +84,7 @@ class PaperResourceController {
     @RequestMapping(value = "/{item}", method = RequestMethod.DELETE)
     DeferredResult<ResponseEntity<?>> delete(@PathVariable String item,
                                              @GitHubAuthentication OctoUser octoUser) {
+
         if (!ObjectId.isValid(item)) return defer(Observable.just(new ResponseEntity(BAD_REQUEST)))
 
         command.delete(item, Optional.ofNullable(octoUser))

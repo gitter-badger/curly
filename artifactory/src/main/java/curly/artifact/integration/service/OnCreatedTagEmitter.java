@@ -18,7 +18,6 @@ package curly.artifact.integration.service;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
@@ -49,7 +48,7 @@ public class OnCreatedTagEmitter implements EventEmitter<Artifact> {
 	@Loggable
 	@Retryable
 	@HystrixCommand(fallbackMethod = "emitEventFallback")
-	public void emit(@NotNull Artifact artifact) {
+	public void emit(Artifact artifact) {
 		amqpTemplate.convertAndSend("tag.queue", artifact.getTags());
 	}
 

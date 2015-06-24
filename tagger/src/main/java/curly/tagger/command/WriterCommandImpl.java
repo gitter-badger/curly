@@ -23,7 +23,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -35,7 +34,7 @@ public class WriterCommandImpl implements WriterCommand {
 	private final TagService tagService;
 
 	@Inject
-	public WriterCommandImpl(@NotNull TagService tagService) {
+	public WriterCommandImpl(TagService tagService) {
 		this.tagService = tagService;
 	}
 

@@ -16,7 +16,6 @@
 package curly.tagger;
 
 import curly.tagger.model.Tag;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +75,7 @@ public class TagControllerTests extends TagHelper {
 				.andExpect(content().json(json(tag, new MappingJackson2HttpMessageConverter())));
 	}
 
-	@NotNull
+
 	private static String withControllerPath(String fragment) {
 		return "/tags" + fragment;
 	}

@@ -17,7 +17,6 @@ package curly.tagger;
 
 import curly.commons.config.context.EnableWorkQueueExecutor;
 import curly.commons.logging.annotation.config.EnableLoggable;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
@@ -45,7 +44,7 @@ public class TaggerApplication extends ResourceServerConfigurerAdapter {
 	}
 
 	@Override
-	public void configure(@NotNull HttpSecurity http) throws Exception {
+	public void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests().antMatchers(HttpMethod.GET, "/**").permitAll();
 	}
 

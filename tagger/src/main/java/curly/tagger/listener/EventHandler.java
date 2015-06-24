@@ -18,7 +18,6 @@ package curly.tagger.listener;
 import curly.commons.config.reactor.Reactor;
 import curly.tagger.command.WriterCommand;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 import reactor.bus.EventBus;
@@ -44,8 +43,8 @@ public class EventHandler {
 	private final WriterCommand writerCommand;
 
 	@Inject
-	public EventHandler(@NotNull @Reactor EventBus eventBus,
-						@NotNull @Qualifier("writerCommand") WriterCommand writerCommand) {
+	public EventHandler(@Reactor EventBus eventBus,
+						@Qualifier("writerCommand") WriterCommand writerCommand) {
 		Assert.notNull(eventBus, "EventBus must be not null!");
 		Assert.notNull(writerCommand, "WriterCommand must be not null!");
 		this.eventBus = eventBus;
@@ -54,7 +53,7 @@ public class EventHandler {
 
 
 	@Selector("tag.bus")
-	public void handle(@NotNull Set<TagMessage> message) {
+	public void handle(Set<TagMessage> message) {
 		log.info("Initiating processor for tag message" + message + " received on Event Bus");
 		writerCommand.save(message
 				.stream()

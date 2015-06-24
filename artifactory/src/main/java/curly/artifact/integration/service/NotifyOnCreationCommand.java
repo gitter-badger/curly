@@ -19,7 +19,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import curly.artifact.model.Artifact;
 import curly.commons.logging.annotation.Loggable;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,14 +49,14 @@ public class NotifyOnCreationCommand implements EventEmitter<Artifact> {
 	@Loggable
 	@Retryable
 	@HystrixCommand(fallbackMethod = "emitFallback")
-	public void emit(@NotNull Artifact artifact) {
+	public void emit(Artifact artifact) {
 		log.info("Emitting artifact to notification system");
 		amqpTemplate.convertAndSend("artifactory.notification.queue", artifact);
 	}
 
 	@Retryable
 	@HystrixCommand
-	public void emitFallback(@NotNull Object object) {
+	public void emitFallback(Object object) {
 		if (object instanceof Artifact) {
 			ResponseEntity<?> responseEntity = notifierClient.postNotification(((Artifact) object));
 			log.info("Fallback emitted event through HTTP response is {}", responseEntity.getStatusCode().value());

@@ -14,12 +14,13 @@
  *    limitations under the License.
  */
 package curly.paperclip
-
 import curly.paperclip.paper.model.Paper
+import curly.paperclip.paper.web.PaperResource
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.hateoas.ResourceAssembler
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -46,6 +47,9 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     private @Autowired
     MongoTemplate mongoTemplate
 
+    private @Autowired
+    ResourceAssembler<Paper, PaperResource> assemble
+
     private Paper paper
 
     @Before
@@ -64,10 +68,10 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
                 asyncDispatch(
                         mockMvc.perform(get("/papers/{id}", paper.item))
                                 .andExpect(request().asyncStarted())
-                                .andExpect(request().asyncResult(ResponseEntity.ok(paper)))
+                                .andExpect(request().asyncResult(ResponseEntity.ok(assembler.toResource(paper))))
                                 .andReturn()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(json(paper, new MappingJackson2HttpMessageConverter())))
+
     }
 
     @Test

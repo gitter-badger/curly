@@ -16,7 +16,6 @@
 package curly.artifact.integration.service;
 
 import curly.artifact.model.Artifact;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ import javax.validation.Valid;
 @FeignClient("notifier")
 public interface NotifierClient {
 
-	@NotNull
+
 	@RequestMapping(value = "/notify/artifact", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<?> postNotification(@Valid @RequestBody Artifact artifact);
 }

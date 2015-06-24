@@ -15,7 +15,6 @@
  */
 package curly.artifact.integration.config;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -33,54 +32,50 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AmqpConfiguration {
 
-	@NotNull
+
 	@Bean
 	Queue tagQueue() {
 		return new Queue("tag.queue", false);
 	}
 
-	@NotNull
+
 	@Bean
 	Queue notifierQueue() {
 		return new Queue("artifactory.notification.queue", false);
 	}
 
-	@NotNull
+
 	@Bean
 	Queue categoryQueue() {
 		return new Queue("category.queue", false);
 	}
 
-	@NotNull
+
 	@Bean
 	TopicExchange exchange() {
 		return new TopicExchange("artifactory-exchange");
 	}
 
 
-	@Bean
-	Binding tagBinding(@NotNull TopicExchange exchange, @NotNull Queue tagQueue) {
+	@Bean Binding tagBinding(TopicExchange exchange, Queue tagQueue) {
 		return BindingBuilder.bind(tagQueue).to(exchange).with(tagQueue.getName());
 	}
 
-	@Bean
-	Binding notifierBinding(@NotNull TopicExchange exchange, @NotNull Queue notifierQueue) {
+	@Bean Binding notifierBinding(TopicExchange exchange, Queue notifierQueue) {
 		return BindingBuilder.bind(notifierQueue).to(exchange).with(notifierQueue.getName());
 	}
 
-	@Bean
-	Binding categoryBinding(@NotNull TopicExchange exchange, @NotNull Queue categoryQueue) {
+	@Bean Binding categoryBinding(TopicExchange exchange, Queue categoryQueue) {
 		return BindingBuilder.bind(categoryQueue).to(exchange).with(categoryQueue.getName());
 	}
 
 
-	@NotNull
 	@Bean
 	MessageConverter messageConverter() {
 		return new Jackson2JsonMessageConverter();
 	}
 
-	@NotNull
+
 	@Bean
 	RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
 		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);

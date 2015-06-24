@@ -1,7 +1,6 @@
 package curly.artifact.web;
 
 import curly.artifact.model.Artifact;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 
@@ -10,7 +9,7 @@ import org.springframework.hateoas.Resource;
  */
 public final class ArtifactResource extends Resource<Artifact> {
 
-	public ArtifactResource(@NotNull Artifact content, Link... links) {
+	public ArtifactResource(Artifact content, Link... links) {
 		super(content, links);
 	}
 }

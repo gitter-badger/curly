@@ -16,7 +16,6 @@
 package curly.artifact.integration.service;
 
 import curly.artifact.model.Category;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient("formula")
 public interface CategoryClient {
 
-	@NotNull
+
 	@RequestMapping(value = "/categories", method = RequestMethod.POST)
 	ResponseEntity<?> postEvent(@RequestBody Category categories);
 }

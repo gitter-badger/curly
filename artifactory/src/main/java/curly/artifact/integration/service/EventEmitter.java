@@ -15,12 +15,10 @@
  */
 package curly.artifact.integration.service;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * @author João Evangelista
  */
 public interface EventEmitter<T> {
 
-	void emit(@NotNull T artifact);
+	void emit(T artifact);
 }
