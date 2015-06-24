@@ -16,18 +16,13 @@
 package curly.artifactory.web;
 
 import curly.artifact.model.Artifact;
-import curly.artifact.model.PagedArtifact;
-import curly.artifact.web.ArtifactResource;
 import curly.artifactory.ArtifactoryTestHelper;
-import curly.commons.web.hateoas.MediaTypes;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.hateoas.ResourceAssembler;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +30,13 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
 
 /**
  * @author Joao Pedro Evangelista
@@ -51,9 +48,6 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
-
-	@Autowired
-	private ResourceAssembler<Artifact, ArtifactResource> assembler;
 
 	private MockMvc mockMvc;
 
@@ -74,7 +68,6 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 								.uris().withHost("localhost").withPort(port).withScheme(" http")
 								.and()
 								.snippets().withEncoding(StandardCharsets.UTF_8.name()))
-
 			*/.alwaysDo(print())
 				//		.alwaysDo(document("artifactory"))
 				.alwaysExpect(status().is2xxSuccessful())
@@ -83,10 +76,13 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 
 	@Test
 	public void testArtifactResources() throws Exception {
-		TestRestTemplate testRestTemplate = new TestRestTemplate();
-		ResponseEntity<PagedArtifact> entity = testRestTemplate.getForEntity("http://localhost:8084/artifacts", PagedArtifact.class);
-		Assert.assertTrue(entity.getStatusCode().is2xxSuccessful());
-		Assert.assertNotNull(entity.getBody());
+		mongoTemplate.findAllAndRemove(new Query(), Artifact.class);
+		mockMvc.perform(
+				asyncDispatch(
+						mockMvc.perform(get("/artifacts").header("Version", "curly/internal.v1"))
+								.andExpect(request().asyncStarted())
+								.andExpect(request().asyncResult(instanceOf(ResponseEntity.class)))
+								.andReturn()));
 
 	}
 
@@ -96,19 +92,20 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 		Artifact byId = mongoTemplate.findById(id, Artifact.class);
 		mockMvc.perform(
 				asyncDispatch(
-						mockMvc.perform(get("/artifacts/{id}", id))
+						mockMvc.perform(get("/artifacts/{id}", id).header("Version", "curly/internal.v1"))
 								.andExpect(status().isOk())
 								.andExpect(request().asyncStarted())
-								.andExpect(request().asyncResult(ResponseEntity.ok(assembler.toResource(byId))))
+								.andExpect(request().asyncResult(ResponseEntity.ok(byId)))
 								.andReturn()))
-				.andExpect(content().contentType(MediaTypes.HAL_JSON));
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(content().json(json(byId, messageConverter)));
 	}
 
 	@Test
 	public void testSaveResource() throws Exception {
 		mockMvc.perform(
 				asyncDispatch(
-						mockMvc.perform(post("/artifacts")
+						mockMvc.perform(post("/artifacts").header("Version", "curly/internal.v1")
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(json(artifact, messageConverter))
 								.principal(octoUser()))
@@ -123,10 +120,7 @@ public class ArtifactResourceControllerTests extends ArtifactoryTestHelper {
 		mockMvc.perform(
 				asyncDispatch(
 						mockMvc.perform(delete("/artifacts/{id}", id)
-								.principal(octoUser()))
-								.andExpect(request().asyncStarted())
-								.andExpect(request().asyncResult(new ResponseEntity<>(HttpStatus.NO_CONTENT)))
+								.principal(octoUser()).header("Version", "curly/internal.v1"))
 								.andReturn()));
 	}
 }
-

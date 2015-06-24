@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: formula
+  cloud:
+    config:
+      uri: http://localhost:10004/

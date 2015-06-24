@@ -22,16 +22,14 @@ import curly.commons.github.OctoUser;
 import curly.commons.web.BadRequestException;
 import curly.commons.web.HttpHeaders;
 import curly.commons.web.ModelErrors;
-import curly.commons.web.hateoas.MediaTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,28 +55,22 @@ class ArtifactResourceController {
 
 	private final ArtifactCommand artifactService;
 
-	private final ArtifactResourceAssembler resourceAssembler;
-
-	@Autowired
-	ArtifactResourceController(ArtifactCommand artifactService, ArtifactResourceAssembler resourceAssembler) {
+	@Autowired ArtifactResourceController(ArtifactCommand artifactService) {
 		this.artifactService = artifactService;
-		this.resourceAssembler = resourceAssembler;
 	}
 
 	/**
 	 * Process a page of Artifacts into a HAL representation or return 404 if not found or was null value
 	 *
 	 * @param pageable  acquired from url parameters
-	 * @param assembler inject by Spring
 	 * @return Observable of a HttpEntity of a Paged Resources of Artifacts
 	 */
-	@RequestMapping(method = GET, produces = MediaTypes.HAL_JSON, headers = HttpHeaders.API_V1)
-	public DeferredResult<HttpEntity<PagedResources<ArtifactResource>>> artifactResources(@PageableDefault(20) Pageable pageable,
-																						  PagedResourcesAssembler<Artifact> assembler) {
+	@RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = HttpHeaders.INTERNAL_V1)
+	public DeferredResult<HttpEntity<PagedArtifact>> artifactResources(@PageableDefault(20) Pageable pageable) {
 
 		return defer(artifactService.findAllByPage(pageable)
 				.map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
-				.map(artifacts -> assembler.toResource(artifacts, resourceAssembler))
+				.map(PagedArtifact::new)
 				.map(ResponseEntity::ok));
 	}
 
@@ -88,14 +80,13 @@ class ArtifactResourceController {
 	 * @param id the id to look for
 	 * @return resource of artifact
 	 */
-	@RequestMapping(value = "/{id}", method = GET, produces = MediaTypes.HAL_JSON, headers = HttpHeaders.API_V1)
-	public DeferredResult<HttpEntity<ArtifactResource>> artifactResource(@PathVariable("id") String id) {
+	@RequestMapping(value = "/{id}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = HttpHeaders.INTERNAL_V1)
+	public DeferredResult<HttpEntity<Artifact>> artifactResource(@PathVariable("id") String id) {
 
 		if (!ObjectId.isValid(id)) throw new BadRequestException("Provided id " + id + " is not valid!");
 
 		return defer(artifactService.findOne(id)
 				.map(o -> o.<ResourceNotFoundException>orElseThrow(ResourceNotFoundException::new))
-				.map(resourceAssembler::toResource)
 				.map(ResponseEntity::ok));
 	}
 
@@ -105,7 +96,7 @@ class ArtifactResourceController {
 	 * @param bindingResult errors results of artifact
 	 * @return no content if saved, bad request if binding results has errors
 	 */
-	@RequestMapping(method = {POST, PUT}, headers = HttpHeaders.API_V1)
+	@RequestMapping(method = {POST, PUT}, consumes = MediaType.APPLICATION_JSON_VALUE, headers = HttpHeaders.INTERNAL_V1)
 	public DeferredResult<HttpEntity<?>> saveResource(@Valid @RequestBody Artifact artifact,
 													  @GitHubAuthentication OctoUser octoUser,
 													  BindingResult bindingResult) {
@@ -125,7 +116,7 @@ class ArtifactResourceController {
 	 * @param octoUser authenticated user
 	 * @return no content if deleted
 	 */
-	@RequestMapping(value = "/{id}", method = DELETE, headers = HttpHeaders.API_V1)
+	@RequestMapping(value = "/{id}", method = DELETE, headers = HttpHeaders.INTERNAL_V1)
 	public DeferredResult<HttpEntity<?>> deleteResource(@PathVariable("id") String id,
 														@GitHubAuthentication OctoUser octoUser) {
 

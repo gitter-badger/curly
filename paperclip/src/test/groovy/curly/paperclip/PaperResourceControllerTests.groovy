@@ -15,12 +15,10 @@
  */
 package curly.paperclip
 import curly.paperclip.paper.model.Paper
-import curly.paperclip.paper.web.PaperResource
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.hateoas.ResourceAssembler
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -47,9 +45,6 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     private @Autowired
     MongoTemplate mongoTemplate
 
-    private @Autowired
-    ResourceAssembler<Paper, PaperResource> assemble
-
     private Paper paper
 
     @Before
@@ -66,9 +61,9 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     public void testGetOneByItem() throws Exception {
         mockMvc.perform(
                 asyncDispatch(
-                        mockMvc.perform(get("/papers/{id}", paper.item))
+                        mockMvc.perform(get("/papers/{id}", paper.item).header("Version", "curly/internal.v1"))
                                 .andExpect(request().asyncStarted())
-                                .andExpect(request().asyncResult(ResponseEntity.ok(assembler.toResource(paper))))
+                                .andExpect(request().asyncResult(ResponseEntity.ok(paper)))
                                 .andReturn()))
                 .andExpect(status().isOk())
 
@@ -77,7 +72,7 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     @Test
     public void testGetOneByItemAndOwner() throws Exception {
         mockMvc.perform(asyncDispatch(
-                mockMvc.perform(get("/papers/owner/{item}", paper.item)
+                mockMvc.perform(get("/papers/owner/{item}", paper.item).header("Version", "curly/internal.v1")
                         .principal(octoUser()))
                         .andExpect(request().asyncStarted())
                         .andExpect(request().asyncResult(ResponseEntity.ok(paper)))
@@ -89,7 +84,7 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     @Test
     public void testDelete() throws Exception {
         mockMvc.perform(asyncDispatch(
-                mockMvc.perform(delete("/papers/{item}", paper.item)
+                mockMvc.perform(delete("/papers/{item}", paper.item).header("Version", "curly/internal.v1")
                         .principal(octoUser()))
                         .andExpect(request().asyncStarted())
                         .andExpect(request().asyncResult(new ResponseEntity(HttpStatus.NO_CONTENT)))
@@ -99,7 +94,7 @@ class PaperResourceControllerTests extends SpringBootTestAdapter {
     @Test
     public void testSave() throws Exception {
         mockMvc.perform(asyncDispatch(
-                mockMvc.perform(post("/papers")
+                mockMvc.perform(post("/papers").header("Version", "curly/internal.v1")
                         .principal(octoUser())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(paper, new MappingJackson2HttpMessageConverter())))

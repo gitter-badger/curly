@@ -89,6 +89,7 @@ public abstract class ArtifactoryTestHelper {
 		artifact.setIncubation(LocalDate.now().toString());
 		artifact.setLanguages(languages);
 		artifact.setTags(tags);
+		artifact.setOwner("6969");
 		mongoTemplate.insert(artifact);
 		Assert.assertTrue(artifact.getId() != null);
 		try {

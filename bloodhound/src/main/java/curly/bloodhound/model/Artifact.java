@@ -13,29 +13,54 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.model;
+package curly.bloodhound.model;
 
+import curly.commons.security.OwnedResource;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.Id;
+import org.springframework.hateoas.Identifiable;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author Joao Pedro Evangelista
  * @since 19/04/2015
  */
 @Data
-@Document
-public class Category implements Serializable {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class Artifact extends OwnedResource implements Identifiable<String>, Serializable {
 
-	private static final long serialVersionUID = 2741852981600031808L;
+	private static final long serialVersionUID = 8357768165966900756L;
+
+	@Id
+	private String id;
+
+	private String author;
 
 	private String name;
 
-	public Category(String name) {
-		this.name = name;
+	private String homePage;
+
+	private String githubPage;
+
+	private Set<Language> languages;
+
+	private Set<Tag> tags;
+
+	private Category category;
+
+	private String incubation;
+
+	public Artifact() {
 	}
 
-	public Category() {
+
+	@Override
+	public String getId() {
+		return id;
 	}
 }

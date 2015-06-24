@@ -75,7 +75,7 @@ public class DefaultArtifactService extends ResourceOperationsResolverAdapter<Ar
 		Assert.hasText(id, "Id must be not empty");
 		log.debug("Looking for entity with id {}", id);
 		Artifact artifact = findOne(id);
-		if (isOwnedBy(artifact, user)) {
+		if (artifact != null && isOwnedBy(artifact, user)) {
 			repository.delete(artifact);
 		} else {
 			log.error("Cannot process #delete({},{})", id, user.getId());

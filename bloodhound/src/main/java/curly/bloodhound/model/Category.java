@@ -13,10 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.artifact.model;
+package curly.bloodhound.model;
 
-import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -25,17 +24,13 @@ import java.io.Serializable;
  * @since 19/04/2015
  */
 @Data
-@Document
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = 2741852981600031808L;
 
+	@Setter(AccessLevel.NONE)
 	private String name;
 
-	public Category(String name) {
-		this.name = name;
-	}
-
-	public Category() {
-	}
 }

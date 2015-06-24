@@ -17,6 +17,7 @@ package curly.tagger.controller;
 
 import com.google.common.base.Optional;
 import curly.commons.logging.annotation.Loggable;
+import curly.commons.web.HttpHeaders;
 import curly.commons.web.ModelErrors;
 import curly.tagger.command.ReaderCommand;
 import curly.tagger.command.WriterCommand;
@@ -53,9 +54,8 @@ class TagController {
 		this.writerCommand = writerCommand;
 	}
 
-	//todo hateoas links to artifacts using this tag?
 	@Loggable
-	@RequestMapping(value = "/{tag}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = "Accept: curly.api/v1")
+	@RequestMapping(value = "/{tag}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = HttpHeaders.INTERNAL_V1)
 	public DeferredResult<ResponseEntity<Tag>> get(@PathVariable String tag) {
 		return defer(readerCommand.get(tag)
 				.filter(Optional::isPresent)
@@ -65,7 +65,7 @@ class TagController {
 	}
 
 	@Loggable
-	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = "Accept: curly.api/v1")
+	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, headers = HttpHeaders.INTERNAL_V1)
 	public DeferredResult<ResponseEntity<SearchResult>> search(@RequestParam(value = "q", defaultValue = "") String query) {
 		return defer(readerCommand.like(query)
 				.filter(Optional::isPresent)
@@ -75,7 +75,7 @@ class TagController {
 				.defaultIfEmpty(new ResponseEntity<>(NOT_FOUND)));
 	}
 
-	@RequestMapping(method = RequestMethod.POST, headers = "Accept: curly.internal/v1")
+	@RequestMapping(method = RequestMethod.POST, headers = HttpHeaders.INTERNAL_V1)
 	public DeferredResult<ResponseEntity<?>> save(@Valid @RequestBody Set<Tag> tags, BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			return defer(Observable.just(new ResponseEntity<>(new ModelErrors(bindingResult), BAD_REQUEST)));
