@@ -13,16 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.bloodhound;
+package curly.bloodhound.lookup;
 
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-@WebIntegrationTest
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = BloodhoundApplication.class)
-public class BloodhoundApplicationTests {
+/**
+ * @author João Evangelista
+ */
+public class SearchTranspiler {
 
 }

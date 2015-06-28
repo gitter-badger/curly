@@ -15,33 +15,33 @@
  */
 package curly.bloodhound.model;
 
-import curly.commons.security.OwnedResource;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
-import org.springframework.hateoas.Identifiable;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
 import java.util.Set;
 
 /**
+ * An artifact representation
  * @author Joao Pedro Evangelista
- * @since 19/04/2015
  */
 @Data
+@Document(indexName = "artifact")
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Artifact extends OwnedResource implements Identifiable<String>, Serializable {
+public class Artifact implements Serializable {
 
 	private static final long serialVersionUID = 8357768165966900756L;
 
-	@Id
 	private String id;
 
 	private String author;
 
 	private String name;
+
+	private String owner;
 
 	private String homePage;
 
@@ -56,11 +56,5 @@ public class Artifact extends OwnedResource implements Identifiable<String>, Ser
 	private String incubation;
 
 	public Artifact() {
-	}
-
-
-	@Override
-	public String getId() {
-		return id;
 	}
 }

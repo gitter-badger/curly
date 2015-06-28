@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author João Evangelista
  */
-public class SplitQueryTests {
+public class QueryParserTests {
 
 
 	public static final String REGEX_INNER_CURLY = "\\{(.*?)\\}";
@@ -49,12 +49,27 @@ public class SplitQueryTests {
 		assertThat(list, contains("foo:bar", "goo:{too, yoo,loo}", "roo:{ree rii}"));
 	}
 
+	@NotNull private static List<String> getSplits(String s) {
+		return Arrays.asList(s.split(SPLIT_SPACES));
+	}
+
 	@Test
 	public void testKeyValue() throws Exception {
 		Map<String, String> kvMap = getMappedKeyValue(getSplits(DEFAULT_QUERY));
 		assertTrue(kvMap.get("foo").equals("bar"));
 	}
 
+	@NotNull private static Map<String, String> getMappedKeyValue(List<String> list) {
+		Map<String, String> kvMap = new HashMap<>(0);
+		list.forEach(item -> {
+			String[] kv = item.split(":");
+			if (kv.length == 2) {
+				kvMap.put(kv[0], kv[1]);
+			}
+		});
+		System.out.println("Mapped Key Value " + kvMap);
+		return kvMap;
+	}
 
 	@Test
 	public void testIfContainsCurlyCleanAndSplitIntoMap() throws Exception {
@@ -69,24 +84,5 @@ public class SplitQueryTests {
 		fix(map);
 		map.forEach((k, v) -> System.out.println(k + " " + v));
 		assertThat(map.get("goo"), equalTo("{too}"));
-	}
-
-
-	@NotNull private static Map<String, String> getMappedKeyValue(List<String> list) {
-		Map<String, String> kvMap = new HashMap<>(0);
-		list.forEach(item -> {
-			String[] kv = item.split(":");
-			if (kv.length == 2) {
-				kvMap.put(kv[0], kv[1]);
-			}
-		});
-		System.out.println("Mapped Key Value " + kvMap);
-		return kvMap;
-	}
-
-
-	@NotNull private static List<String> getSplits(String s) {
-		//"foo:bar goo:{too, yoo,loo} roo:{ree rii}";
-		return Arrays.asList(s.split(SPLIT_SPACES));
 	}
 }

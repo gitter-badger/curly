@@ -27,27 +27,55 @@ import java.util.Map;
  */
 final class QueryUtils {
 
+	protected static final String L_CURLY = "{";
+
+	protected static final String R_CURLY = "}";
+
+	/**
+	 * Fix any curly mismatched on the query Map value, replacing it with the appropriate value
+	 *
+	 * @param map current info Map
+	 */
 	static void fix(Map<String, String> map) {
 		map.forEach((key, value) -> {
-			boolean containsOnlyRightCurly = (value.contains("}") && !value.contains("{"));
-			boolean containsOnlyLeftCurly = (value.contains("{") && !value.contains("}"));
+			boolean containsOnlyRightCurly = (value.contains(R_CURLY) && !value.contains(L_CURLY));
+			boolean containsOnlyLeftCurly = (value.contains(L_CURLY) && !value.contains(R_CURLY));
 			if (containsOnlyRightCurly) {
 				String committedValue = value.trim().replace(",", "");
-				String newValue = "{" + committedValue;
+				String newValue = L_CURLY + committedValue;
 				map.replace(key, value, newValue);
 			} else if (containsOnlyLeftCurly) {
 				String committedValue = value.trim().replace(",", "");
-				String newValue = committedValue + "}";
+				String newValue = committedValue + R_CURLY;
 				map.replace(key, value, newValue);
 			}
 		});
 	}
 
-	@Nullable static List<String> trimElements(List<String> strings) {
+	@Nullable static List<String> trimElements(Collection<String> strings) {
 		if (strings == null) return null;
 		List<String> output = new ArrayList<>(strings.size());
 		strings.stream().forEach(e -> output.add(e.trim()));
 		return output;
 	}
 
+	static String cleanDelimiters(String inner) {
+		return inner.replace(L_CURLY, "").replace(R_CURLY, "");
+	}
+
+	static List<String> toUnquotedList(String[] quoted) {
+		List<String> unquotedArray = new ArrayList<>(quoted.length);
+		for (String s : quoted) {
+			if (s.contains("\"")) {
+				unquotedArray.add(unquote(s));
+			} else {
+				unquotedArray.add(s);
+			}
+		}
+		return unquotedArray;
+	}
+
+	static String unquote(String quoted) {
+		return quoted.replace("\"", "");
+	}
 }

@@ -21,11 +21,13 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static curly.bloodhound.query.QueryUtils.trimElements;
+import static curly.bloodhound.query.QueryUtils.*;
+import static org.springframework.util.StringUtils.delimitedListToStringArray;
 
 /**
  * @author João Evangelista
@@ -36,9 +38,7 @@ final class QueryParser {
 
 	private static final String SPLIT_SPACES = "\\s+(?![^\\{]*\\})";
 
-	private static final String L_CURLY = "{";
-
-	private static final String R_CURLY = "}";
+	private static final String SPLIT_SPACE_QUOTED = "([^\"]\\S*|\".+?\")\\s*";
 
 	private static final String COMMA = ",";
 
@@ -49,12 +49,11 @@ final class QueryParser {
 			if (value.contains(L_CURLY) && value.contains(R_CURLY)) {
 				Matcher matcher = Pattern.compile(REGEX_INNER_CURLY).matcher(value);
 				if (matcher.find()) {
-					String inner = matcher.group();
-					String cleaned = inner.replace(L_CURLY, "").replace(R_CURLY, "");
+					String cleaned = cleanDelimiters(matcher.group());
 					if (cleaned.contains(COMMA)) {
-						multimap.put(key, trimElements((Arrays.asList(cleaned.split(COMMA)))));
+						multimap.put(key, getCommaDelimitedValue(cleaned));
 					} else {
-						multimap.put(key, Arrays.asList(cleaned.split(" ")));
+						multimap.put(key, getSpaceSplicedValue(cleaned));
 					}
 				}
 			} else {
@@ -70,10 +69,22 @@ final class QueryParser {
 		Arrays.asList(query.split(SPLIT_SPACES)).stream().forEach(item -> {
 			String[] kv = item.split(":");
 			if (kv.length == 2) {
-				kvMap.put(kv[0], kv[1]);
+				kvMap.put(kv[0].toLowerCase(), kv[1]);
 			}
 		});
 		return kvMap;
+	}
+
+	private static List<String> getCommaDelimitedValue(String cleaned) {
+		return trimElements(Arrays.asList(delimitedListToStringArray(unquote(cleaned), COMMA)));
+	}
+
+	private static List<String> getSpaceSplicedValue(String cleaned) {
+		return trimElements(toUnquotedList(cleaned.split(SPLIT_SPACE_QUOTED)));
+	}
+
+	private static void transform(MultiValueMap<String, String> multimap, String key, String inner) {
+
 	}
 
 
