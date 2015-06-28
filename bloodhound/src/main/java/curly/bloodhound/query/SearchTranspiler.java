@@ -13,11 +13,31 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package curly.bloodhound.lookup;
+package curly.bloodhound.query;
+
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import org.springframework.util.MultiValueMap;
+
+import javax.inject.Inject;
 
 /**
  * @author João Evangelista
  */
-public class SearchTranspiler {
+@Component
+public class SearchTranspiler implements Transpiler {
 
+	private final QueryResolver resolver;
+
+	@Inject
+	public SearchTranspiler(QueryResolver resolver) {
+		this.resolver = resolver;
+	}
+
+	@Override
+	public MultiValueMap<String, String> execute(String query) {
+		Assert.hasText(query, "A query must have text!");
+		MultiValueMap<String, String> parameter = QueryParser.resolveMultiParameter(query);
+		return resolver.resolve(parameter);
+	}
 }

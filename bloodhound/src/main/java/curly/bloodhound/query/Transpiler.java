@@ -20,7 +20,8 @@ import org.springframework.util.MultiValueMap;
 /**
  * @author João Evangelista
  */
-interface QueryResolver {
+public interface Transpiler {
 
-	MultiValueMap<String, String> resolve(MultiValueMap<String, String> raw);
+	MultiValueMap<String, String> execute(String query);
+
 }

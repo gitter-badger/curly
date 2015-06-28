@@ -15,6 +15,7 @@
  */
 package curly.bloodhound;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -25,4 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringApplicationConfiguration(classes = BloodhoundApplication.class)
 public class BloodhoundApplicationTests {
 
+	@Test
+	public void testContext() throws Exception {
+	}
 }
