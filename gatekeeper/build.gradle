@@ -2,8 +2,7 @@ buildscript {
     ext {
         springBootVersion = '1.2.4.RELEASE'
         asciidoctorVersion = '1.5.2'
-        managementVersion = '0.5.0.RELEASE'
-        kotlinVersion = '0.12.613'
+        managementVersion = '0.5.1.RELEASE'
     }
     repositories {
         jcenter()
@@ -16,40 +15,16 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
         classpath "io.spring.gradle:dependency-management-plugin:$managementVersion"
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:$asciidoctorVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+
     }
 }
+
+
 apply plugin: 'license'
-apply plugin: 'kotlin'
+apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
-
-sourceSets {
-    main {
-        kotlin {
-            srcDir "src/main/kotlin"
-        }
-    }
-    test {
-        kotlin {
-            srcDir "test/main/kotlin"
-        }
-    }
-    main.java.srcDirs += 'src/main/kotlin'
-}
-
-
-
-jar {
-    baseName = 'translator'
-    version = '0.0.1-SNAPSHOT'
-}
-
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = 1.8
-//noinspection GroovyUnusedAssignment
-targetCompatibility = 1.8
 
 
 repositories {
@@ -61,21 +36,12 @@ repositories {
 
 ext {
     groovyVersion = '2.4.3'
-    kotlinVersion = '0.12.613'
     javaVersion = '1.8'
-    metricsVersion = '3.1.2'
-    mongoDriverVersion = '3.0.0'
     rxjavaVersion = '1.0.8'
-    rxscalaVersion = '0.24.1'
     reactorVersion = '2.0.3.RELEASE'
-    securityJWTVersion = '1.0.3.RELEASE'
     springBootVersion = '1.2.4.RELEASE'
     springCloudVersion = '1.0.2.RELEASE'
     springIOPlatformVersion = '1.1.2.RELEASE'
-    scalatestVersion = '2.2.4'
-    scalaVersion = '2.11.6'
-    spockVersion = '1.0-groovy-2.4'
-    springSessionVersion = '1.0.0.RELEASE'
 }
 
 ext['reactor.version'] = reactorVersion
@@ -115,20 +81,26 @@ dependencyManagement {
 }
 
 dependencies {
-    compile project(":curly-commons")
     compile "javax.ws.rs:jsr311-api:1.1.1"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-undertow"
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
-    compile "org.springframework.boot:spring-boot-starter-redis"
     compile 'org.jetbrains:annotations:13.0'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.6.0-rc2'
     runtime "io.projectreactor:reactor-logback:$reactorVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "com.jayway.jsonpath:json-path"
     testCompile "org.skyscreamer:jsonassert:1.2.3"
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    compile "org.springframework.cloud:spring-cloud-starter-security"
+    compile "org.springframework.cloud:spring-cloud-starter-zuul"
+    compile "org.springframework.security.oauth:spring-security-oauth2"
+    compile project(':curly-commons')
 }
-
+jar {
+    baseName = 'proxy'
+}
+springBoot {
+    mainClass = 'curly.gatekeeper.ZuulProxyApplication'
+}
