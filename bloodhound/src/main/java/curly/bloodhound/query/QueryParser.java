@@ -57,7 +57,7 @@ final class QueryParser {
 					}
 				}
 			} else {
-				multimap.add(key, value);
+				multimap.add(key, unquote(value));
 			}
 		});
 
