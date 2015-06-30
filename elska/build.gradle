@@ -9,7 +9,6 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
-
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
@@ -21,27 +20,42 @@ buildscript {
 }
 
 
+apply plugin: 'scala'
+apply plugin: 'idea'
 apply plugin: 'license'
-apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
 
+jar {
+    baseName = 'elska'
+    version = '0.0.1.SNAPSHOT'
+}
+springBoot{
+    mainClass = 'io.curly.elska.ElskaApplication'
+}
+group = 'curly' version = '0.0.1.SNAPSHOT' sourceCompatibility = 1.8 targetCompatibility = 1.8
 
 repositories {
     jcenter()
     mavenCentral()
     maven { url "https://repo.spring.io/libs-snapshot/" }
     maven { url "http://repo.spring.io/libs-milestone/" }
+    maven { url "https://raw.github.com/crly/curly-commons/mvn-repo/"}
 }
 
 ext {
-    groovyVersion = '2.4.3'
     javaVersion = '1.8'
+    mongoDriverVersion = '3.0.0'
     rxjavaVersion = '1.0.11'
+    rxscalaVersion = '0.24.1'
     reactorVersion = '2.0.3.RELEASE'
+
     springBootVersion = '1.2.4.RELEASE'
     springCloudVersion = 'Angel.SR3'
     springIOPlatformVersion = '1.1.2.RELEASE'
+    scalatestVersion = '2.2.4'
+    scalaVersion = '2.11.6'
+
 }
 
 ext['reactor.version'] = reactorVersion
@@ -64,7 +78,6 @@ license {
 }
 
 
-
 dependencyManagement {
     imports {
         mavenBom "io.spring.platform:platform-bom:$springIOPlatformVersion"
@@ -81,25 +94,27 @@ dependencyManagement {
 }
 
 dependencies {
+    compile "curly:curly-commons:1.0-SNAPSHOT"
     compile "javax.ws.rs:jsr311-api:1.1.1"
+    compile "org.scala-lang:scala-library:$scalaVersion"
+    compile "com.fasterxml.jackson.module:jackson-module-scala_2.11:2.5.2"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb"
+    compile "org.springframework.boot:spring-boot-starter-data-rest"
+    compile "org.springframework.boot:spring-boot-starter-remote-shell"
+    compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "or.springframework.boot:spring-boot-starter-aop"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-undertow"
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-hystrix"
+    compile 'org.jetbrains:annotations:13.0'
     runtime "io.projectreactor:reactor-logback:$reactorVersion"
-    compile "org.springframework.cloud:spring-cloud-starter-security"
-    compile "org.springframework.security.oauth:spring-security-oauth2"
-    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-    compile "org.springframework.cloud:spring-cloud-config-server"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "com.jayway.jsonpath:json-path"
+    testCompile "org.skyscreamer:jsonassert:1.2.3"
+}
 
-}
-jar {
-    baseName = 'config-server'
-    version = '1.0.0.RC'
-}
-springBoot {
-    mainClass = 'io.curly.configserver.ConfigServerApplication'
-}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
