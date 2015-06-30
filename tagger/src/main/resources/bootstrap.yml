@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: tagger
-  cloud:
-    config:
-      uri: http://localhost:10004/

@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: paperclip
-  cloud:
-    config:
-      uri: http://localhost:10004/

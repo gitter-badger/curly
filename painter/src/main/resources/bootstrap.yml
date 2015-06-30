@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: painter
-  cloud:
-    config:
-      uri: http://localhost:10004/

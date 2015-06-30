@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: artifactory
-  cloud:
-    config:
-      uri: http://localhost:10004/
