@@ -7,3 +7,31 @@
 [submodule "curly-config"]
 	path = curly-config
 	url = https://github.com/crly/curly-config.git
+
+[submodule "formula"]
+	path = formula
+	url = https://github.com/crly/formula.git
+[submodule "elska"]
+	path = elska
+	url = https://github.com/crly/elska.git
+[submodule "tagger"]
+	path = tagger
+	url = https://github.com/crly/tagger.git
+[submodule "painter"]
+	path = painter
+	url = https://github.com/crly/painter.git
+[submodule "paperclip"]
+	path = paperclip
+	url = https://github.com/crly/paperclip.git
+[submodule "discovery"]
+	path = discovery
+	url = https://github.com/crly/discovery.git
+[submodule "artifactory"]
+	path = artifactory
+	url = https://github.com/crly/artifactory.git
+[submodule "gatekeeper"]
+	path = gatekeeper
+	url = https://github.com/crly/gatekeeper.git
+[submodule "bloodhound"]
+	path = bloodhound
+	url = https://github.com/crly/bloodhound.git
