@@ -7,7 +7,6 @@
 [submodule "curly-config"]
 	path = curly-config
 	url = https://github.com/crly/curly-config.git
-
 [submodule "formula"]
 	path = formula
 	url = https://github.com/crly/formula.git
