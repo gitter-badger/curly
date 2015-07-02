@@ -34,3 +34,6 @@
 [submodule "bloodhound"]
 	path = bloodhound
 	url = https://github.com/crly/bloodhound.git
+[submodule "commons"]
+	path = commons
+	url = git@github.com:crly/commons.git
