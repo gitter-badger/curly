@@ -1,9 +1,9 @@
 [submodule "vector"]
 	path = vector
 	url = https://github.com/joaoevangelista/vector.git
-[submodule "curly-commons"]
-	path = curly-commons
-	url = https://github.com/crly/curly-commons.git
+[submodule "commons"]
+	path = commons
+	url = https://github.com/crly/commons.git
 [submodule "curly-config"]
 	path = curly-config
 	url = https://github.com/crly/curly-config.git
