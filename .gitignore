@@ -3,7 +3,8 @@
 # Ignore activator for PlayFramework
 
 rebel.xml
-
+build.gradle
+settings.gradle
 ### Linux template
 # KDE directory preferences
 # Linux trash folder which might appear on any partition or disk
