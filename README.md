@@ -1,5 +1,7 @@
 #{urly ![Logo](https://raw.githubusercontent.com/crly/webapp/master/public/assets/images/logo60.png)   
 
+[![Join the chat at https://gitter.im/crly/curly](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/crly/curly?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/crly/curly.svg?branch=master)](https://travis-ci.org/crly/curly)
 
 
